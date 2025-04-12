@@ -1,0 +1,47 @@
+1) Create new laravel project
+2) Add the following code in you composer.json file
+{
+    "name": "your-main-project/your-laravel-app",
+    // ... other configurations
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../packages/quicker-faster/code-gen"
+        }
+    ],
+    "require": {
+        // ... other requirements
+        "quicker-faster/code-gen": "dev-main" // Or your preferred version constraint
+    },
+    // ... other configurations
+
+
+     // ... other configurations
+    "autoload": {
+        "psr-4": {
+            "QuickerFaster\\CodeGen\\": "src/"
+        }
+    },
+    // ...
+}
+
+3)  > composer require laravel/ui
+    > php artisan ui bootstrap
+    > sudo npm install 
+    > sudo npm run dev
+
+4)  Add
+    config/app.php providers = [
+        QuickerFaster\CodeGen\Providers\QuickerFasterCodeGenServiceProvider::class,
+    ]  
+    
+    Add Laravel 11 and above 
+    <?php
+
+    return [
+        App\Providers\AppServiceProvider::class,
+         QuickerFaster\CodeGen\Providers\QuickerFasterCodeGenServiceProvider::class, // Add your package's service provider here
+
+    ];
+
+
