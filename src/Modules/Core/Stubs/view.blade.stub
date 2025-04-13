@@ -1,0 +1,7 @@
+<x-core.views::layouts.app>
+    {{sidebar}}  {{header}}  {{tabBarLinks}}
+
+    {{livewireComponent}}
+
+    {{footer}}
+</x-core.views::layouts.app>

@@ -1,0 +1,108 @@
+models:
+  School:
+    module: school
+    fields:
+      name:
+        type: string
+        validation:
+          - required|string
+    controls: all
+    simpleActions: ['show', 'edit'],
+
+    relations:
+      students:
+        type: hasMany # Add the relationship type here
+        model: App\Modules\School\Models\Student
+        foreignKey: student_id # Use foreignKey key for consistency
+
+    tab:
+      label:  School # Display title
+      group: user-management
+      id: school # Unique name for the tab
+      parentPageTitle: Main page title here  # Display title
+      pageTitle: Tab Sub page title here  # Display title
+      view: schools  # Blade view for this tab
+      url: school/schools  # Blade view for this tab
+
+
+  Student:
+    module: school
+    fields:
+      name:
+        type: string
+        validation:
+          - required|string
+
+      school_id:
+        type: select
+        validation:
+          - required
+        foreign:
+          table: schools
+          column: id
+          onDelete: cascade
+
+    relations:
+      school:
+        type: belongsTo # Add the relationship type here
+        model: App\Modules\School\Models\School
+        foreignKey: school_id # Use foreignKey key for consistency
+      lectures:
+        type: belongsToMany
+        model: App\Modules\School\Models\Lecture
+        pivotTable: lecture_student
+        localKey: student_id  # Key in the pivot table relating to Student
+        foreignKey: lecture_id # Key in the pivot table relating to Lecture
+
+
+    controls: all
+    simpleActions: ['show', 'edit'],
+
+
+    tab:
+      label:  Student # Display title
+      group: user-management
+      id: student # Unique name for the tab
+      parentPageTitle: Main page title here  # Display title
+      pageTitle: Tab Sub page title here  # Display title
+      view: students  # Blade view for this tab
+      url: school/students  # Blade view for this tab
+
+
+
+  Lecture:
+    module: school
+    fields:
+      name:
+        type: string
+        validation:
+          - required|string
+
+      school_id:
+        type: select
+        validation:
+          - required
+        foreign:
+          table: schools
+          column: id
+          onDelete: cascade
+
+    relations:
+      school:
+        type: belongsTo # Add the relationship type here
+        model: App\Modules\School\Models\School
+        foreignKey: school_id # Use foreignKey key for consistency
+      students:
+        type: belongsToMany
+        model: App\Modules\School\Models\Student
+        pivotTable: lecture_student
+        foreignKey: student_id # Key in the pivot table relating to Student
+        localKey: lecture_id  # Key in the pivot table relating to Lecture
+
+    controls: all
+    simpleActions: ['show', 'edit'],
+
+
+
+
+

@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Modules\{{module}}\Models; // Important: Include the module namespace
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class {{modelName}} extends Model
+{
+    use HasFactory;
+
+    {{tableName}}
+
+    protected $fillable = [
+        {{fillable}} // Fillable properties will be inserted here
+    ];
+
+    {{relations}} // Relations will be inserted here
+}

@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+/*
+
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', [HomeController::class, 'home']);
@@ -86,3 +88,56 @@ Route::group(['middleware' => 'guest'], function () {
 Route::get('/login', function () {
     return view('session/login-session');
 })->name('login');
+
+
+
+
+
+
+Route::group([
+    'prefix' => 'access',
+], function () {
+    Route::get('access-control-management/{module}', function(){
+        return view('access.views::access-control-management',
+        [
+            'selectedModule' => request("module"),
+            'isUrlAccess' => true,
+        ]);
+    });
+});
+
+
+
+Route::get('/{module}/{view}', function ($module, $view) {
+    // Validate module and view parameters
+    Validator::make(['module' => $module, 'view' => $view], [
+        'module' => 'required|string',
+        'view' => 'required|string',
+    ])->validate();
+
+    // Define an allowed list of modules (you can modify this as needed)
+    $allowedModules = [
+        'core', 'billing', 'sales', 'organization', 'hr', 'profile', 'item', 'warehouse',
+    ]; // Add your allowed modules here
+    if (!in_array($module, $allowedModules)) {
+        abort(404, 'Invalid module');
+    }
+
+    // Construct the view name securely. App\Modules\[Module Name]\Resources\views IS MAPPED TO [Module Name]::
+    $viewName = $module . '.views::' . $view;
+
+    // Check if the view file exists
+    if (view()->exists($viewName)) {
+        return view($viewName);
+    } else {
+        // Handle the case where the view doesn't exist
+        abort(404, 'View not found');
+    }
+});
+
+
+
+
+
+
+*/

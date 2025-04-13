@@ -23,12 +23,16 @@
         }
     },
     // ...
+    
 }
 
 3)  > composer require laravel/ui
     > php artisan ui bootstrap
     > sudo npm install 
     > sudo npm run dev
+
+    > php artisan vendor:publish --tag=code-gen-ct-soft-ui-bootstrap-v2  
+      
 
 4)  Add
     config/app.php providers = [
