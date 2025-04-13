@@ -6,6 +6,10 @@ use QuickerFaster\CodeGen\Services\DataTables\DataTableConfigService;
 use QuickerFaster\CodeGen\Services\DataTables\DataTableOptionService;
 use QuickerFaster\CodeGen\Services\DataTables\DataTableDataSourceService;
 
+use QuickerFaster\CodeGen\Facades\UserActivities\UserActivityLoggerFacade;
+
+use QuickerFaster\CodeGen\Services\Log\UserActivityLogger;
+
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
@@ -38,7 +42,7 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('user-activity-logger', function () {
-            //return new \App\Modules\Log\Services\UserActivities\UserActivityLogger();
+            return new UserActivityLogger();
         });
 
         $this->app->singleton("DataTableConfigService", function ($app) {
@@ -155,6 +159,10 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
     {
         $loader = AliasLoader::getInstance();
 
+        if (class_exists(UserActivityLoggerFacade::class)) {
+            $loader->alias('UserActivityLoggerFacade', UserActivityLoggerFacade::class);
+        }
+        
         if (class_exists(\App\Modules\Core\Facades\DataTables\DataTableOption::class)) {
             $loader->alias('DataTableOption', \App\Modules\Core\Facades\DataTables\DataTableOption::class);
         }
@@ -316,7 +324,7 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../scaffold/ct/soft-ui/bootstrap/v2/app/Http/Controllers' => app_path('Http/Controllers'),
             __DIR__ . '/../scaffold/ct/soft-ui/bootstrap/v2/app/Models/User.php' => app_path('Models/User.php'),
-            __DIR__ . '/../Modules/Core' => app_path('Modules/Core'),
+            __DIR__ . '/../Modules' => app_path('Modules'),
 
             __DIR__ . '/../scaffold/ct/soft-ui/bootstrap/v2/public' => public_path('/'),
             //__DIR__.'/../scaffold/ct/soft-ui/bootstrap/v2/public/assets' => public_path('assets'),

@@ -20,8 +20,8 @@ use App\Modules\Core\Events\DataTableFormAfterUpdateEvent;
 use App\Modules\Inventory\Livewire\Inventories\InventoryManager;
 use App\Modules\Core\Traits\DataTable\DataTableFieldsConfigTrait;
 use App\Modules\Core\Services\CodeGenerators\CodeGeneratorService;
-use App\Modules\Log\Facades\UserActivities\UserActivityLoggerFacade;
 
+use QuickerFaster\CodeGen\Facades\UserActivities\UserActivityLoggerFacade;
 
 class DataTableForm extends Component
 {
