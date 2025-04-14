@@ -42,6 +42,21 @@
                             </a>
                         </li>
                     @endif
+
+                    {{--
+                    @if (in_array('pdf', $controls['files']['export']))
+                        <li>
+                            <a wire:click="export('print')" target="_blank" class="dropdown-item" href="#">
+                                <span class="btn-inner--icon me-1"><i
+                                        class="fas fa-file-pdf text-sm me-1 text-danger"></i></span>
+                                <span class="btn-inner--text">Print</span>
+                            </a>
+                        </li>
+                    @endif
+                    --}}
+
+
+
                 @endif
                 <!-- Print Option -->
                 @if (in_array('print', $controls['files']))

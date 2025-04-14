@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Core\Services\Commands;
+namespace QuickerFaster\CodeGen\Services\Commands;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -85,7 +85,7 @@ class BladeGenerator extends Command
             $tabBarLinks .= "</x-core.views::tab-bar>\n";
         }
 
-        $livewireComponent = "<livewire:core.data-tables.data-table-manager model=\"App\\Modules\\{$module}\\Models\\{$modelName}\"\n";
+        $livewireComponent = "<livewire:data-tables.data-table-manager model=\"App\\Modules\\{$module}\\Models\\{$modelName}\"\n";
         $livewireComponent .= "    pageTitle=\"{$pageTitle}\"\n";
         $livewireComponent .= "    queryFilters=[]\n";
         $livewireComponent .= "    :hiddenFields=\"{$hiddenFields}\"\n";

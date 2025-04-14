@@ -1,6 +1,6 @@
 
 <div wire:key="form-render-{{$modalId}}">
-    <livewire:core.data-tables.data-table-form
+    <livewire:data-tables.data-table-form
     :fieldDefinitions="$fieldDefinitions"
     :model="$model"
     :moduleName="$moduleName"

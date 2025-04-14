@@ -6,6 +6,6 @@
         </x-core.views::layouts.navbars.auth.sidebar>
     </x-slot>
 
-    <livewire:core.data-tables.data-table-manager model="App\\Modules\\Core\\Models\\Status" />
+    <livewire:data-tables.data-table-manager model="App\\Modules\\Core\\Models\\Status" />
 </x-core.views::layouts.app>
 

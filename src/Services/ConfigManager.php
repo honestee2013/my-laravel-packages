@@ -1,5 +1,5 @@
 <?php
-namespace App\Modules\Core\Services;
+namespace QuickerFaster\CodeGen\Services;
 
 
 class ConfigManager

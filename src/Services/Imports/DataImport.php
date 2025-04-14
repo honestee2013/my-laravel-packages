@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Core\Services\Imports;
+namespace QuickerFaster\CodeGen\Services\Imports;
 
 
 use Maatwebsite\Excel\Facades\Excel;

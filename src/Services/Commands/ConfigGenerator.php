@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Core\Services\Commands;
+namespace QuickerFaster\CodeGen\Services\Commands;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;

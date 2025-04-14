@@ -7,7 +7,7 @@
     ])
         <div class="card-body">
             {{-- REACTIVE FORM COMPONENT --}}
-            <livewire:core.data-tables.data-table-form
+            <livewire:data-tables.data-table-form
                 :pageTitle="$pageTitle"
                 :queryFilters="$queryFilters"
                 :configFileName="$configFileName"
@@ -66,22 +66,22 @@
 
 
         {{-- @include('core.views::data-tables.partials.feedback-messages')
-        {{-- <livewire:core.feedback.feedback-message />
-        <livewire:core.feedback.alert-message /> --}}
+        {{-- <livewire:feedback.feedback-message />
+        <livewire:feedback.alert-message /> --}}
 
 
 
 
         {{-- ------------ DATA TABLE CONTROLS ------------ --}}
         <div class="container ms-0 mt-4 mb-0">
-            <livewire:core.data-tables.data-table-control :controls="$controls" :columns="$columns" :hiddenFields="$hiddenFields"
+            <livewire:data-tables.data-table-control :controls="$controls" :columns="$columns" :hiddenFields="$hiddenFields"
                 :visibleColumns="$visibleColumns" :model="$model" :fieldDefinitions="$fieldDefinitions" :multiSelectFormFields="$multiSelectFormFields" :sortField="$sortField"
                 :sortDirection="$sortDirection" :perPage="$perPage" :moduleName="$moduleName" :modelName="$modelName"  :recordName="$recordName" />
         </div>
 
 
         {{-- ------------ DATA TABLE  ------------ --}}
-        <livewire:core.data-tables.data-table :fieldDefinitions="$fieldDefinitions" :hiddenFields="$hiddenFields" :multiSelectFormFields="$multiSelectFormFields"
+        <livewire:data-tables.data-table :fieldDefinitions="$fieldDefinitions" :hiddenFields="$hiddenFields" :multiSelectFormFields="$multiSelectFormFields"
             :queryFilters="$queryFilters"
             :columns="$columns" :model="$model" :simpleActions="$simpleActions" :controls="$controls" :visibleColumns="$visibleColumns"
             :sortField="$sortField" :sortDirection="$sortDirection" :perPage="$perPage" :moduleName="$moduleName" :modelName="$modelName"  :recordName="$recordName"

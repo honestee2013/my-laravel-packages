@@ -7,7 +7,7 @@
 
     
 
-    <livewire:core.data-tables.data-table-manager model="App\Modules\core\Models\Geolocation"
+    <livewire:data-tables.data-table-manager model="App\Modules\core\Models\Geolocation"
     pageTitle="Geolocations Management"
     queryFilters=[]
     :hiddenFields="[

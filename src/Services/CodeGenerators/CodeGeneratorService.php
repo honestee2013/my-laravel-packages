@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Core\Services\CodeGenerators;
+namespace QuickerFaster\CodeGen\Services\CodeGenerators;
 
 use Illuminate\Support\Facades\DB;
 

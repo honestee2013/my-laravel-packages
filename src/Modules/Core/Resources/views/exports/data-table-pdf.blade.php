@@ -1,109 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Data Export</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid;
-            padding: 8px;
-            text-align: left;
-            word-wrap: break-word;
-        }
+        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 4px; text-align: left; }
+        th { background-color: #f0f0f0; }
     </style>
 </head>
 <body>
-
-
-
-
-
-
+    <h3>Data Export</h3>
     <table>
         <thead>
             <tr>
-                @foreach ($data->first()->toArray() as $column => $value)
-                @if(in_array($column, $columns))
-
-                    @if (isset($fieldDefinitions[$column]['label']))
-                        <th>{{ ucwords($fieldDefinitions[$column]['label']) }}</th>
-                    @else
-                        <th>{{ ucwords(str_replace('_', ' ', $column)) }}</th>
-                    @endif
-                    @endif
+                @foreach($columns as $col)
+                    <th>{{ $fieldDefs[$col]['label'] ?? ucfirst(str_replace('_', ' ', $col)) }}</th>
                 @endforeach
             </tr>
         </thead>
         <tbody>
-            @foreach ($data as $row)
-
+            @foreach($data as $row)
                 <tr>
-                    @foreach ($row->toArray() as $column => $value)
-                        @if(in_array($column, $columns))
+                    @foreach($columns as $col)
+                        @php
+                            $value = '';
+                            $def = $fieldDefs[$col] ?? [];
 
-                            @if ($multiSelectFormFields && in_array($column, array_keys($multiSelectFormFields)))
-                                <td>{{ str_replace(',', ', ', str_replace(['[', ']', '"'], '', $value)) }}</td>
-                            @elseif (in_array($column, ['image', 'photo', 'picture']))
-                                <td></td>
-                            @elseif (isset($fieldDefinitions[$column]) && isset($fieldDefinitions[$column]['relationship']))
-                                <!---- Has Many Relationship ---->
-                                @if (isset($fieldDefinitions[$column]['relationship']['type']) &&
-                                        $fieldDefinitions[$column]['relationship']['type'] == 'hasMany')
-                                    implode(', ',
-                                    $row->{$fieldDefinitions[$column]['relationship']['dynamic_property']}
-                                    ->pluck($fieldDefinitions[$column]['relationship']['display_field'])->toArray()
-                                    )
+                            if (isset($def['relationship'])) {
+                                $rel = $def['relationship'];
+                                $dp = $rel['dynamic_property'];
+                                $df = $rel['display_field'] ?? 'name';
 
-                                    <!---- Belongs To Many Relationship ---->
-                                @elseif (isset($fieldDefinitions[$column]['relationship']['type']) &&
-                                        $fieldDefinitions[$column]['relationship']['type'] == 'belongsToMany')
-                                    implode(', ',
-                                    $row->{$fieldDefinitions[$column]['relationship']['dynamic_property']}
-                                    ->pluck($fieldDefinitions[$column]['relationship']['display_field'])->toArray()
-                                    )
-                                @else
-                                    <!---- Belongs Relationship ---->
-                                    @php
-                                        $dynamic_property = $fieldDefinitions[$column]['relationship']['dynamic_property'];
-                                        $displayField = $fieldDefinitions[$column]['relationship']['display_field'];
-                                        $value = optional($row->{$dynamic_property})->$displayField;
-
-                                    @endphp
-
-                                    <td>{{ $value }}</td>
-                                @endif
-                            @else <!---- Ends Relationship Check---->
-                                @if (!is_array($value))
-                                    <td>{{ $value }}</td>
-
-                                @endif
-
-                            @endif
-
-                            
-
-    @endif
-
+                                if (in_array($rel['type'], ['hasMany', 'belongsToMany'])) {
+                                    $value = $row->$dp?->pluck($df)->implode(', ');
+                                } else {
+                                    $value = $row->$dp?->{$df} ?? '';
+                                }
+                            } else {
+                                $value = $row->$col;
+                            }
+                        @endphp
+                        <td>{{ $value }}</td>
                     @endforeach
                 </tr>
             @endforeach
         </tbody>
     </table>
-
-
-
-
-
-
-
-
-
-
-
 </body>
 </html>

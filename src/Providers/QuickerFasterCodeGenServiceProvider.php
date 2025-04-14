@@ -8,6 +8,10 @@ use QuickerFaster\CodeGen\Services\DataTables\DataTableDataSourceService;
 
 use QuickerFaster\CodeGen\Facades\UserActivities\UserActivityLoggerFacade;
 
+use QuickerFaster\CodeGen\Facades\DataTables\DataTableDataSource;
+use QuickerFaster\CodeGen\Facades\DataTables\DataTableConfig;
+use QuickerFaster\CodeGen\Facades\DataTables\DataTableOption;
+
 use QuickerFaster\CodeGen\Services\Log\UserActivityLogger;
 
 use Illuminate\Support\ServiceProvider;
@@ -128,14 +132,20 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
 */
 
 
+$this->registerLivewireComponents($livewirePath = __DIR__ .'/../Http/Livewire');
 
         // Publishing Creative Tim Bootstrap Soft UI Scaffolding
         $this->publishScaffold();
 
         // Load translations
-        $this->setup();
+        $this->setupModules();
         $this->loadAliases();
         $this->loadRoutes();
+
+
+
+
+        
 
 
 
@@ -163,21 +173,21 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
             $loader->alias('UserActivityLoggerFacade', UserActivityLoggerFacade::class);
         }
         
-        if (class_exists(\App\Modules\Core\Facades\DataTables\DataTableOption::class)) {
-            $loader->alias('DataTableOption', \App\Modules\Core\Facades\DataTables\DataTableOption::class);
+        if (class_exists(DataTableOption::class)) {
+            $loader->alias('DataTableOption', DataTableOption::class);
         }
-        if (class_exists(\App\Modules\Core\Facades\DataTables\DataTableConfig::class)) {
-            $loader->alias('DataTableConfig', \App\Modules\Core\Facades\DataTables\DataTableConfig::class);
+        if (class_exists(DataTableConfig::class)) {
+            $loader->alias('DataTableConfig', DataTableConfig::class);
         }
-        if (class_exists(\App\Modules\Core\Facades\DataTables\DataTableDataSource::class)) {
-            $loader->alias('DataTableDataSource', \App\Modules\Core\Facades\DataTables\DataTableDataSource::class);
+        if (class_exists(DataTableDataSource::class)) {
+            $loader->alias('DataTableDataSource', DataTableDataSource::class);
         }
 
     }
 
 
 
-    private function setup()
+    private function setupModules()
     {
         // Get all module directories
         if (!file_exists(base_path('app/Modules'))) {
@@ -257,7 +267,7 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
             // Register Livewire components
             $livewirePath = $module . '/Http/Livewire';
             if (File::exists($livewirePath)) {
-                $this->registerLivewireComponents($moduleName, $livewirePath);
+                $this->registerModuleLivewireComponents($moduleName, $livewirePath);
             }
 
 
@@ -393,7 +403,22 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
     }
 
 
-    protected function registerLivewireComponents(string $moduleName, string $livewirePath)
+
+    protected function registerLivewireComponents(string $livewirePath)
+    {
+        $namespace = "QuickerFaster\\CodeGen\\Http\\Livewire";
+        $components = $this->scanLivewireComponents($livewirePath, $namespace);
+
+        foreach ($components as $className => $alias) {
+            // Directly register the component with the dynamically generated alias
+            $alias = strtolower($alias);
+            //dd($alias);
+            Livewire::component($alias, $className);
+        }
+    }
+
+
+    protected function registerModuleLivewireComponents(string $moduleName, string $livewirePath)
     {
         $namespace = "App\\Modules\\$moduleName\\Http\\Livewire";
         $components = $this->scanLivewireComponents($livewirePath, $namespace);

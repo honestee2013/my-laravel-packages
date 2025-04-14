@@ -7,7 +7,7 @@
 
     
 
-    <livewire:core.data-tables.data-table-manager model="App\Modules\hr\Models\JobTitle"
+    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\JobTitle"
     pageTitle="Job Titles Management"
     queryFilters=[]
     :hiddenFields="[

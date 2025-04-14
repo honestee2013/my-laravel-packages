@@ -1,73 +1,55 @@
 
 
-
 <table>
     <thead>
         <tr>
             @foreach ($data->first()->toArray() as $column => $value)
-            @if(in_array($column, $columns))
-
-                @if (isset($fieldDefinitions[$column]['label']))
-                    <th>{{ ucwords($fieldDefinitions[$column]['label']) }}</th>
-                @else
-                    <th>{{ ucwords(str_replace('_', ' ', $column)) }}</th>
-                @endif
+                @if (in_array($column, $columns))
+                    <th>
+                        {{ $fieldDefinitions[$column]['label'] ?? ucwords(str_replace('_', ' ', $column)) }}
+                    </th>
                 @endif
             @endforeach
         </tr>
     </thead>
     <tbody>
         @foreach ($data as $row)
-
             <tr>
                 @foreach ($row->toArray() as $column => $value)
-                    @if(in_array($column, $columns))
+                    @if (in_array($column, $columns))
+                        @php
+                            $fieldDef = $fieldDefinitions[$column] ?? [];
+                        @endphp
 
                         @if ($multiSelectFormFields && in_array($column, array_keys($multiSelectFormFields)))
                             <td>{{ str_replace(',', ', ', str_replace(['[', ']', '"'], '', $value)) }}</td>
+
                         @elseif (in_array($column, ['image', 'photo', 'picture']))
-                            <td></td>
-                        @elseif (isset($fieldDefinitions[$column]) && isset($fieldDefinitions[$column]['relationship']))
-                            <!---- Has Many Relationship ---->
-                            @if (isset($fieldDefinitions[$column]['relationship']['type']) &&
-                                    $fieldDefinitions[$column]['relationship']['type'] == 'hasMany')
-                                implode(', ',
-                                $row->{$fieldDefinitions[$column]['relationship']['dynamic_property']}
-                                ->pluck($fieldDefinitions[$column]['relationship']['display_field'])->toArray()
-                                )
+                            <td></td> {{-- Empty for images, Excel handles it via drawings() --}}
 
-                                <!---- Belongs To Many Relationship ---->
-                            @elseif (isset($fieldDefinitions[$column]['relationship']['type']) &&
-                                    $fieldDefinitions[$column]['relationship']['type'] == 'belongsToMany')
-                                implode(', ',
-                                $row->{$fieldDefinitions[$column]['relationship']['dynamic_property']}
-                                ->pluck($fieldDefinitions[$column]['relationship']['display_field'])->toArray()
-                                )
-                            @else
-                                <!---- Belongs Relationship ---->
+                        @elseif (isset($fieldDef['relationship']))
+                            @php
+                                $rel = $fieldDef['relationship'];
+                                $type = $rel['type'] ?? 'belongsTo';
+                                $dynamic_property = $rel['dynamic_property'] ?? '';
+                                $displayField = $rel['display_field'] ?? '';
+                            @endphp
+
+                            @if ($type == 'hasMany' || $type == 'belongsToMany')
                                 @php
-                                    $dynamic_property = $fieldDefinitions[$column]['relationship']['dynamic_property'];
-                                    $displayField = $fieldDefinitions[$column]['relationship']['display_field'];
-                                    $value = optional($row->{$dynamic_property})->$displayField;
-
+                                    $relatedValues = $row->{$dynamic_property}
+                                        ->pluck($displayField)
+                                        ->toArray();
                                 @endphp
-
-                                <td>{{ $value }}</td>
-                            @endif
-                        @else <!---- Ends Relationship Check---->
-                            @if (!is_array($value))
-                                <td>{{ $value }}</td>
-
+                                <td>{{ implode(', ', $relatedValues) }}</td>
+                            @else
+                                <td>{{ optional($row->{$dynamic_property})->$displayField }}</td>
                             @endif
 
+                        @else
+                            <td>{{ is_array($value) ? '' : $value }}</td>
                         @endif
-
-                        @php
-                            $colCount++;
-                        @endphp
-
-@endif
-
+                    @endif
                 @endforeach
             </tr>
         @endforeach
