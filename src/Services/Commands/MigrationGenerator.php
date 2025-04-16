@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\File;
 class MigrationGenerator extends Command
 {
 
+    
+
 
     protected function getMigrationPath($module, $modelName, $is_pivot = false) {
 
@@ -98,7 +100,10 @@ class MigrationGenerator extends Command
         $migrationName = 'create_' . $pivotTableName . '_table';
         $migrationFullPath = $this->getMigrationPath($module, $migrationName);
 
-        $stub = File::get(app_path('Modules/Core/Stubs/polymorphic_pivot_migration.stub')); // Create this stub
+        $stubPath =  __DIR__ . '/../../Stubs/polymorphic_pivot_migration.stub';
+        $stub = File::get($stubPath);
+
+        //$stub = File::get(app_path('Modules/Core/Stubs/polymorphic_pivot_migration.stub')); // Create this stub
 
         $stub = str_replace('{{pivotTableName}}', $pivotTableName, $stub);
         $stub = str_replace('{{modelName}}', strtolower($modelName), $stub);
@@ -117,7 +122,9 @@ class MigrationGenerator extends Command
         if (File::exists($moduleStubPath)) {
             $stub = File::get($moduleStubPath);
         } else {
-            $coreStubPath = app_path('Modules/Core/Stubs/migration.stub'); // Fallback
+            //$coreStubPath = app_path('Modules/Core/Stubs/migration.stub'); // Fallback
+            $coreStubPath =  __DIR__ . '/../../Stubs/migration.stub';
+           
             if (!File::exists($coreStubPath)) {
                 $this->error("Migration stub not found: {$coreStubPath} or {$moduleStubPath}");
                 return "";
@@ -239,7 +246,9 @@ class MigrationGenerator extends Command
 
     protected function getPivotMigrationStub($pivotTableName, $model1, $model2, $foreignKey1, $foreignKey2)
     {
-        $stub = File::get(app_path('Modules/Core/Stubs/pivot_migration.stub'));
+        //$stub = File::get(app_path('Modules/Core/Stubs/pivot_migration.stub'));
+        $stubPath =  __DIR__ . '/../../Stubs/pivot_migration.stub';
+        $stub = File::get($stubPath);
 
         $stub = str_replace('{{pivotTableName}}', $pivotTableName, $stub);
         $stub = str_replace('{{model1}}', strtolower(Str::snake($model1)), $stub); // Model name for foreign key constraint

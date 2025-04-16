@@ -7,11 +7,13 @@ use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Symfony\Component\Yaml\Yaml;
 use Illuminate\Support\Facades\File;
-use App\Modules\Core\Services\Commands\BladeGenerator;
-use App\Modules\Core\Services\Commands\ModelGenerator;
-use App\Modules\Core\Services\Commands\ConfigGenerator;
-use App\Modules\Core\Services\Commands\MigrationGenerator;
-use App\Modules\Core\Services\Commands\SidebarLinksGenerator;
+
+use QuickerFaster\CodeGen\Services\Commands\BladeGenerator;
+use QuickerFaster\CodeGen\Services\Commands\ModelGenerator;
+use QuickerFaster\CodeGen\Services\Commands\ConfigGenerator;
+use QuickerFaster\CodeGen\Services\Commands\MigrationGenerator;
+use QuickerFaster\CodeGen\Services\Commands\SidebarLinksGenerator;
+
 
 class GenerateFromSchema extends Command
 {

@@ -35,7 +35,9 @@
       
 
 4)  Add
-    config/app.php providers = [
+    config/app.php 
+    
+    providers = [
         QuickerFaster\CodeGen\Providers\QuickerFasterCodeGenServiceProvider::class,
     ]  
     

@@ -28,15 +28,15 @@ class GenerateAllSchemas extends Command
     // Define strict module execution order
     protected $modules = [
         //'Core' => [],
-        //'Organization' => [],
+        'Organization' => [],
         //'Hr' => [],
         //'Profile' => [],
         //'Item' => [],
-        'Warehouse'=> [
+        /*'Warehouse'=> [
             'environmental_condition.yaml',
             'storage_type.yaml',
             'warehouse.yaml',
-        ],
+        ],*/
 
 
     ];
@@ -66,7 +66,7 @@ class GenerateAllSchemas extends Command
             if (!empty($this->modules[$module])) {
                 $yamlFiles = collect($this->modules[$module])
                     ->map(fn($path) => new \SplFileInfo("$searchPath/$path"))
-                    ->filter(fn($file) => File::exists($file->getRealPath()));
+                    ->filter(fn(\SplFileInfo $file) => File::exists($file->getRealPath()));
             }
 
             if ($yamlFiles->isEmpty()) {

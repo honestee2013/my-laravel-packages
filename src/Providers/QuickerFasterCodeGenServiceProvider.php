@@ -29,6 +29,8 @@ use Illuminate\Foundation\AliasLoader;
 
 use App\Modules\Core\Repositories\DataTables\FieldRepository;
 
+use QuickerFaster\CodeGen\Commands\GenerateAllSchemas;
+use QuickerFaster\CodeGen\Commands\GenerateFromSchema;
 
 
 
@@ -61,17 +63,19 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
         $this->app->singleton("DataTableDataSourceService", fn() => new DataTableDataSourceService);
 
 
+        // Register commands
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                GenerateAllSchemas::class,
+                GenerateFromSchema::class
+            ]);
+        }
 
 
         // Merge configuration
         /*$this->mergeConfigFrom(__DIR__.'/../config/code-gen.php', 'code-gen');
 
-        // Register commands
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                //MakeCrudCommand::class, // Example command
-            ]);
-        }*/
+*/
 
         // Register Livewire component (example - adjust namespace and class name if needed)
         //Livewire::component('crud-component', CrudComponent::class);

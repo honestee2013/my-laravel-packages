@@ -36,7 +36,8 @@ class ConfigGenerator extends Command
 
     protected function getConfigStub($module, $modelName, $modelData, $command)
     {
-        $stub = File::get(app_path('Modules/Core/Stubs/config.stub'));
+        $configStubPath =  __DIR__ . '/../../Stubs/config.stub';
+        $stub = File::get($configStubPath);
 
         $includes = $modelData['includes'] ?? [];
         $includedConfig = [];

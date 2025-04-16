@@ -42,9 +42,13 @@ class ModelGenerator extends Command
         if (File::exists($moduleStubPath)) {
             $stub = File::get($moduleStubPath);
         } else {
-            $coreStubPath = app_path('Modules/Core/Stubs/model.stub'); // Fallback
+            //$coreStubPath = app_path('Modules/Core/Stubs/model.stub'); // Fallback
+            $coreStubPath =  __DIR__ . '/../../Stubs/model.stub';
+
             if (!File::exists($coreStubPath)) {
-                $this->error("Model stub not found: {$coreStubPath} or {$moduleStubPath}");
+                //$this->error("Model stub not found: {$coreStubPath} or {$moduleStubPath}");
+                throw new \RuntimeException("Model stub not found: {$coreStubPath} or {$moduleStubPath}");
+
                 return "";
             }
             $stub = File::get($coreStubPath);

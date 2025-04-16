@@ -63,7 +63,9 @@ class BladeGenerator extends Command
         $includeSidebar = $modelData['includeSidebar'] ?? true; // Get sidebar flag
 
 
-        $stub = File::get(app_path('Modules/Core/Stubs/view.blade.stub'));
+        $viewStubPath =  __DIR__ . '/../../Stubs/view.blade.stub';
+        $stub = File::get($viewStubPath);
+
         $pageTitle = Str::plural(Str::title(str_replace('_', ' ', Str::snake($modelName)))). " Management";
         $parentPageTitle = $pageTitle;
 
