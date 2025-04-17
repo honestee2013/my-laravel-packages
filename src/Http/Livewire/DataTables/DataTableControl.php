@@ -40,6 +40,7 @@ class DataTableControl extends Component
     public $sortDirection = "asc";
 
     public $selectedRows = [];
+    public array $filters = [];
 
 
 
@@ -71,7 +72,7 @@ class DataTableControl extends Component
 
 
 
-    // Apply Bulk action on the selected rows
+    // Update visibleColumns with the selectedColumns
     public function showHideSelectedColumns()
     {
         // Update visibleColumns with the selectedColumns
@@ -79,6 +80,10 @@ class DataTableControl extends Component
         $this->dispatch("showHideColumnsEvent", $this->selectedColumns);
 
     }
+
+
+
+    
 
 
 
@@ -100,6 +105,17 @@ class DataTableControl extends Component
             return $this->exportSelectedRows();
         }
     }
+
+
+
+
+    public function applyFilters()
+    {
+        $this->dispatch('applyFilterEvent', $this->filters);
+    }
+
+
+
 
 
 
@@ -226,40 +242,6 @@ class DataTableControl extends Component
     }
 
 
-    /*public function printPreview($rows = "table")
-    {
-        $modelClass = '\\' . ltrim($this->model, '\\');
-        $query = (new $modelClass)->newQuery();
-        $hiddenFields = $this->hiddenFields["onQuery"];
-    
-        $this->applySearchAndFilters($query, $hiddenFields);
-    
-        if ($rows === "selected" && !empty($this->selectedRows)) {
-            $query->whereIn('id', $this->selectedRows);
-        }
-    
-        if ($this->sortField) {
-            $query->orderBy($this->sortField, $this->sortDirection);
-        }
-    
-        $data = $query->get();
-        dd($data);
-        return view('core.views::exports.data-table-print', [
-            'data' => $data,
-            'columns' => $this->visibleColumns,
-            'fieldDefs' => $this->fieldDefinitions,
-        ]);
-    }*/
-    
-
-
-
-
-
-
-
-
-
 
 
     protected function applySearchAndFilters(&$query, $hiddenFields)
@@ -311,104 +293,6 @@ class DataTableControl extends Component
         }
     }
 
-
-
-
-
-
-    /*private function getSelectedExportData()
-    {
-
-        //dd( UserActivityLog::find(1)->with('user')->first());//->user->name;
-
-        // Adjust the query to include relationships if necessary
-        $query = $this->model::whereIn('id', $this->selectedRows);
-
-        // Prepare to exclude dynamic_property fields AS THE DO NOT EXIST ON TABLE SCHEMA
-        $dynamicProperties = [];
-        foreach ($this->fieldDefinitions as $column => $definition) {
-            if (!in_array($column, $this->visibleColumns)) // Skip hidden field
-                continue;
-
-            if (isset($definition['relationship'])) {
-
-
-                $relationship = $definition['relationship'];
-                $dynamicProperty = $relationship['dynamic_property'];
-
-                // Load the relationship to include it in the export
-                $query->with($dynamicProperty);
-                $dynamicProperties[] = $dynamicProperty;
-            }
-        }
-
-        $visibleColumns = array_diff($this->visibleColumns, $this->hiddenFields['onQuery']);
-        $data = $query->get(array_diff($visibleColumns, $dynamicProperties));
-        return $data;
-    }*/
-
-
-
-    // Query the record for data to be exported
-    /*private function getExportData()
-    {
-
-        // Get the hidden fields on query
-        //$hiddenFields = $this->hiddenFields["onQuery"];//config( "$moduleName.$modelName.hiddenFields.onQuery") ?? [];
-        $visibleColumns = [];
-        foreach ($this->fieldDefinitions as $column => $definition) {
-            // Skip the hidden fields
-            if (!in_array($column, $this->hiddenFields["onQuery"]))
-                $visibleColumns[] = $column;
-        }
-
-
-        $modelClass = '\\' . ltrim($this->model, '\\'); // Ensure the model has a leading backslash
-        $query = (new $modelClass)->newQuery();
-
-        return $this->model::query()
-
-            ->when($this->search, function ($query) use ($visibleColumns) {
-                foreach ($this->fieldDefinitions as $column => $definition) {
-
-                    //if (in_array($column, $visibleColumns)) {
-    
-                    // Check if the column is part of a relationship
-                    if (isset($definition['relationship'])) {
-                        $relationship = $definition['relationship'];
-
-                        // Check the dependent fields
-                        if (
-                            !isset($relationship['type'])
-                            || !isset($relationship['display_field'])
-                            || !isset($relationship['dynamic_property'])
-                        )
-                            continue;
-
-                        $relationshipType = $relationship['type'];
-                        //$relatedModel = $relationship['model'];
-                        $displayField = $relationship['display_field'];
-                        //$foreignKey = $relationship['foreign_key'];
-                        $dynamicProperty = $relationship['dynamic_property'];
-
-                        // Handle belongsTo, hasMany, belongsToMany relationships
-                        if (in_array($relationshipType, ['belongsTo', 'hasMany', 'belongsToMany'])) {
-                            $query->orWhereHas($dynamicProperty, function ($relatedQuery) use ($displayField) {
-                                $relatedQuery->where($displayField, 'like', '%' . $this->search . '%');
-                            });
-                        }
-                    } else {
-                        // For non-relationship fields, do a regular where clause
-                        $query->orWhere($column, 'like', '%' . $this->search . '%');
-                    }
-                    //}
-    
-                }
-            })
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->take($this->perPage);//  // Limit the number of records to the per-page value
-        //->get($visibleColumns);
-    }*/
 
 
 

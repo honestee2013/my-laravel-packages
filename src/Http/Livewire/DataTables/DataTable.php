@@ -45,8 +45,11 @@ class DataTable extends Component
         "perPageEvent" => "changePerPage",
         "searchEvent" => "changeSearch",
         "showHideColumnsEvent" => "showHideColumns",
+        'applyFilterEvent' => 'applyFilters',
+
         "recordDeletedEvent" => "resetSelection",
         'recordSavedEvent' => '$refresh',
+
     ];
 
 
@@ -130,6 +133,28 @@ class DataTable extends Component
     }
 
 
+    public function applyFilters($filters)
+    {
+
+        $this->queryFilters = [];
+
+        foreach ($filters as $field => $filter) {
+            if (!isset($filter['operator']) || !isset($filter['value']))
+                continue;
+
+            $operator = trim($filter['operator']);
+            $value = trim($filter['value']);
+
+            if ($operator !== '' && $value !== '') {
+                $this->queryFilters[] = [$field, $operator, $value];
+            }
+        }
+
+
+}
+
+
+
 
     /////////////////// BULK ACTION ////////////////////////
 
@@ -199,7 +224,6 @@ class DataTable extends Component
 
 
     /////////////// RENDERING //////////////////////
-
     public function render()
     {
 

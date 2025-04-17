@@ -182,6 +182,52 @@
         </div>
     @endif
 
+
+
+    <!-- Filter Columns -->
+    @if (in_array('filterColumns', $controls))
+        <div class="dropdown col-12 w-100 col-sm-auto w-sm-auto">
+            <a href="#" class="btn bg-gradient-primary dropdown-toggle bt-sm pt-2 me-2 w-100"
+                data-bs-toggle="dropdown" id="filterDropdownMenuLink" style="border-radius: 3em; height: 3em">
+                <span class="btn-inner--icon"><i class="fa-solid fa-filter text-sm me-1 text-white"></i></span>
+                <span class="btn-inner--text">Filter</span>
+            </a>
+
+            <ul class="dropdown-menu p-3 pt-4" aria-labelledby="filterDropdownMenuLink" style="min-width: 300px">
+                <span class="m-2 text-uppercase text-xs fw-bolder">Filter Records</span>
+                <hr class="m-2 p-0 bg-gray-500" />
+
+                {{--------- List filter inputs per column ---------}}
+                @foreach ($columns as $column)
+                    @if (!in_array($column, $hiddenFields['onTable']))
+                        <div class="dropdown-item mb-2">
+                            <label class="form-label mb-1 fw-bold">
+                                {{ $fieldDefinitions[$column]['label'] ?? ucwords(str_replace('_', ' ', str_replace('_id', '', $column))) }}
+                            </label>
+                            <div class="input-group input-group-sm">
+                                <select class="form-select me-1" wire:model.defer="filters.{{ $column }}.operator" style="width: 4.5em;">
+                                    <option value="like">Contains</option>
+                                    <option value="=">=</option>
+                                    <option value="!=">!=</option>
+                                    <option value=">">></option>
+                                    <option value="<"><</option>
+                                </select>
+                                <input type="text" class="form-control" wire:model.defer="filters.{{ $column }}.value" placeholder="Value">
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+
+                <hr class="m-2 p-0 bg-gray-500" />
+                <button class="btn btn-sm btn-secondary w-100 mt-2" wire:click="applyFilters"
+                    style="border-radius: 2em">Apply Filter</button>
+            </ul>
+        </div>
+    @endif
+
+
+
+
     <!-- Show / Hide Columns -->
     @if (in_array('showHideColumns', $controls))
         <div class="dropdown col-12 w-100 col-sm-auto w-sm-auto">
@@ -224,6 +270,11 @@
             </ul>
         </div>
     @endif
+
+
+
+
+
 </div>
 
 
