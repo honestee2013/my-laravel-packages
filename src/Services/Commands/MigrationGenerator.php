@@ -11,10 +11,11 @@ use Illuminate\Support\Facades\File;
 class MigrationGenerator extends Command
 {
 
-    
 
 
-    protected function getMigrationPath($module, $modelName, $is_pivot = false) {
+
+    protected function getMigrationPath($module, $modelName, $is_pivot = false)
+    {
 
 
         $migrationName = 'create_' . strtolower(Str::plural(Str::snake($modelName))) . '_table';
@@ -24,17 +25,17 @@ class MigrationGenerator extends Command
         }
 
 
-        $migrationPath = app_path("Modules/".ucfirst($module)."/Database/Migrations/");
+        $migrationPath = app_path("Modules/" . ucfirst($module) . "/Database/Migrations/");
 
         sleep(1);
-        $migrationFullPath = $migrationPath . date('Y_m_d_His')  . '_' . $migrationName . '.php';  // Modular path
+        $migrationFullPath = $migrationPath . date('Y_m_d_His') . '_' . $migrationName . '.php';  // Modular path
 
         if (File::exists($migrationPath)) { // Delete the existing migration file
             foreach (File::files($migrationPath) as $file) {
                 if (str_contains($file->getFilename(), $migrationName)) {
                     //echo "Overiding: {$file->getRealPath()}";
                     //File::delete($file->getRealPath());
-                    return $migrationPath.$file->getBasename(); // Return the file if it exist
+                    return $migrationPath . $file->getBasename(); // Return the file if it exist
                 }
             }
         } else {
@@ -46,8 +47,6 @@ class MigrationGenerator extends Command
     }
     public function generateMigration($module, $modelName, $modelData)
     {
-
-
         if (isset($modelData['relations'])) {
             foreach ($modelData['relations'] as $relationName => $relationData) {
                 switch ($relationData['type']) {
@@ -61,38 +60,42 @@ class MigrationGenerator extends Command
                         $this->generatePivotMigration($module, $pivotTableName, $model2, $model1, $foreignKey1, $foreignKey2);
                         break;
 
-                    case 'morphToMany': // Handle morphToMany
-                        $pivotTableName = $relationData['pivotTable']; // Pivot table name is required
-                        $foreignKey = $relationData['foreignKey']; // Foreign key to the current model
-                        $relatedPivotKey = $relationData['relatedPivotKey']; // Polymorphic ID column name
-                        $morphType = $relationData['morphType']; // Polymorphic type column name
+                    case 'morphToMany':
+                        $pivotTableName = $relationData['pivotTable'];
+                        $foreignKey = $relationData['foreignKey'];
+                        $relatedPivotKey = $relationData['relatedPivotKey'];
+                        $morphType = $relationData['morphType'];
 
                         $this->generatePolymorphicPivotMigration($module, $pivotTableName, $modelName, $foreignKey, $relatedPivotKey, $morphType);
                         break;
+
                     case 'belongsTo':
                         $isPivot = $modelData['isPivot'] ?? false;
                         if (!$isPivot) {
                             $fields = $modelData['fields'];
                             $migrationFullPath = $this->getMigrationPath($module, $modelName, $isPivot);
                             $stub = $this->getMigrationStub($module, $modelName, $fields);
-                            $stub = $this->getMigrationStub($module, $modelName, $fields);
                             File::put($migrationFullPath, $stub);
                         }
                         break;
 
                     case 'morphTo':
-                      // No migration needed for morphTo relationships themselves. They are handled in the models
-                      break;
+                        break;
 
                     default:
-                        // Other relationship types (belongsTo, hasOne, hasMany) are handled by the main stub
                         break;
                 }
             }
+        } else {
+            // No relationships defined; generate migration from fields
+            $isPivot = $modelData['isPivot'] ?? false;
+            $fields = $modelData['fields'];
+            $migrationFullPath = $this->getMigrationPath($module, $modelName, $isPivot);
+            $stub = $this->getMigrationStub($module, $modelName, $fields);
+            File::put($migrationFullPath, $stub);
         }
-
-        //echo "Migration created: {$migrationFullPath}";
     }
+
 
 
     protected function generatePolymorphicPivotMigration($module, $pivotTableName, $modelName, $foreignKey, $relatedPivotKey, $morphType)
@@ -100,7 +103,7 @@ class MigrationGenerator extends Command
         $migrationName = 'create_' . $pivotTableName . '_table';
         $migrationFullPath = $this->getMigrationPath($module, $migrationName);
 
-        $stubPath =  __DIR__ . '/../../Stubs/polymorphic_pivot_migration.stub';
+        $stubPath = __DIR__ . '/../../Stubs/polymorphic_pivot_migration.stub';
         $stub = File::get($stubPath);
 
         //$stub = File::get(app_path('Modules/Core/Stubs/polymorphic_pivot_migration.stub')); // Create this stub
@@ -123,8 +126,8 @@ class MigrationGenerator extends Command
             $stub = File::get($moduleStubPath);
         } else {
             //$coreStubPath = app_path('Modules/Core/Stubs/migration.stub'); // Fallback
-            $coreStubPath =  __DIR__ . '/../../Stubs/migration.stub';
-           
+            $coreStubPath = __DIR__ . '/../../Stubs/migration.stub';
+
             if (!File::exists($coreStubPath)) {
                 $this->error("Migration stub not found: {$coreStubPath} or {$moduleStubPath}");
                 return "";
@@ -134,6 +137,9 @@ class MigrationGenerator extends Command
 
         $columns = '';
         foreach ($fields as $fieldName => $fieldData) {
+            if (str_contains($fieldName, '_confirmation'))
+                continue; // eg. "password_confirmation"
+
             $type = $this->getFieldType($fieldData);
             $modifiers = $fieldData['modifiers'] ?? [];
             $foreign = $fieldData['foreign'] ?? null;
@@ -185,8 +191,8 @@ class MigrationGenerator extends Command
 
     private function getFieldType($fieldData)
     {
-         $type = $fieldData['type'] ?? 'string'; // Default to string
-         // Handle custome types like datetime picker to avoid database type errors
+        $type = $fieldData['type'] ?? 'string'; // Default to string
+        // Handle custome types like datetime picker to avoid database type errors
         if (str_contains($type, "datetime"))
             return "datetime";
         else if (str_contains($type, "date"))
@@ -195,10 +201,13 @@ class MigrationGenerator extends Command
             return "time";
         else if (str_contains($type, "text"))
             return "text";
-        else if (str_contains($type, "select")
+        else if (
+            str_contains($type, "select")
             || str_contains($type, "file")
             || str_contains($type, "checkbox")
             || str_contains($type, "radio")
+            || str_contains($type, "email")
+            || str_contains($type, "password")
         )
             return "string";
         else
@@ -209,24 +218,24 @@ class MigrationGenerator extends Command
 
     private function addModifiers($columnDefinition, $modifiers)
     {
-            // Handle modifiers (nullable, unique, default) as chained methods
-            foreach ($modifiers as $modifierName => $modifierValue) {
+        // Handle modifiers (nullable, unique, default) as chained methods
+        foreach ($modifiers as $modifierName => $modifierValue) {
 
-                if ($modifierName === 'nullable' && $modifierValue === true) { // Check for nullable: true
-                    $columnDefinition .= "->nullable()";
-                } elseif ($modifierName === 'unique' && $modifierValue === true) {
-                    $columnDefinition .= "->unique()";
-                } elseif ($modifierName === 'default') { //e.g default:100
-                    if ($modifierValue === true )
-                        $columnDefinition .= "->default(true)";
-                    else if ($modifierValue === false )
-                        $columnDefinition .= "->default(false)";
-                    else
-                        $columnDefinition .= "->default($modifierValue)";
-                }
+            if ($modifierName === 'nullable' && $modifierValue === true) { // Check for nullable: true
+                $columnDefinition .= "->nullable()";
+            } elseif ($modifierName === 'unique' && $modifierValue === true) {
+                $columnDefinition .= "->unique()";
+            } elseif ($modifierName === 'default') { //e.g default:100
+                if ($modifierValue === true)
+                    $columnDefinition .= "->default(true)";
+                else if ($modifierValue === false)
+                    $columnDefinition .= "->default(false)";
+                else
+                    $columnDefinition .= "->default($modifierValue)";
             }
+        }
 
-            return $columnDefinition;
+        return $columnDefinition;
     }
 
 
@@ -247,7 +256,7 @@ class MigrationGenerator extends Command
     protected function getPivotMigrationStub($pivotTableName, $model1, $model2, $foreignKey1, $foreignKey2)
     {
         //$stub = File::get(app_path('Modules/Core/Stubs/pivot_migration.stub'));
-        $stubPath =  __DIR__ . '/../../Stubs/pivot_migration.stub';
+        $stubPath = __DIR__ . '/../../Stubs/pivot_migration.stub';
         $stub = File::get($stubPath);
 
         $stub = str_replace('{{pivotTableName}}', $pivotTableName, $stub);

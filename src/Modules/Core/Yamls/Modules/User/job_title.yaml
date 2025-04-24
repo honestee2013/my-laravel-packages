@@ -1,6 +1,6 @@
 models:
   JobTitle:
-    module: hr
+    module: user
     fields:
       title:
         type: string
@@ -33,10 +33,10 @@ models:
           - title
           - description
 
-    #sidebar:
-    #  add: true
-    #  title: Job Titles
-    #  iconClasses: fas fa-briefcase # Or a more suitable icon
+    sidebar:
+      add: true
+      title: Job Titles
+      iconClasses: fas fa-briefcase # Or a more suitable icon
 
     iconClasses: fas fa-heading # Or a more suitable icon
     includeHeader: false

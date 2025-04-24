@@ -69,6 +69,7 @@ class ConfigGenerator extends Command
                     $relatedModel = null;
                     $relationshipType = null;
                     $displayField = null;
+                    $inlineAdd = null;
                     // Find the related model and relationship type from the relations section
                     if (isset($modelData['relations'])) {
                         foreach ($modelData['relations'] as $relationName => $relationData) {
@@ -76,6 +77,7 @@ class ConfigGenerator extends Command
                                 $relatedModel = $relationData['model'];
                                 $relationshipType = $relationData['type'];
                                 $displayField = $relationData['displayField'] ?? 'name';
+                                $inlineAdd = $relationData['inlineAdd'] ?? false;
                                 break; // Found it, exit the loop
                             }
                         }
@@ -89,7 +91,7 @@ class ConfigGenerator extends Command
                             'display_field' => $displayField, // Or whichever field you want to display
                             'dynamic_property' => $dynamic_property,
                             'foreign_key' => $fieldName,
-                            'inlineAdd' => true,
+                            'inlineAdd' => $inlineAdd,
                         ];
                         $yamlFieldDefinitions[$fieldName]['options'] = [
                             'model' => $relatedModel, // Correct model path from relations
@@ -114,6 +116,7 @@ class ConfigGenerator extends Command
                     $foreignKey = $relationData['foreignKey'] ?? null; // Make foreignKey nullable
                     $displayField = $relationData['displayField'] ?? 'name';
                     $label = Str::title(str_replace("_", " ", Str::snake($relationName)));
+                    $inlineAdd = $relationData['inlineAdd'] ?? false;
 
                     $display = $relationData['display'] ?? $display;
 
@@ -131,7 +134,7 @@ class ConfigGenerator extends Command
                                     'dynamic_property' => $relationName, // The name of the relationship
                                     'foreign_key' => $foreignKey,
                                     'local_key' => 'id', // Local key for the relationship
-                                    'inlineAdd' => false, // Or false, depending on your needs
+                                    'inlineAdd' => $inlineAdd, // Or false, depending on your needs
                                 ],
                                 'options' => [
                                     'model' => $relatedModel,
@@ -161,6 +164,8 @@ class ConfigGenerator extends Command
                             $pivotTable = $relationData['pivotTable'];
                             $relatedPivotKey = $relationData['relatedPivotKey'];
                             $morphType = $relationData['morphType'];
+                            $inlineAdd = $relationData['inlineAdd'] ?? false;
+
 
                             $yamlFieldDefinitions[$relationName] = [
                                 'field_type' => 'morphToMany', // Indicate it's a morphToMany relationship
@@ -173,7 +178,7 @@ class ConfigGenerator extends Command
                                     'related_pivot_key' => $relatedPivotKey,
                                     'morph_type' => $morphType,
                                     'pivot_table' => $pivotTable,
-                                    'inlineAdd' => false,
+                                    'inlineAdd' => $inlineAdd,
                                 ],
                                 'options' => [
                                     'model' => $relatedModel,
@@ -215,7 +220,8 @@ class ConfigGenerator extends Command
             }
 
             // Default label
-            $label = Str::title(str_replace("_", " ", Str::snake($fieldName)));
+            $label = str_replace("_id", "", $fieldName);
+            $label = Str::title(str_replace("_", " ", Str::snake($label)));
 
 
 
@@ -263,10 +269,11 @@ class ConfigGenerator extends Command
 
 
     // Merge included configs and YAML generated configs (include overrides YAML if both exist).
+    $ucModule = ucfirst($module);
     $configData = array_merge(
         $includedConfig, // Include first, so it has lower override priority.
         [
-            "model" => "App\\Modules\\{$module}\\Models\\{$modelName}",
+            "model" => "App\\Modules\\{$ucModule}\\Models\\{$modelName}",
             "fieldDefinitions" => $yamlFieldDefinitions,
             "hiddenFields" => $modelData['hiddenFields'] ?? [],
             "simpleActions" => $modelData['simpleActions'] ?? [],

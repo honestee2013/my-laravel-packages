@@ -118,16 +118,19 @@ class ModelGenerator extends Command
         $stub = str_replace('{{fillable}}', $fillableString, $stub);
 
 
-        $tableName = ""; // Default table name
-        if ($modelData['isPivot'] ?? false) {
-            $pivotTable = Str::snake(Str::singular(class_basename($modelName)));
-            $tableName = "  protected \$table = '{$pivotTable}';\n";
+        $tableName = Str::snake(Str::plural($modelName)); // plural for normal table
+        if ($modelData['isPivot'] ?? false) { // singular for pivot table
+            $tableName = Str::snake(Str::singular(class_basename($modelName)));
         }
+
+        $tableName = "protected \$table = '{$tableName}';\n";
 
         $stub = str_replace('{{tableName}}', $tableName, $stub);
 
         return $stub;
     }
+
+
 
 
 

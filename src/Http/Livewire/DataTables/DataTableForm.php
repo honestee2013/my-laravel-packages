@@ -22,6 +22,8 @@ use QuickerFaster\CodeGen\Services\CodeGenerators\CodeGeneratorService;
 use QuickerFaster\CodeGen\Events\DataTableFormEvent;
 use QuickerFaster\CodeGen\Events\DataTableFormFieldEvent;
 
+use Illuminate\Support\Facades\Hash;
+
 
 
 
@@ -329,10 +331,16 @@ class DataTableForm extends Component
         // Ensure only allowed fields are saved (whitelisting)
         //$allowedFields = ['name', 'email', 'location', 'photo']; // Define which fields are allowed to be updated/created
         $allowedFields = $this->columns;
-        if ($this->isEditMode)
+        // In any case remove
+        $allowedFields = array_diff($allowedFields, $this->hiddenFields['onQuery']);
+
+        if ($this->isEditMode) {
             $allowedFields = array_diff($allowedFields, $this->hiddenFields['onEditForm']);
-        else
+        } else {
             $allowedFields = array_diff($allowedFields, $this->hiddenFields['onNewForm']);
+        }
+
+
 
         $sanitizedFields = array_filter(
             $this->fields,
@@ -340,12 +348,15 @@ class DataTableForm extends Component
             ARRAY_FILTER_USE_KEY
         );
 
+        $sanitizedFields = $this->hashPasswordFields($sanitizedFields);
+        
 
         // $sanitizedFields = $this->addAuditTrailFields("created", $sanitizedFields);
         if ($this->isEditMode)
             $sanitizedFields = $this->addAuditTrailFields("updated", $sanitizedFields);
         else
             $sanitizedFields = $this->addAuditTrailFields("created", $sanitizedFields);
+        
 
 
         // Now create or update the model using the sanitized fields array
@@ -593,9 +604,84 @@ private function getEventFullName() {
             }
         }
 
+        
+        return  $this->removePasswordConfirmIfPasswordNotChanged($rules); 
 
+    }
+
+    private function hashPasswordFields($sanitizedFields) {
+        if ($this->isEditMode) {
+            
+            $record = $this->model::find($this->selectedItemId);
+    
+            foreach ($sanitizedFields as $key => $value) {
+                if (str_contains($key, 'password')) {
+                    if ($sanitizedFields[$key] != null) {
+                        
+                        // Only hash if it's different from the current hashed password
+                        if (!Hash::check($value, $record->$key)) {
+                            $sanitizedFields[$key] = Hash::make($value);
+                        } else {
+                            // Keep the original hashed password if unchanged
+                            $sanitizedFields[$key] = $record->$key;
+                        }
+                    }
+                }
+            }
+        } else {
+            foreach ($sanitizedFields as $key => $value) {
+                if (str_contains($key, 'password')) {
+                    $sanitizedFields[$key] = Hash::make($value);
+                }
+            }
+        }
+    
+        return $sanitizedFields;
+    }
+    
+
+
+    private function removePasswordConfirmIfPasswordNotChanged($rules) {
+       $before = $rules;
+        if ($this->isEditMode) {
+            foreach ($rules as $key => $value) {
+                if (str_contains($key, 'password')) {
+                    $inputField = str_replace('fields.', '', $key);
+                    $inputValue = $this->fields[$inputField] ?? null;
+    
+                    // If the password field is empty, it means user did not change it
+                    if (empty($inputValue)) {
+                        unset($rules[$key]);
+    
+                        // Also remove confirmation rule if exists
+                        $confirmKey = str_replace('password', 'password_confirmation', $key);
+                        if (isset($rules[$confirmKey])) {
+                            unset($rules[$confirmKey]);
+                        }
+                    }
+                }
+            }
+        }
+
+        //dd($before, $rules);
+ 
         return $rules;
     }
+    
+    
+
+    /*
+array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/Http/Livewire/DataTables/DataTableForm.php:638
+  "fields.name" => "required"
+  "fields.email" => "required|email|unique:users,email,2"
+  "fields.password" => "required|min:8|confirmed"
+  "singleSelectFormFields.user_type" => "required|string:max:255"
+]
+
+
+
+    */
+
 
     protected function adjustUniqueFieldValidation($validation) {
         // If the field includes "unique" and there's a selected item ID, customize the rule
@@ -629,8 +715,14 @@ private function getEventFullName() {
         $this->selectedItemId = $record->id;
 
         foreach ($this->fieldDefinitions as $field => $type) {
-            $this->fields[$field] = $record->$field;
+            // Only populate non-password fields
+            if (str_contains($field, 'password')) {
+                $this->fields[$field] = null;
+            } else {
+                $this->fields[$field] = $record->$field;
+            }
         }
+        
 
         // handle multi-selection form field
         if ($record && $this->multiSelectFormFields) {

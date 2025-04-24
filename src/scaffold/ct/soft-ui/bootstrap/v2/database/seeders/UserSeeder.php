@@ -21,7 +21,9 @@ class UserSeeder extends Seeder
             'email' => 'admin@softui.com',
             'password' => Hash::make('secret'),
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
+
+            'user_type' => 'staff'
         ]);
     }
 }

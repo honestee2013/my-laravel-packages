@@ -1,5 +1,5 @@
 
-<table id="dataTable" class="table align-items-center mb-0">
+<table id="dataTable" class="table align-items-center mb-0" >
     <thead>
         <tr>
             <!--- Bulk Action - Select ALL Checkbox ---->
@@ -90,14 +90,14 @@
                                         !!}
                                     <!---- Belongs To Many Relationship ---->
                                     @elseif (isset($fieldDefinitions[$column]['relationship']['type']) && $fieldDefinitions[$column]['relationship']['type'] == 'belongsToMany')
-                                        {!!
+                                        {{--!!
                                             $this->formartTableCellData($row, $column,
                                                 implode(', ',
                                                     $row->{$fieldDefinitions[$column]['relationship']['dynamic_property']}
-                                                    ->pluck($fieldDefinitions[$column]['relationship']['display_field'])->toArray()
+                                                    ?->pluck($fieldDefinitions[$column]['relationship']['display_field'])->toArray()
                                                 )
                                             )
-                                        !!}
+                                        !!--}}
                                     @else <!---- Belongs To Relationship ---->
                                         @php
                                             $dynamic_property = $fieldDefinitions[$column]['relationship']['dynamic_property'];

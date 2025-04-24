@@ -37,6 +37,7 @@ trait DataTableControlsTrait
             'perPage' => [5, 10, 25, 50, 100, 200, 500],
             'search',
             'showHideColumns',
+            'filterColumns',
         ];
     }
 

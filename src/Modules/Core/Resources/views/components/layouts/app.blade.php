@@ -283,7 +283,7 @@
 
     
     @auth
-  <div id="wrapper">
+  <div id="wrapper" class="flex-nowrap">
 
       
 
@@ -291,7 +291,7 @@
         {{------ Sidebar content. The <x-slot name="sidebar" /> content goes here------}}
         {{ $sidebar?? "" }}
 
-        <div class="content" id="contentArea" class=" content main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg {{ Request::is('rtl') ? 'overflow-hidden' : '' }}">
+        <div class="content" style="overflow-x: scroll" id="contentArea">
             {{------ Navbar content. The <x-slot name="navbar" /> content goes here------}}
             {{--{{ $navbar }}--}}
             <x-core.views::layouts.navbars.auth.nav />
@@ -539,5 +539,70 @@
   
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+<!--------------------------------  ORIGINAL LINKS --------------------------------->
+
+    @if (session()->has('success'))
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show"
+            class="position-fixed bg-success rounded right-3 text-sm py-2 px-4">
+            <p class="m-0">{{ session('success') }}</p>
+        </div>
+    @endif
+
+    <!--   Core JS Files   -->
+    <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
+    {{--<script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>--}}
+    <script src="{{ asset('assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/smooth-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/fullcalendar.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/chartjs.min.js') }}"></script>
+
+    @stack('rtl')
+    @stack('dashboard')
+
+    <script>
+        var win = navigator.platform.indexOf('Win') > -1;
+        if (win && document.querySelector('#sidenav-scrollbar')) {
+            var options = {
+                damping: '0.5'
+            }
+            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+    </script>
+
+    <!-- Github buttons -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="{{ asset('assets/js/soft-ui-dashboard.min.js?v=1.0.3') }}"></script>
+
+
+    <!----------------------------------- Plugins ---------------------------------->
+    <!------------- Flat Date Picker JS -------------->
+    <script src="{{ asset('assets/js/plugins/flatpickr.min.js') }}"></script>
+
+    <!------------- Flat Date Picker JS ENDS -------------->
+
+    <!------------------- Sweet Alert JS ------------------>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!--<script src="{{ asset('assets/js/plugins/sweetalert.min.js') }}"></script>-->
+
+    <!------------ PDF File ------------>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!------------ Crest App code generator supporting code ------------>
+    <script src="{{ asset('assets/js/crest-apps/code-generator-ui.js') }}"></script>
+
+
+
+
 </body>
 </html>

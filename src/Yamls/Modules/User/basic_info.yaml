@@ -1,0 +1,100 @@
+models:
+  BasicInfo:
+    module: user
+    fields:
+      user_id:
+        type: select
+        foreign:
+          table: users
+          column: id
+          onDelete: cascade
+        validation:
+          - required|unique:basic_info,user_id
+      phone_number:
+        type: string
+        nullable: true
+      email:
+        type: email
+        nullable: true
+      address_line_1:
+        type: string
+        nullable: true
+      address_line_2:
+        type: string
+        nullable: true
+      city:
+        type: string
+        nullable: true
+      state:
+        type: string
+        nullable: true
+      postal_code:
+        type: string
+        nullable: true
+      country:
+        type: string
+        nullable: true
+      date_of_birth:
+        type: datepicker
+        nullable: true
+      gender:
+        type: select
+        options: male, female, other # Add other options as needed
+        nullable: true
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Basic Info
+      group: users-management
+      id: basic-info
+      parentPageTitle: Users Management
+      pageTitle: Basic Info
+      view: basic-info
+      url: user/basic-info
+
+    fieldGroups:
+      - title: Contact Information
+        groupType: hr
+        fields:
+          - phone_number
+          - email
+
+      - title: Address
+        groupType: hr
+        fields:
+          - address_line_1
+          - address_line_2
+          - city
+          - state
+          - postal_code
+          - country
+
+      - title: Personal Details
+        groupType: hr
+        fields:
+          - date_of_birth
+          - gender
+
+    relations:
+      user:
+        type: belongsTo
+        model: App\Models\User # Assuming User model is in app/Models
+        foreignKey: user_id
+        displayField: name
+
+    sidebar:
+      add: true
+      title: Basic Info
+      iconClasses: fas fa-info-circle # Or a more suitable icon
+
+    iconClasses: fas fa-address-card # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']

@@ -28,10 +28,11 @@ class GenerateAllSchemas extends Command
     // Define strict module execution order
     protected $modules = [
         //'Core' => [],
-        'Organization' => [],
+        //'Organization' => [],
         //'Hr' => [],
         //'Profile' => [],
         //'Item' => [],
+        //'User' => ['user.yaml', 'job_title.yaml', 'basic_info.yaml', 'employee_profile.yaml'],
         /*'Warehouse'=> [
             'environmental_condition.yaml',
             'storage_type.yaml',
@@ -50,7 +51,7 @@ class GenerateAllSchemas extends Command
         $modulesToProcess = $cliModules ? explode(',', $cliModules) : array_keys($this->modules);
 
         foreach ($modulesToProcess as $module) {
-            $module = trim($module);
+            $module = ucfirst(trim($module));
             $searchPath = "$basePath/$module";
 
             if (!File::exists($searchPath)) {

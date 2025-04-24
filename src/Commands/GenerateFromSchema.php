@@ -33,6 +33,7 @@ class GenerateFromSchema extends Command
 
         foreach ($schema['models'] as $modelName => $modelData) {
             $module = $modelData['module']; // Get the module name
+            
             (new MigrationGenerator())->generateMigration($module, $modelName, $modelData);
             (new ModelGenerator())->generateModel($module, $modelName, $modelData);
             (new ConfigGenerator())->generateConfigFile($module, $modelName, $modelData, $this); // New: Generate config file

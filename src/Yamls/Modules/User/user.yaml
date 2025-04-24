@@ -1,0 +1,90 @@
+models:
+  User:
+    module: user
+    fields:
+      name:
+        type: string
+        validation:
+          - required
+      email:
+        type: email
+        validation:
+          - required|email|unique:users,email
+      email_verified_at:
+        type: datetime
+        modifiers:
+          - nullable: true
+        onTable: false
+        onNewForm: false
+        onEditForm: false
+      password:
+        type: password
+        validation:
+          - required|min:8|confirmed
+        onTable: false
+        onEditForm: true # Allow changing password
+      password_confirmation:
+        type: password
+        label: Confirm Password
+        onTable: false
+        onNewForm: true
+        onEditForm: true
+      remember_token:
+        type: string
+        onTable: false
+        onNewForm: false
+        onEditForm: false
+        onQuery: false
+      user_type:
+        type: select
+        options: staff, customer, supplier # Add other user types as needed
+        default: staff
+
+    hiddenFields:
+      onTable:
+        - password
+        - remember_token
+      onNewForm:
+        - email_verified_at
+        - remember_token
+      onEditForm:
+        - email_verified_at
+        - remember_token
+      onQuery:
+        - password
+        - remember_token
+
+    tab:
+      label: Users
+      group: users-management
+      id: users
+      parentPageTitle: Users Management
+      pageTitle: Users Overview
+      view: users
+      url: user/users
+
+    fieldGroups:
+      - title: Basic Information
+        groupType: hr
+        fields:
+          - name
+          - email
+          - user_type
+
+      - title: Password
+        groupType: hr
+        fields:
+          - password
+          - password_confirmation
+
+    sidebar:
+      add: true
+      title: Users
+      iconClasses: fas fa-users # Or a more suitable icon
+
+    iconClasses: fas fa-user # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']

@@ -136,7 +136,7 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
 */
 
 
-$this->registerLivewireComponents($livewirePath = __DIR__ .'/../Http/Livewire');
+        $this->registerLivewireComponents($livewirePath = __DIR__ .'/../Http/Livewire');
 
         // Publishing Creative Tim Bootstrap Soft UI Scaffolding
         $this->publishScaffold();
@@ -270,6 +270,8 @@ $this->registerLivewireComponents($livewirePath = __DIR__ .'/../Http/Livewire');
 
             // Register Livewire components
             $livewirePath = $module . '/Http/Livewire';
+            $namespace = "App\\Modules\\$moduleName\\Http\\Livewire";
+
             if (File::exists($livewirePath)) {
                 $this->registerModuleLivewireComponents($moduleName, $livewirePath);
             }
@@ -337,7 +339,7 @@ $this->registerLivewireComponents($livewirePath = __DIR__ .'/../Http/Livewire');
     {
         $this->publishes([
             __DIR__ . '/../scaffold/ct/soft-ui/bootstrap/v2/app/Http/Controllers' => app_path('Http/Controllers'),
-            __DIR__ . '/../scaffold/ct/soft-ui/bootstrap/v2/app/Models/User.php' => app_path('Models/User.php'),
+            //__DIR__ . '/../scaffold/ct/soft-ui/bootstrap/v2/app/Models/User.php' => app_path('Models/User.php'),
             __DIR__ . '/../Modules' => app_path('Modules'),
 
             __DIR__ . '/../scaffold/ct/soft-ui/bootstrap/v2/public' => public_path('/'),

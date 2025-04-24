@@ -186,14 +186,14 @@
 
     <!-- Filter Columns -->
     @if (in_array('filterColumns', $controls))
-        <div class="dropdown col-12 w-100 col-sm-auto w-sm-auto">
+        <div class="dropdown col-12 w-100 col-sm-auto w-sm-auto" >
             <a href="#" class="btn bg-gradient-primary dropdown-toggle bt-sm pt-2 me-2 w-100"
                 data-bs-toggle="dropdown" id="filterDropdownMenuLink" style="border-radius: 3em; height: 3em">
                 <span class="btn-inner--icon"><i class="fa-solid fa-filter text-sm me-1 text-white"></i></span>
                 <span class="btn-inner--text">Filter</span>
             </a>
 
-            <ul class="dropdown-menu p-3 pt-4" aria-labelledby="filterDropdownMenuLink" style="min-width: 300px">
+            <ul class="dropdown-menu p-3 pt-4" aria-labelledby="filterDropdownMenuLink" style="min-width: 300px;">
                 <span class="m-2 text-uppercase text-xs fw-bolder">Filter Records</span>
                 <hr class="m-2 p-0 bg-gray-500" />
 
