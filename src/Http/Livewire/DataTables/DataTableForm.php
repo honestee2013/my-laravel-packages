@@ -60,6 +60,8 @@ class DataTableForm extends Component
     public $fieldGroups;
 
     public $hiddenFields;
+    public $readOnlyFields;
+
     public $columns;
     public $fields;
     public $model;

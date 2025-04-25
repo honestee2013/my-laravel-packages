@@ -81,6 +81,9 @@
                             }
 
                         @endphp
+
+
+
                         <!----  FORM FIELDS    ---->
                     <div class=" {{ $fieldDefinitions[$field]['wraperCssClasses']?? 'col-12'}}">
                         <div class="form-group">
@@ -109,7 +112,7 @@
 
                             @if ($type === 'textarea')
                                 <textarea wire:model.{{$reactivity}}="fields.{{ $field }}" id="{{ $field }}" class="form-control"
-                                    name = "{{ $field }}" value= "{{ $field }}" rows="3">{{ $fields[$field] ?? '' }}</textarea>
+                                    name = "{{ $field }}" value= "{{ $field }}" rows="3" @if(in_array($field, $readOnlyFields)) disabled @endif>{{ $fields[$field] ?? '' }}</textarea>
 
                             @elseif ($type === 'select')
                                 <!--------- Opening the Select Element -------->
@@ -117,17 +120,17 @@
                                 @if ($field && $multiSelectFormFields && in_array($field, array_keys($multiSelectFormFields)))
                                     <select wire:key="multi-select-{{$field}}" multiple wire:model.{{$reactivity}}="multiSelectFormFields.{{ $field }}"
                                         name = "{{ $field }}" value= "{{ $field }}" id="{{ $field }}"
-                                        class="form-control" placeholder="">
+                                        class="form-control"  @if(in_array($field, $readOnlyFields)) disabled @endif>
 
                                 @elseif ($field && $singleSelectFormFields && in_array($field, array_keys($singleSelectFormFields)))
                                     {{--- Single Select Dropwdown box---}}
                                     <select wire:key="single-select-{{$field}}" wire:model.{{$reactivity}}="singleSelectFormFields.{{ $field }}"
                                     name = "{{ $field }}"  id="{{ $field }}"
-                                    class="form-control" placeholder="">
+                                    class="form-control" @if(in_array($field, $readOnlyFields)) disabled @endif>
 
                                 @else
                                         <select wire:key="select-{{$field}}" wire:model.{{$reactivity}}="fields.{{ $field }}" name = "{{ $field }}"
-                                            value= "{{ $field }}" id="{{ $field }}" class="form-control" placeholder="">
+                                            value= "{{ $field }}" id="{{ $field }}" class="form-control"  @if(in_array($field, $readOnlyFields)) disabled @endif>
                                 @endif
 
                                 @if (isset($fieldDefinitions[$field]['label']))

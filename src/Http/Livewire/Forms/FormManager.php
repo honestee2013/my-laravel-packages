@@ -15,7 +15,10 @@ class FormManager extends DataTableManager
     /*protected $listeners = [
     ];*/
 
-
+    public function mount()
+    {
+        parent::mount();
+    }
 
 
    /* public function render() {

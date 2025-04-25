@@ -243,9 +243,9 @@
 
             {{-- ----------------- MAIN MODAL FOR ADD-EDIT ----------------- --}}
 
-    <livewire:forms.form-manager model="App\\Modules\\User\\Models\\User" modalId="User" />
-    <livewire:forms.form-manager model="App\\Modules\\User\\Models\\BasicInfo" modalId="BasicInfo" />
-    <livewire:forms.form-manager model="App\\Modules\\User\\Models\\EmployeeProfile" modalId="EmployeeProfile" />
+    <livewire:forms.form-manager model="App\\Modules\\User\\Models\\User" modalId="User"/>
+    <livewire:forms.form-manager model="App\\Modules\\User\\Models\\BasicInfo" modalId="BasicInfo"  :readOnlyFields="['user_id']" />
+    <livewire:forms.form-manager model="App\\Modules\\User\\Models\\EmployeeProfile" modalId="EmployeeProfile"  :readOnlyFields="['user_id']" />
 
 
     </div>

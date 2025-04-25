@@ -40,6 +40,7 @@ class DataTableManager extends Component
     public $simpleActions;
     public $moreActions;
     public $hiddenFields;
+    public $readOnlyFields;
 
     public $isEditMode;
     public $selectedItem;
@@ -122,6 +123,10 @@ class DataTableManager extends Component
         if ($this->hiddenFields['onTable'])
             $this->visibleColumns = array_diff($this->visibleColumns, $this->hiddenFields['onTable']);
 
+        // Hidden on form
+        if (!$this->readOnlyFields) {
+            $this->readOnlyFields = [];
+        }
 
         \Log::info($this->getInlinableModels());
 

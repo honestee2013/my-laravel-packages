@@ -22,6 +22,7 @@
                 :multiSelectFormFields="$multiSelectFormFields"
                 :singleSelectFormFields="$singleSelectFormFields"
                 :hiddenFields="$hiddenFields"
+                :readOnlyFields="$readOnlyFields"
                 :columns="$columns"
                 :isEditMode="$isEditMode"
                 :modalId="$modalId"
