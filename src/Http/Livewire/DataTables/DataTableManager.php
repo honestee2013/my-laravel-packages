@@ -108,6 +108,7 @@ class DataTableManager extends Component
                 $this->hiddenFields[$key] = $this->config["hiddenFields"][$key];
         }
 
+
         $this->controls = $this->config["controls"];
         $this->columns = $this->config["columns"];
         $this->multiSelectFormFields = $this->config["multiSelectFormFields"];

@@ -333,6 +333,9 @@ class DataTableForm extends Component
         $allowedFields = $this->columns;
         // In any case remove
         $allowedFields = array_diff($allowedFields, $this->hiddenFields['onQuery']);
+        //if ($this->isEditMode && $this->fields['password'] == null)
+            
+        
 
         if ($this->isEditMode) {
             $allowedFields = array_diff($allowedFields, $this->hiddenFields['onEditForm']);
@@ -350,6 +353,10 @@ class DataTableForm extends Component
 
         $sanitizedFields = $this->hashPasswordFields($sanitizedFields);
         
+        // Remove password field if not in edit mode
+        if ($this->isEditMode && array_key_exists("password", $sanitizedFields) && $sanitizedFields["password"] == null) {
+            unset($sanitizedFields["password"]);
+        }
 
         // $sanitizedFields = $this->addAuditTrailFields("created", $sanitizedFields);
         if ($this->isEditMode)

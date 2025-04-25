@@ -8,6 +8,13 @@ use Livewire\Component;
 
 class UserProfile extends Component
 {
+
+
+    protected $listeners = [
+        'refreshFieldsEvent' => '$refresh'
+    ];
+
+
     public $user;
 
     public function mount()

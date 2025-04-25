@@ -70,13 +70,17 @@ return [
       1 => 'remember_token',
     ], 
 
+    'onDetail' =>    [
+      0 => 'email_verified_at',
+      1 => 'remember_token',
+    ], 
+
     'onEditForm' =>    [
       0 => 'email_verified_at',
       1 => 'remember_token',
     ], 
 
     'onQuery' =>    [
-      0 => 'password',
       1 => 'remember_token',
       2 => 'password_confirmation',
     ], 

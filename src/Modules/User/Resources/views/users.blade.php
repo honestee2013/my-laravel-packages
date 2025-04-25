@@ -37,7 +37,6 @@
   ],
   'onQuery' => 
   [
-    0 => 'password',
     1 => 'remember_token',
     2 => 'password_confirmation',
   ],
