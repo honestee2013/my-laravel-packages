@@ -9,6 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use App\Modules\user\Models\BasicInfo;
+use App\Modules\user\Models\EmployeeProfile;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -22,4 +25,17 @@ class User extends Authenticatable
     ];
 
      // Relations will be inserted here
+    public function basicInfo(){
+		return $this->hasOne(BasicInfo::class, 'user_id');
+	}
+
+    public function employeeProfile(){
+		return $this->hasOne(EmployeeProfile::class, 'user_id');
+	}
+
+    public function profile() {
+        return $this->employeeProfile;
+    }
+
+
 }

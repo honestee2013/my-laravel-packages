@@ -58,6 +58,9 @@ class DataTableManager extends Component
     public $pageTitle;
     public $queryFilters = [];
 
+    public $modalId = 'addEditModal';
+
+
     protected $listeners = [
         "setFeedbackMessageEvent" => "setFeedbackMessage",
         "changeFormModeEvent" => "changeFormMode",
@@ -120,6 +123,11 @@ class DataTableManager extends Component
 
 
         \Log::info($this->getInlinableModels());
+
+    }
+
+
+    private function initialiseData() {
 
     }
 

@@ -699,8 +699,15 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
 
 
     // Method to open the Edit Modal
-    public function openEditModal($id, $model)
+    public function openEditModal($id, $model, $modelId = 'addEditModal')
     {
+
+
+        // handle only for the intended mode
+        if ($this->model !== $model) return;
+
+
+
         Log::info("DataTableForm->openEditModal(): Id: ".$id." this->model: ".$this->model);
         Log::info("DataTableForm->openEditModal(): Id: ".$id." model: ".$model);
         Log::info("DataTableForm->openEditModal(): ".$this->getId());
@@ -712,6 +719,7 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
         $this->resetFields();
 
         $record = $model::find($id);
+       
         $this->selectedItemId = $record->id;
 
         foreach ($this->fieldDefinitions as $field => $type) {
@@ -766,7 +774,8 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
         $this->isEditMode = true;
         //$this->dispatch('open-add-edit-modal' );
         //$this->dispatch('show-modal-main' );
-        $this->dispatch('open-modal-event', ["modalId" => "addEditModal"]);  // To show modal
+        
+        $this->dispatch('open-modal-event', ["modalId" => $modelId]);  // To show modal
 
         $this->dispatch('changeFormModeEvent', ['mode' => 'edit']);
     }

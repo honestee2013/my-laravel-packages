@@ -2,7 +2,7 @@
 
     {{-- ----------------- MAIN MODAL FOR ADD-EDIT ----------------- --}}
     @include('core.views::data-tables.modals.modal-header', [
-        'modalId' => 'addEditModal',
+        'modalId' => $modalId,
         'isEditMode' => $isEditMode,
     ])
         <div class="card-body">
@@ -28,7 +28,7 @@
                 key="addEditModal" />
         </div>
     @include('core.views::data-tables.modals.modal-footer', [
-        'modalId' => 'addEditModal',
+        'modalId' => $modalId,
         'isEditMode' => $isEditMode,
     ])
 

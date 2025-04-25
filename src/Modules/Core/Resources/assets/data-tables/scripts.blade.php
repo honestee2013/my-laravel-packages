@@ -23,10 +23,10 @@
 
                 modalWrapper.classList.remove('is-open'); // Start closing animation
                 // Wait for animation to finish before removing the modal
-                setTimeout(() => {
+                /*setTimeout(() => {
                     if (event[0].modalId != "addEditModal") // Dont remove the parent modal [addEditModal]
                         modalWrapper.remove();
-                }, 800); // Adjust timing to match your CSS transition duration
+                }, 800); // Adjust timing to match your CSS transition duration*/
             });
 
 

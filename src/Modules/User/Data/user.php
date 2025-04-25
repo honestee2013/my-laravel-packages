@@ -47,9 +47,9 @@ return [
       'field_type' => 'select',
       'validation' => 'required|string:max:255',
       'options' =>      [
-        'Staff' => 'Staff',
-        ' Customer' => ' Customer',
-        ' Supplier' => ' Supplier',
+        'Employee' => 'Employee',
+        'Customer' => 'Customer',
+        'Supplier' => 'Supplier',
       ], 
 
       'label' => 'User Type',
