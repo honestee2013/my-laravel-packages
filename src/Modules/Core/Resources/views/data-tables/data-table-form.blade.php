@@ -224,24 +224,30 @@
                                         @endif
                                     </div>
 
+
+
+
+
+
                                     <div class="col-2 rounded border border-red p-1 ms-3 image-container" id="image-container-{{ $field }}">
 
                                         <!--- IMAGE PREVIEW THUBMNAIL ---->
-                                        @if (isset($fields[$field]))
+                                        @if (isset($this->fields[$field]))
+
                                             <!------ Crop Thubnail -------->
                                             <img id="image-preview-{{ $field }}" {{-- --------  Selected on the Client side  ---------- --}}
-                                                @if (is_object($fields[$field]) && $fields[$field]->temporaryUrl()) src="{{ $fields[$field]->temporaryUrl() }}"
+                                                @if (is_object($this->fields[$field]) && $this->fields[$field]->temporaryUrl()) src="{{ $this->fields[$field]->temporaryUrl() }}"
 
                                                                         {{-- --------  Already exist on the Server side  ---------- --}}
-                                                                        @elseif (isset($fields[$field]))
-                                                                            src="{{ asset('storage/' . $fields[$field]) }}" @endif
+                                                                        @elseif (isset($this->fields[$field]))
+                                                                            src="{{ asset('storage/' . $this->fields[$field]) }}" @endif
                                                 alt="Image Preview" style="width: 100%;" />
 
                                             <!------ Crop Icon-------->
                                             <span
-                                                @if (is_object($fields[$field]) && $fields[$field]->temporaryUrl()) onclick="Livewire.dispatch('openCropImageModalEvent', ['{{ $field }}', '{{ $fields[$field]->temporaryUrl() }}', '{{ $this->getId() }}'])"
+                                                @if (is_object($this->fields[$field]) && $this->fields[$field]->temporaryUrl()) onclick="Livewire.dispatch('openCropImageModalEvent', ['{{ $field }}', '{{ $this->fields[$field]->temporaryUrl() }}', '{{ $this->getId() }}'])"
                                                                         @else
-                                                                            onclick="Livewire.dispatch('openCropImageModalEvent', ['{{ $field }}', '{{ asset('storage/' . $fields[$field]) }}', '{{ $this->getId() }}'])" @endif
+                                                                            onclick="Livewire.dispatch('openCropImageModalEvent', ['{{ $field }}', '{{ asset('storage/' . $this->fields[$field]) }}', '{{ $this->getId() }}'])" @endif
                                                 class="mx-2" style="" data-bs-toggle="tooltip" data-bs-original-title="Crop">
                                                 <span style="cursor: pointer;">
                                                     <i class="fas fa-edit text-primary"></i>

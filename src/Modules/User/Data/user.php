@@ -55,6 +55,33 @@ return [
       'label' => 'User Type',
     ], 
 
+
+
+    'roles' => [
+      'field_type' => 'checkbox',
+      'options' => [
+          'model' => 'App\Modules\Access\Models\Role',
+          'column' => 'name',
+      ],
+      'relationship' => [
+          'model' => 'App\Modules\Access\Models\Role',
+          'type' => 'belongsToMany',
+          'display_field' => 'name',
+          'dynamic_property' => 'roles',
+          'multiSelect' => true,
+          'foreign_key' => 'role_id',
+          'inlineAdd' => true,
+      ],
+      'label' => 'User Roles',
+      'display' => 'inline',
+      'multiSelect' => true,
+      'validation' => 'required'
+  ],
+
+
+
+
+
   ], 
 
   'hiddenFields' =>  [
@@ -104,6 +131,7 @@ return [
         0 => 'name',
         1 => 'email',
         2 => 'user_type',
+        3 => 'roles',
       ], 
 
     ], 

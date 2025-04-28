@@ -3,14 +3,16 @@
 namespace App\Modules\user\Models; // Important: Include the module namespace
 
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
+use App\Modules\user\Models\BasicInfo;
+
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-use App\Modules\user\Models\BasicInfo;
 use App\Modules\user\Models\EmployeeProfile;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -36,6 +38,15 @@ class User extends Authenticatable
     public function profile() {
         return $this->employeeProfile;
     }
+
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id', 'role_id')
+            ->where('model_type', 'App\\Modules\\user\\Models\\User');  
+    }
+
+  
 
 
 }

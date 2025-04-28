@@ -13,6 +13,8 @@
                 :configFileName="$configFileName"
                 :config="$config"
 
+                :readOnlyFields="$readOnlyFields"
+
                 :fieldGroups="$fieldGroups"
                 :fieldDefinitions="$fieldDefinitions"
                 :model="$model"

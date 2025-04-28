@@ -124,9 +124,8 @@ class DataTableManager extends Component
             $this->visibleColumns = array_diff($this->visibleColumns, $this->hiddenFields['onTable']);
 
         // Hidden on form
-        if (!$this->readOnlyFields) {
+        if ($this->readOnlyFields == null)
             $this->readOnlyFields = [];
-        }
 
         \Log::info($this->getInlinableModels());
 

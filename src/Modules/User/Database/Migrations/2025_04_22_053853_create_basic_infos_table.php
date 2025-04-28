@@ -11,6 +11,11 @@ return new class extends Migration
         Schema::create('basic_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
+
+            $table->string('profile_picture')->nullable();
+            $table->string('about_me')->nullable();
+
+
 			$table->string('phone_number')->nullable();
 			$table->string('email')->nullable();
 			$table->string('address_line_1')->nullable();

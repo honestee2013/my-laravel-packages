@@ -85,6 +85,10 @@ class DataTableForm extends Component
     public $queryFilters = [];
 
 
+    public $uploads = []; // separate property for file uploads
+
+
+
     public function mount()
     {
 
@@ -93,12 +97,24 @@ class DataTableForm extends Component
         Log::info("DataTableForm->mount(): ".$this->getId());
 
         // Initialize fields with keys from fieldDefinitions
-        foreach ($this->fieldDefinitions as $field => $type) {
+        /*foreach ($this->fieldDefinitions as $field => $type) {
             $this->fields[$field] = null; // Default values (null or empty)
-        }
+        }*/
 
-
+        if ($this->readOnlyFields == null)
+            $this->readOnlyFields = [];
+        
     }
+
+
+
+    public function updatedUploads($value, $key)
+    {
+        if (isset($this->uploads[$key])) {
+            $this->fields[$key] = $this->uploads[$key]; 
+        }
+    }
+
 
 
     public function updated($field, $value)
@@ -120,6 +136,9 @@ class DataTableForm extends Component
         // Specific
         if (class_exists("\\App\\Modules\\{$this->moduleName}\\Events\\{$event}"))
             $event::dispatch($data);
+
+
+            
 
     }
 
@@ -297,15 +316,14 @@ class DataTableForm extends Component
         // Handle file uploads for image, photo & picture fields
         foreach (DataTableConfig::getSupportedImageColumnNames() as $imageField) {
             if (isset($this->fields[$imageField]) && is_object($this->fields[$imageField])) {
-                // Validate file type (e.g., ensure it's an image)
                 if (!$this->fields[$imageField]->isValid()) {
                     throw new \Exception('Invalid file upload.');
                 }
-
-                $path = $this->fields[$imageField]->store('uploads', 'public'); // Use Laravel's Storage system
-                $this->fields[$imageField] = $path; // Add the file path to the fields array
+                $path = $this->fields[$imageField]->store('uploads', 'public');
+                $this->fields[$imageField] = $path;
             }
         }
+        
 
 
         // Handle simple (No Relationship involved) multi-select form fields (convert them to JSON for storage)
@@ -832,6 +850,7 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
             'text' => 'Image was cropped successfully!',
             'icon' => 'success',
         ]);
+        
     }
 
 

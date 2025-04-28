@@ -13,7 +13,7 @@ class BasicInfo extends Model
 
 
     protected $fillable = [
-        'user_id', 'phone_number', 'email', 'address_line_1', 'address_line_2', 'city', 'state', 'postal_code', 'country', 'date_of_birth', 'gender' // Fillable properties will be inserted here
+        'user_id', 'about_me', 'profile_picture', 'phone_number', 'email', 'address_line_1', 'address_line_2', 'city', 'state', 'postal_code', 'country', 'date_of_birth', 'gender' // Fillable properties will be inserted here
     ];
 
        public function user(){

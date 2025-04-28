@@ -3,6 +3,14 @@
 return [
   'model' => 'App\\Modules\\User\\Models\\BasicInfo',
   'fieldDefinitions' =>  [
+    
+    'profile_picture' =>    [
+      'display' => 'inline',
+      'field_type' => 'file',
+      'validation' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+      'label' => 'Profile Picture',
+    ],
+
     'user_id' =>    [
       'relationship' =>      [
         'model' => 'App\\Models\\User',
@@ -23,6 +31,7 @@ return [
       'validation' => 'required|unique:basic_infos,user_id',
       'label' => 'User',
     ], 
+
 
     'phone_number' =>    [
       'display' => 'inline',
@@ -90,6 +99,18 @@ return [
       'label' => 'Gender',
     ], 
 
+
+    'about_me' =>    [
+      'display' => 'inline',
+      'field_type' => 'textarea',
+      'validation' => 'nullable|string|max:1000',
+      'label' => 'About Me',
+    ],
+
+
+
+
+
   ], 
 
   'hiddenFields' =>  [
@@ -122,8 +143,11 @@ return [
       'groupType' => 'hr',
       'fields' =>      [
         0 => 'user_id',
-        1 => 'date_of_birth',
-        2 => 'gender',
+        1 => 'profile_picture',
+        2 => 'date_of_birth',
+        3 => 'gender',
+        4 => 'about_me',
+
       ], 
 
     ], 
