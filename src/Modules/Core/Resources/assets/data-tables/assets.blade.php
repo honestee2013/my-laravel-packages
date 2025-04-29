@@ -47,7 +47,7 @@
             transform: translateY(0);
             background-color: white;
             width: 80%;
-            max-height: 90vh;
+            max-height: 99vh;
             /* Ensures modal fits within viewport height */
             min-height: 500px;
             /* Optional: Ensures modal has a minimum height */

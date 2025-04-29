@@ -245,9 +245,9 @@
 
                                             <!------ Crop Icon-------->
                                             <span
-                                                @if (is_object($this->fields[$field]) && $this->fields[$field]->temporaryUrl()) onclick="Livewire.dispatch('openCropImageModalEvent', ['{{ $field }}', '{{ $this->fields[$field]->temporaryUrl() }}', '{{ $this->getId() }}'])"
+                                                @if (is_object($this->fields[$field]) && $this->fields[$field]->temporaryUrl()) wire:click="openCropImageModal( '{{ $field }}', '{{ $this->fields[$field]->temporaryUrl() }}', '{{ $this->getId() }}')"
                                                                         @else
-                                                                            onclick="Livewire.dispatch('openCropImageModalEvent', ['{{ $field }}', '{{ asset('storage/' . $this->fields[$field]) }}', '{{ $this->getId() }}'])" @endif
+                                                                            wire:click="openCropImageModal('{{ $field }}', '{{ asset('storage/' . $this->fields[$field]) }}', '{{ $this->getId() }}')" @endif
                                                 class="mx-2" style="" data-bs-toggle="tooltip" data-bs-original-title="Crop">
                                                 <span style="cursor: pointer;">
                                                     <i class="fas fa-edit text-primary"></i>

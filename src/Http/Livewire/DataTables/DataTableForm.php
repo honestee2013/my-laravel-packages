@@ -108,13 +108,35 @@ class DataTableForm extends Component
 
 
 
-    public function updatedUploads($value, $key)
+
+
+
+ public function openCropImageModal($field, $imgUrl, $id)
     {
-        if (isset($this->uploads[$key])) {
-            $this->fields[$key] = $this->uploads[$key]; 
-        }
+        
+        $modalId = "crop-image-modal";
+        $data = [
+            "modalId" => $modalId,
+            "field" => $field,
+            "imgUrl" => $imgUrl,
+            "id" => $id,
+        ];
+
+        //@include('core.views::data-tables.modals.crop-image-modal')
+        $modalHtml = view('core.views::data-tables.modals.crop-image-modal', $data)->render();
+        //$this->dispatch("open-add-relationship-modal", ['modalHtml' => $modalHtml, "modalId" => $modalId]);
+        $data["modalHtml"] = $modalHtml;
+
+        $this->dispatch("show-crop-image-modal-event", $data);
     }
 
+
+
+
+
+
+
+  
 
 
     public function updated($field, $value)
@@ -313,17 +335,12 @@ class DataTableForm extends Component
         if ($validationData)
             $this->validate($validationData, [...$this->messages, ...$validationMsgs]);
 
-        // Handle file uploads for image, photo & picture fields
-        foreach (DataTableConfig::getSupportedImageColumnNames() as $imageField) {
-            if (isset($this->fields[$imageField]) && is_object($this->fields[$imageField])) {
-                if (!$this->fields[$imageField]->isValid()) {
-                    throw new \Exception('Invalid file upload.');
-                }
-                $path = $this->fields[$imageField]->store('uploads', 'public');
-                $this->fields[$imageField] = $path;
+            
+            $record = null;
+            if ($this->isEditMode) {
+                $record = $this->model::find($this->selectedItemId);
+                $this->handleUploadedImages($record);
             }
-        }
-        
 
 
         // Handle simple (No Relationship involved) multi-select form fields (convert them to JSON for storage)
@@ -393,9 +410,8 @@ class DataTableForm extends Component
 
         try {
 
-            $record = null;
-            if ($this->isEditMode) {
-                $record = $this->model::find($this->selectedItemId);
+            if ($this->isEditMode && $record) {
+
                 $oldRecord = $record->toArray();
                 // Sending [After Update Event]
                 $this->dispatchAllEvents("BeforeUpdate", $oldRecord, $sanitizedFields);
@@ -513,6 +529,28 @@ class DataTableForm extends Component
         $this->dispatch('$refresh');  // To update  modal modal field dropdown options data
 
 
+    }
+
+
+    private function  handleUploadedImages($record) {
+        // Handle file uploads for image, photo & picture fields
+        foreach (DataTableConfig::getSupportedImageColumnNames() as $imageField) {
+            if (isset($this->fields[$imageField]) && is_object($this->fields[$imageField])) {
+                if (!$this->fields[$imageField]->isValid()) {
+                    throw new \Exception('Invalid file upload.');
+                }
+                
+                // Delete old image if it exists and is a string path
+                if (isset($record->{$imageField}) && is_string($record->{$imageField})) {
+                    // Delete the old image from storage
+                    Storage::disk('public')->delete($record->{$imageField});
+                }
+        
+                // Store new image
+                $path = $this->fields[$imageField]->store('uploads', 'public');
+                $this->fields[$imageField] = $path;
+            }
+        }
     }
 
 
@@ -819,39 +857,43 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
 
     public function saveCroppedImage($field, $croppedImageBase64, $id)
     {
-        // Validate the Base64 string format
         if (!preg_match('/^data:image\/(jpg|jpeg|png);base64,/', $croppedImageBase64, $matches)) {
-            // Handle invalid image format
             throw new \Exception('Invalid image format.');
         }
-
-        // Extract the file extension from the Base64 string
-        $extension = $matches[1] == 'jpeg' ? 'jpg' : $matches[1];
-
-        // Decode the Base64 string to binary data
+    
+        $extension = $matches[1] === 'jpeg' ? 'jpg' : $matches[1];
         $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $croppedImageBase64));
+    
 
-        // Generate a unique file name
-        $fileName = 'cropped_image_' . time() . '.' . $extension;
+        if ($this->isEditMode && $this->selectedItemId) {
+            // Find the record by ID
+            $record = $this->model::find($this->selectedItemId);
+            // Delete old image if it exists and is a string path
+            if (isset($record->{$field}) && is_string($record->{$field})) {
+                // Delete the old image from storage
+                Storage::disk('public')->delete($record->{$field});
+            }
+        }
 
-        // Use Laravel's Storage facade to save the file in a secure way
+
+        // Set a consistent filename (e.g., user_5_profile.jpg)
+        $fileName = strtolower($field) . '_' . $id . '.' . $extension;
         $filePath = 'uploads/' . $fileName;
-
-
-        // Save the file to the disk (public disk)
+    
+        // Optionally delete the old file first (if renamed or format changes)
+        // Storage::disk('public')->delete($filePath);
+    
         Storage::disk('public')->put($filePath, $imageData);
-
-        // Update the field with the relative file path
         $this->fields[$field] = $filePath;
-
-        // Dispatch success notification
+        
+    
         $this->dispatch('swal:success', [
             'title' => 'Success!',
             'text' => 'Image was cropped successfully!',
             'icon' => 'success',
         ]);
-        
     }
+    
 
 
 

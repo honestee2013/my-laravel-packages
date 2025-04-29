@@ -2,6 +2,7 @@
 <?php
     //$userRoles = implode($user->roles->toArray());
     $userJobTitle = $user->profile()?->jobTitle->title;
+
 ?>
 
     <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
@@ -15,8 +16,7 @@
 
               <div class="col-auto">
                 <div class="avatar avatar-xl position-relative">
-                  <img src="../assets/img/bruce-mars.jpg" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
-                </div>
+                  <img src="{{ $user?->basicInfo?->profile_picture ? asset('storage/'.$user->basicInfo->profile_picture) : asset('assets/img/default_profile_picture.jpg') }}" alt="profile_image" class="w-100 border-radius-lg shadow-sm">                </div>
               </div>
 
               <div class="col-10 my-auto">
@@ -130,7 +130,7 @@
                 <div class="card-body p-3">
                   @if($user->basicInfo)
                     <p class="text-sm">
-                    {{$user->basicInfo?->about}}
+                    {{$user->basicInfo?->about_me}}
                     </p>
                     <hr class="horizontal gray-light my-4">
                     <ul class="list-group">
@@ -241,7 +241,7 @@
 
 
 
-            {{-- ----------------- MAIN MODAL FOR ADD-EDIT ----------------- --}}
+    {{-- ----------------- MAIN MODAL FOR ADD-EDIT ----------------- --}}
 
     <livewire:forms.form-manager model="App\\Modules\\User\\Models\\User" modalId="User"/>
     <livewire:forms.form-manager model="App\\Modules\\User\\Models\\BasicInfo" modalId="BasicInfo"  :readOnlyFields="['user_id']" />

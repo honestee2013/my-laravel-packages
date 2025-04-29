@@ -64,85 +64,88 @@
 
 
             ///************ SHOW IMAGE CROP MODAL EVENT  *************///
-            let cropper;
-            Livewire.on('show-crop-image-modal-event', (event) => {
+            if (!window.__cropModalListenerRegistered) {
+                window.__cropModalListenerRegistered = true;
 
-                // Data from the Backend
-                const field = event[0].field;
-                const imgSrc = event[0].imgUrl;
-                const modalHtml = event[0].modalHtml;
-                const modalId = event[0].modalId;
-                const componentId = event[0].id;
+                let cropper;
+                Livewire.on('show-crop-image-modal-event', (event) => {
 
-                // Get the reference of the LIVEWIRE COMPONENT THAT TRIGER THIS EVENT
-                const component = Livewire.find(componentId);
+                    // Data from the Backend
+                    const field = event[0].field;
+                    const imgSrc = event[0].imgUrl;
+                    const modalHtml = event[0].modalHtml;
+                    const modalId = event[0].modalId;
+                    const componentId = event[0].id;
 
-                // Set the child modal content
-                setChildModalContent(modalHtml);
+                    // Get the reference of the LIVEWIRE COMPONENT THAT TRIGER THIS EVENT
+                    const component = Livewire.find(componentId);
 
-                // Get the modal element by ID
-                const modalElement = document.getElementById(modalId);
+                    // Set the child modal content
+                    setChildModalContent(modalHtml);
 
-                // Create a new Bootstrap Modal instance
-                const myModal = new bootstrap.Modal(modalElement, {
-                    keyboard: false // Optional: Disable closing the modal with keyboard
-                });
+                    // Get the modal element by ID
+                    const modalElement = document.getElementById(modalId);
 
-                // Show the modal
-                myModal.show();
+                    // Create a new Bootstrap Modal instance
+                    const myModal = new bootstrap.Modal(modalElement, {
+                        keyboard: false // Optional: Disable closing the modal with keyboard
+                    });
 
-                // Set up the Cropper.js instance once the modal is fully shown
-                modalElement.addEventListener('shown.bs.modal', function() {
-                    const cropperContainer = document.getElementById('cropper-image-container' +
-                        modalId);
+                    // Show the modal
+                    myModal.show();
 
-                    // Ensure the container has 100% width and appropriate height
-                    cropperContainer.style.width = '100%';
-                    cropperContainer.style.height = '70vh'; // Adjust height as needed
+                    // Set up the Cropper.js instance once the modal is fully shown
+                    modalElement.addEventListener('shown.bs.modal', function() {
+                        const cropperContainer = document.getElementById('cropper-image-container' +
+                            modalId);
 
-                    // Get the image element (img with empty src must exist for the JCroper.js to work)
-                    const image = document.getElementById('image-to-crop' +
-                        modalId); // Ensure you have an image element with this ID
+                        // Ensure the container has 100% width and appropriate height
+                        cropperContainer.style.width = '100%';
+                        cropperContainer.style.height = '70vh'; // Adjust height as needed
 
-                    if (image) {
-                        image.src = imgSrc;
-                        // Destroy the old cropper instance if it exists
-                        if (cropper) {
-                            cropper.destroy();
-                        }
+                        // Get the image element (img with empty src must exist for the JCroper.js to work)
+                        const image = document.getElementById('image-to-crop' +
+                            modalId); // Ensure you have an image element with this ID
 
-                        // Create the JCripper instance and display the image
-                        cropper = new Cropper(image, {
-                            aspectRatio: 0, // Set aspect ratio if needed
-                            viewMode: 2, // Adjust the view mode as needed
-                            autoCropArea: 1, // Optional: Set the initial crop area to cover the entire image
-                            responsive: true // Optional: Enable responsive mode
-                        });
+                        if (image) {
+                            image.src = imgSrc;
+                            // Destroy the old cropper instance if it exists
+                            if (cropper) {
+                                cropper.destroy();
+                            }
 
-                        // Track button click for saving the croped image
-                        document.getElementById('save-croped-image' + modalId).addEventListener(
-                            'click',
-                            function() {
-                                // Get the cropped image data URL
-                                const croppedImage = cropper.getCroppedCanvas().toDataURL(
-                                    'image/jpeg');
-
-                                // Emit the event to Livewire with the Base64 image data
-                                if (component) {
-                                    // Call the method on the correct component instance
-                                    component.call('saveCroppedImage', field, croppedImage,
-                                        component.id);
-                                }
-
-                                // Close the modal
-                                myModal.hide();
+                            // Create the JCripper instance and display the image
+                            cropper = new Cropper(image, {
+                                aspectRatio: 0, // Set aspect ratio if needed
+                                viewMode: 2, // Adjust the view mode as needed
+                                autoCropArea: 1, // Optional: Set the initial crop area to cover the entire image
+                                responsive: true // Optional: Enable responsive mode
                             });
-                    }
-                });
 
-            })
+                            // Track button click for saving the croped image
+                            document.getElementById('save-croped-image' + modalId).addEventListener(
+                                'click',
+                                function() {
+                                    // Get the cropped image data URL
+                                    const croppedImage = cropper.getCroppedCanvas().toDataURL(
+                                        'image/jpeg');
 
+                                    // Emit the event to Livewire with the Base64 image data
+                                    if (component) {
+                                        // Call the method on the correct component instance
+                                        component.call('saveCroppedImage', field, croppedImage,
+                                            component.id);
+                                    }
 
+                                    // Close the modal
+                                    myModal.hide();
+                                });
+                        }
+                    });
+
+                })
+
+            }
 
             ///****************** SWEET ALEART DIALOGS  *******************///
 

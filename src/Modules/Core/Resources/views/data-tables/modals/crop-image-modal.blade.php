@@ -1,5 +1,5 @@
-    <div wire:ignore.self class="modal fade" id="{{ $modalId }}" tabindex="-1"
-        role="dialog"aria-labelledby="addEditModalLabel" aria-hidden="true" wire:key='"{{ $modalId }}'>
+    <div wire:ignore class="modal fade" id="{{ $modalId }}" tabindex="10000"
+        role="dialog"aria-labelledby="addEditModalLabel" aria-hidden="true" >
 
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content p-4">
@@ -15,10 +15,21 @@
                             style="width: 100%;" />
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button id="save-croped-image{{ $modalId }}" type="button" class="btn btn-primary">OK</button>
+
+                <div class="row">
+                    <div>
+                        <hr class="horizontal dark my-0" />
+                    </div>
+                    <div class="modal-footer d-flex justify-content-end align-items-center flex-wrap gap-2 p-3">
+                        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                        <button id="save-croped-image{{ $modalId }}" type="button" class="btn btn-primary rounded-pill">OK</button>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
+
+
+
+    

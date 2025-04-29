@@ -275,6 +275,10 @@
         font-weight: 500;
     }
 
+    #toggleSidebar {
+      z-index: 130 !important;
+    }
+
   
   </style>
 </head>

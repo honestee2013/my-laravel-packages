@@ -68,7 +68,7 @@ class DataTableManager extends Component
         "changeSelectedItemEvent" => "changeSelectedItem",
         "openAddRelationshipItemModalEvent" => "openAddRelationshipItemModal",
 
-        "openCropImageModalEvent" => "openCropImageModal",
+        //"openCropImageModalEvent" => "openCropImageModal",
         'checkPageRefreshTimeEvent' => 'checkPageRefreshTime',
 
         'addModalFormComponentStackEvent' => 'addModalFormComponentStack',
@@ -298,10 +298,12 @@ class DataTableManager extends Component
 
 
 
-    public function openCropImageModal($field, $imgUrl, $id)
+    /*public function openCropImageModal($field, $imgUrl, $id)
     {
 
-        $modalId = ++$this->modalCount;
+        //$modalId = ++$this->modalCount;
+        
+        $modalId = "crop-image-modal";
         $data = [
             "modalId" => $modalId,
             "field" => $field,
@@ -316,7 +318,7 @@ class DataTableManager extends Component
 
         ///$this->dispatch("open-add-relationship-modal", $data);
         $this->dispatch("show-crop-image-modal-event", $data);
-    }
+    }*/
 
 
     public function checkPageRefreshTime()
