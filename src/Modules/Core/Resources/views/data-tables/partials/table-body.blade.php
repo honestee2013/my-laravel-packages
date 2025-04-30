@@ -90,14 +90,14 @@
                                         !!}
                                     <!---- Belongs To Many Relationship ---->
                                     @elseif (isset($fieldDefinitions[$column]['relationship']['type']) && $fieldDefinitions[$column]['relationship']['type'] == 'belongsToMany')
-                                        {{--!!
+                                        {!!
                                             $this->formartTableCellData($row, $column,
                                                 implode(', ',
                                                     $row->{$fieldDefinitions[$column]['relationship']['dynamic_property']}
                                                     ?->pluck($fieldDefinitions[$column]['relationship']['display_field'])->toArray()
                                                 )
                                             )
-                                        !!--}}
+                                        !!}
                                     @else <!---- Belongs To Relationship ---->
                                         @php
                                             $dynamic_property = $fieldDefinitions[$column]['relationship']['dynamic_property'];

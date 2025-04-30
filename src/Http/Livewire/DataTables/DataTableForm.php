@@ -63,7 +63,7 @@ class DataTableForm extends Component
     public $readOnlyFields;
 
     public $columns;
-    public $fields;
+    public $fields = [];
     public $model;
     public $moduleName;
     public $modelName;
@@ -103,6 +103,9 @@ class DataTableForm extends Component
 
         if ($this->readOnlyFields == null)
             $this->readOnlyFields = [];
+
+
+
         
     }
 
@@ -142,6 +145,7 @@ class DataTableForm extends Component
     public function updated($field, $value)
     {
         
+        
         $data = [
             'componentId' => $this->getId(),
             'field' => $field,
@@ -160,7 +164,6 @@ class DataTableForm extends Component
             $event::dispatch($data);
 
 
-            
 
     }
 
@@ -231,6 +234,8 @@ class DataTableForm extends Component
     // updateModelFieldEvent  handler
     public function updateModelField($modelIds, $fieldName, $fieldValue)
     {
+
+
 
         // Ensure $modelIds is an array of integers
         $modelIds = is_array($modelIds) ? array_map('intval', $modelIds) : [intval($modelIds)];
