@@ -9,6 +9,10 @@ return [
                     'validation' => 'required|string|max:255',
                 ],
                 'description' =>'textarea',
+                'editable' => [
+                    'field_type' => 'boolean',
+                    'label' => 'Editable',
+                ],
         ],
 
 
@@ -17,10 +21,11 @@ return [
             'onTable' => [
             ],
             'onNewForm' => [
+                'editable',
 
             ],
             'onEditForm' => [
-
+                'editable',
             ],
 
             'onQuery' => [

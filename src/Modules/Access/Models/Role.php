@@ -2,12 +2,14 @@
 
 namespace App\Modules\Access\Models;
 
+use App\Modules\Core\Traits\EditableTraits;
 use Spatie\Permission\Models\Role as SpatieRole;
 
 
 class Role extends SpatieRole
 {
 
+    use EditableTraits;
 
     /**
      * The database table used by the model.
@@ -36,6 +38,7 @@ class Role extends SpatieRole
                 'description',
 
                 'guard_name',
+                'editable',
                 'team_id'
               ];
 

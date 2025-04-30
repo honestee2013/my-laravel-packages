@@ -4,14 +4,18 @@ return [
 
         "model"=>"App\\Modules\\Core\\Models\\Status",
         "fieldDefinitions"=>[
-            'display_name' => ['field_type' => 'text', 'validation' => 'required|string'],
             'name' => ['field_type' => 'text', 'validation' => 'required|string'],
             'description' => ['field_type' => 'textarea'],
+            'editable' => [
+                'field_type' => 'boolean',
+                'label' => 'Editable',
+            ],
 
         ],
 
         "hiddenFields"=>[
-            'onTable' => [ "name"],
+            'onNewForm' => [ "editable"],
+            'onEditForm' => [ "editable"],
         ],
 
 

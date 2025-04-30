@@ -16,6 +16,11 @@ return [
       'label' => 'Description',
     ], 
 
+    'editable' =>    [
+      'field_type' => 'boolean',
+      'label' => 'Editable',
+    ],
+
   ], 
 
   'hiddenFields' =>  [
@@ -23,10 +28,13 @@ return [
     ], 
 
     'onNewForm' =>    [
+      'editable',
     ], 
 
     'onEditForm' =>    [
+      'editable',
     ], 
+
 
     'onQuery' =>    [
     ], 

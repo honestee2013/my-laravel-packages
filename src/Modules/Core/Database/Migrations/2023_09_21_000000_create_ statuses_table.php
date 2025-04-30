@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->unique(); // Snake_case name for programmatic use
             //$table->string('display_name'); // Descriptive name for user-friendly display
             $table->text('description')->nullable(); // Optional description
-            $table->boolean('is_seeded')->default(false);
+            $table->boolean('editable')->default(false);
 
             $table->timestamps();
 
