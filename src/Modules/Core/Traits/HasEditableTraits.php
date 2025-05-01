@@ -3,7 +3,7 @@
 namespace App\Modules\Core\Traits;
 
 
-trait EditableTraits
+trait HasEditableTraits
 {
 
    public function getEditableAttribute($value)

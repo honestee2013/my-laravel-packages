@@ -5,11 +5,11 @@ namespace App\Modules\user\Models; // Important: Include the module namespace
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Modules\Core\Traits\EditableTraits; // Import the EditableTraits trait
+use App\Modules\Core\Traits\HasEditableTraits; // Import the HasEditableTraits trait
 
 class JobTitle extends Model
 {
-    use HasFactory, EditableTraits;
+    use HasFactory, HasEditableTraits;
 
     protected $table = 'job_titles';
 

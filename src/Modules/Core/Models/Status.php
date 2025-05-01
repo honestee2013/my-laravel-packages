@@ -5,11 +5,11 @@ namespace App\Modules\Core\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Modules\Core\Traits\EditableTraits; // Import the EditableTraits trait
+use App\Modules\Core\Traits\HasEditableTraits; // Import the HasEditableTraits trait
 
 class Status extends Model
 {
-    use HasFactory, EditableTraits;
+    use HasFactory, HasEditableTraits;
 
     protected $fillable = [
         'name',

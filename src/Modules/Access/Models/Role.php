@@ -2,14 +2,14 @@
 
 namespace App\Modules\Access\Models;
 
-use App\Modules\Core\Traits\EditableTraits;
+use App\Modules\Core\Traits\HasEditableTraits;
 use Spatie\Permission\Models\Role as SpatieRole;
 
 
 class Role extends SpatieRole
 {
 
-    use EditableTraits;
+    use HasEditableTraits;
 
     /**
      * The database table used by the model.
