@@ -12,6 +12,10 @@ use QuickerFaster\CodeGen\Services\Imports\DataImport;
 use Maatwebsite\Excel\Excel;
 
 
+use QuickerFaster\CodeGen\Services\AccessControl\AccessControlService;
+use QuickerFaster\CodeGen\Services\GUI\SweetAlertService;
+
+
 class DataTableControl extends Component
 {
 
@@ -136,6 +140,13 @@ class DataTableControl extends Component
     // Export XLS, CSV, PDF files
     public function export($fileType, $fileName = "", $rows = "table")
     {
+        // Check if the user has permission to perform the action
+        if (!AccessControlService::checkPermission( 'export', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+            return;
+        }
+
+
         if (!$fileName && $this->model)
             $fileName = class_basename($this->model);
     
@@ -317,7 +328,26 @@ class DataTableControl extends Component
 
     public function import()
     {
+
+        // Check if the user has permission to perform the action
+        if (!AccessControlService::checkPermission( 'import', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+            return;
+        }
+
         return (new DataImport($this->model, $this->columns))->import($this->file->path(), $this);
+    }
+
+
+    public function printTable()
+    {
+        // Check if the user has permission to perform the action
+        if (!AccessControlService::checkPermission( 'print', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+            return;
+        }
+        
+        $this->dispatch('print-table-event');
     }
 
 

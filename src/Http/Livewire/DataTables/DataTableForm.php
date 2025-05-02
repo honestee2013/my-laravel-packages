@@ -23,6 +23,9 @@ use QuickerFaster\CodeGen\Events\DataTableFormEvent;
 use QuickerFaster\CodeGen\Events\DataTableFormFieldEvent;
 
 use Illuminate\Support\Facades\Hash;
+use QuickerFaster\CodeGen\Services\AccessControl\AccessControlService;
+
+use QuickerFaster\CodeGen\Services\GUI\SweetAlertService;
 
 
 
@@ -323,6 +326,18 @@ class DataTableForm extends Component
     public function saveRecord($modalId)
     {
 
+
+        // Check if the user has permission to perform the action
+        if (!AccessControlService::checkPermission( 'edit', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+            return;
+        }
+
+        // Display saving success message
+        //SweetAlertService::showSuccess($this, "Success!", "Record saved successfully.");
+
+
+
         //Log::info("DataTableForm->saveRecord(): ".$this->getId());
 
         // Retrieve dynamic validation rules
@@ -515,12 +530,7 @@ class DataTableForm extends Component
 
 
         // Display saving success message
-        $this->dispatch('swal:success', [
-            'title' => 'Success!',
-            'text' => 'Record saved successfully.',
-            'icon' => 'success',
-        ]);
-
+        SweetAlertService::showSuccess($this, "Success!", "Record saved successfully.");
 
 
 
@@ -772,6 +782,11 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
     public function openEditModal($id, $model, $modelId = 'addEditModal')
     {
 
+        // Check if the user has permission to perform the action
+        if (!AccessControlService::checkPermission( 'edit', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+            return;
+        }
 
         // handle only for the intended mode
         if ($this->model !== $model) return;
@@ -920,6 +935,14 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
     // Method to open the Add Modal
     public function openAddModal()
     {
+
+        // Check if the user has permission to perform the action
+        if (!AccessControlService::checkPermission( 'create', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+            return;
+        }
+
+
         // Reset multiple opend modal component to release space
         $this->dispatch('checkPageRefreshTimeEvent');
 
@@ -935,6 +958,12 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
     ////////////////////// CONFIRM DELETE /////////////////////
     public function confirmDelete($ids)
     {
+
+        // Check if the user has permission to perform the action
+        if (!AccessControlService::checkPermission( 'edit', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+            return;
+        }
 
         // Sanitize the input
         if (is_array($ids)) {
@@ -955,6 +984,14 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
 
     public function deleteSelected()
     {
+
+        // Check if the user has permission to perform the action
+        if (!AccessControlService::checkPermission( 'edit', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+            return;
+        }
+
+
         $this->model::whereIn('id', $this->selectedRows)->delete();
         $this->resetSelection();
         $this->dispatch('swal:success', [
@@ -977,6 +1014,14 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
     ///////////////////// SHOW DETAIL MODAL //////////////////
     public function openDetailModal($id, $model)
     {
+
+        // Check if the user has permission to perform the action
+        if (!AccessControlService::checkPermission( 'edit', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+            return;
+        }
+
+
         // Load the selected item details from the database
         $this->selectedItem = $model::findOrFail($id);
         // Emit event to trigger the modal

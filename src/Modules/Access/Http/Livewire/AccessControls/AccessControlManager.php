@@ -27,13 +27,28 @@ class AccessControlManager extends Component
     public $isUrlAccess = false;
 
 
-    public $controlList = ['view', 'print', 'edit', 'delete', 'export'];
+    public $controlList = ['view', 'create',  'edit', 'delete', 'print', 'export', 'import'];
     public $controlsCSSClasses = [
         'view' => ['color' => 'info', 'bg' => 'info', 'icon' => 'fas fa-eye'],
-        'print' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-print'],
+        'create' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-plus'],
         'edit' => ['color' => 'warning', 'bg' => 'warning', 'icon' => 'fas fa-edit'],
         'delete' => ['color' => 'danger', 'bg' => 'danger', 'icon' => 'fas fa-trash'],
+
+        'print' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-print'],
+
         'export' => ['color' => 'primary', 'bg' => 'primary', 'icon' => 'fas fa-file-pdf'],
+        'import' => ['color' => 'primary', 'bg' => 'primary', 'icon' => 'fas fa-file-import'],
+
+
+        // 'restore' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-undo'],
+        // 'approve' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-check'],
+        // 'reject' => ['color' => 'danger', 'bg' => 'danger', 'icon' => 'fas fa-times'],
+        // 'send' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-paper-plane'],
+        // 'forceDelete' => ['color' => 'danger', 'bg' => 'danger', 'icon' => 'fas fa-trash'],
+        // 'archive' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-archive'],
+        // 'unarchive' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-archive'],
+
+        
     ];
     public $resourceControlButtonGroup = [];
 

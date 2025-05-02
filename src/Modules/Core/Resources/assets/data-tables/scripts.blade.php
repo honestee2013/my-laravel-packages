@@ -2,9 +2,17 @@
     <script>
         document.addEventListener('livewire:initialized', function() {
 
+
+
+                ///************ PRINT EVENT  *************///
+                Livewire.on('print-table-event', (event) => {
+                    printTable();
+                });
+
+
+
+
             ///************ MODALS FOR ADD-EDIT   *************///
-
-
             Livewire.on('open-modal-event', function(event) {
                 let modalId = event[0].modalId;
 

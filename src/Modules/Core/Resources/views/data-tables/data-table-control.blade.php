@@ -3,7 +3,7 @@
 
     <!-- Files -->
     @if (isset($controls['files']))
-        <div class="dropdown col-12 w-100 col-sm-auto w-sm-auto " x->
+        <div class="dropdown col-12 w-100 col-sm-auto w-sm-auto " wire:ignore>
             <a href="#" class="btn bg-gradient-primary dropdown-toggle mb-2 bt-sm pt-2  rounded-pill w-100 px-5"
                 data-bs-toggle="dropdown" id="navbarDropdownMenuLink2" style=" height: 3em; ">
                 <span class="btn-inner--icon"><i class="fa-solid fa-file text-sm me-1 text-white"></i></span>
@@ -62,7 +62,7 @@
                 @if (in_array('print', $controls['files']))
                     <hr class="m-2 p-0 bg-gray-500" />
                     <li>
-                        <a onclick="printTable()" class="dropdown-item" href="#">
+                        <a wire:click="printTable()" class="dropdown-item" href="#">
                             <span class="btn-inner--icon me-1"><i class="fa-solid fa-print text-sm me-1"></i></span>
                             <span class="btn-inner--text">Print</span>
                         </a>

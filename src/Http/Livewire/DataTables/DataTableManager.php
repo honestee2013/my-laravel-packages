@@ -15,6 +15,9 @@ use QuickerFaster\CodeGen\Traits\DataTable\DataTableFieldsConfigTrait;
 use QuickerFaster\CodeGen\Traits\DataTable\DataTableConfigTrait;
 use QuickerFaster\CodeGen\Traits\DataTable\DataTableControlsTrait;
 
+use App\Modules\Access\Models\Permission;
+use Illuminate\Support\Facades\Auth;
+use QuickerFaster\CodeGen\Services\AccessControl\AccessControl;
 
 
 class DataTableManager extends Component
@@ -80,6 +83,7 @@ class DataTableManager extends Component
 
     public function mount()
     {
+
 
         Log::info("DataTableManager->mount(): " . $this->getId());
 
