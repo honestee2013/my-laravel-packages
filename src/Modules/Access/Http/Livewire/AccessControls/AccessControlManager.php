@@ -10,6 +10,7 @@ use App\Modules\Access\Models\Role;
 use Illuminate\Support\Facades\File;
 use App\Modules\Access\Models\Permission;
 use QuickerFaster\CodeGen\Services\AccessControl\AccessControlPermissionService;
+use QuickerFaster\CodeGen\Services\Core\ApplicationInfo;
 
 class AccessControlManager extends Component
 {
@@ -65,19 +66,9 @@ class AccessControlManager extends Component
 
     public function mount() {
 
-        $this->moduleNames = $this->getModuleNames();
+        $this->moduleNames = ApplicationInfo::getModuleNames();
         $selectedScopeClassName = "App\Modules\Access\Models\\".$this->selectedScopeName;
         $this->scopeNames =  $selectedScopeClassName::all()->pluck("name", "id");
-
-        /*$this->selectedRole = Role::where('name', 'Staff')->first();
-        if (!$this->selectedRole) {
-            $this->selectedRoleId = $this->selectedRole->id;
-        }
-
-        $this->checkPermissionsExistsOrCreate($this->resourceNames);
-        $this->setupResourceControlButtonGroup();*/
-
-
     }
 
 
@@ -115,7 +106,7 @@ class AccessControlManager extends Component
         $directory = app_path("Modules/".ucfirst($this->selectedModule)."/Models");
         $namespace = addslashes("App\\Modules\\".ucfirst($this->selectedModule)."\\Models\\");
 
-        $this->resourceNames = $this->getAllModelNames($directory, $namespace);
+        $this->resourceNames = ApplicationInfo::getAllModelNames($directory, $namespace);
 
 
         AccessControlPermissionService::checkPermissionsExistsOrCreate($this->resourceNames);
@@ -131,76 +122,12 @@ class AccessControlManager extends Component
 
 
 
-
-
-
-
-
-    private function getModuleNames() {
-        $moduleNames = [];
-        // Get all module directories
-        $modules = File::directories(base_path('app/Modules'));
-
-        // Loop through each module to load views, routes, and config files dynamically
-        foreach ($modules as $module) {
-            $moduleNames[] = basename($module); // Get the module name from the directory
-        }
-
-        return $moduleNames;
-    }
-
-
-
-
-    public function getAllModelNames($directory = null, $namespace = 'App\\Models\\')
-    {
-
-
-        if (!$directory) {
-            $directory = app_path('Models');
-        }
-
-        $models = [];
-        if (!file_exists($directory))
-            return $models;
-        
-        $files = File::allFiles($directory);
-
-        foreach ($files as $file) {
-            $relativePath = $file->getRelativePathname();
-            $fullClassName = $namespace . str_replace(['/', '.php'], ['\\', ''], $relativePath);
-
-
-            //if (class_exists($fullClassName)) {
-                // Take class name out of the path
-                $models[] = class_basename($fullClassName);
-            //}
-        }
-
-        return $models;
-    }
-
-
-
-
-    protected function checkPermissionsExistsOrCreate($resourceNames) {
-        foreach($resourceNames as $resourceName) {
-            $permissionNames = $this->getResourcePermissionNames($resourceName);
-            foreach($permissionNames as $permissionName) {
-                if(!Permission::where("name", $permissionName)->first())
-                    Permission::create(['name' => $permissionName, 'description' => 'Allow role or user to '.str_replace('_', ' ',$permissionName)]);
-            }
-        }
-    }
-
-
-
     private function setupResourceControlButtonGroup () {
         $this->resourceControlButtonGroup = [];
 
 
         foreach ($this->resourceNames as $resourceName) {
-            $resourcePermissionNames = $this->getResourcePermissionNames($resourceName);
+            $resourcePermissionNames = AccessControlPermissionService::getResourcePermissionNames($resourceName);
             if (empty($this->resourceControlButtonGroup[$resourceName]))
                 $this->resourceControlButtonGroup[$resourceName] = $this->getPermissionConfig($resourceName, $resourcePermissionNames);
         }
@@ -240,15 +167,7 @@ class AccessControlManager extends Component
 
 
 
-    // Get resoure permission name list
-    private function getResourcePermissionNames($resourceName) {
-        $resourcePermissionNames = [];
-        $resourceName = Str::snake($resourceName);
-        foreach($this->controlList as $control) {
-            $resourcePermissionNames[] = strtolower($control."_".$resourceName );
-        }
-        return $resourcePermissionNames;
-    }
+
 
 
     public function render()
