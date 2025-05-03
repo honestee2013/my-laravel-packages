@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\user\Models; // Important: Include the module namespace
+namespace App\Models; 
 
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Models\Role;
@@ -18,6 +18,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
     use HasRoles;
+
+    protected $guard_name = 'web'; // ✅ important line
 
     protected $table = 'users';
 

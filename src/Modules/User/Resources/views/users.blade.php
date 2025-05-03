@@ -14,7 +14,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\user\Models\User"
+    <livewire:data-tables.data-table-manager model="App\Models\User"
     pageTitle="Users Overview"
     queryFilters=[]
     :hiddenFields="[

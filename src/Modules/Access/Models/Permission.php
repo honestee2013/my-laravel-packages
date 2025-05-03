@@ -4,7 +4,10 @@ namespace App\Modules\Access\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Permission extends Model
+use Spatie\Permission\Models\Permission as SpatiePermission;
+
+
+class Permission extends SpatiePermission
 {
 
 

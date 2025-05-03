@@ -339,7 +339,7 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../scaffold/ct/soft-ui/bootstrap/v2/app/Http/Controllers' => app_path('Http/Controllers'),
-            //__DIR__ . '/../scaffold/ct/soft-ui/bootstrap/v2/app/Models/User.php' => app_path('Models/User.php'),
+            __DIR__ . '/../Modules/User/Models/User.php' => app_path('Models/User.php'),
             __DIR__ . '/../Modules' => app_path('Modules'),
 
             __DIR__ . '/../scaffold/ct/soft-ui/bootstrap/v2/public' => public_path('/'),

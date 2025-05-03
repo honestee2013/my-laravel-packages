@@ -2,7 +2,7 @@
 
 namespace QuickerFaster\CodeGen\Http\Livewire\DataTables;
 
-
+use App\Modules\Access\Http\Livewire\AccessControls\AccessControlManager;
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +19,8 @@ use App\Modules\Access\Models\Permission;
 use Illuminate\Support\Facades\Auth;
 use QuickerFaster\CodeGen\Services\AccessControl\AccessControl;
 
+use App\Modules\Access\Models\Role;
+use QuickerFaster\CodeGen\Services\AccessControl\AccessControlPermissionService;
 
 class DataTableManager extends Component
 {
@@ -84,6 +86,9 @@ class DataTableManager extends Component
     public function mount()
     {
 
+        // dd(auth()->user()?->can('view_user'));
+       //$accessControlManager = new AccessControlManager();
+       //$accessControlManager->seedPermissions();
 
         Log::info("DataTableManager->mount(): " . $this->getId());
 

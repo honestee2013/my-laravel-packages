@@ -40,18 +40,18 @@ class AccessControlManager extends Component
         'import' => ['color' => 'primary', 'bg' => 'primary', 'icon' => 'fas fa-file-import'],
 
 
-        // 'restore' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-undo'],
-        // 'approve' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-check'],
-        // 'reject' => ['color' => 'danger', 'bg' => 'danger', 'icon' => 'fas fa-times'],
-        // 'send' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-paper-plane'],
-        // 'forceDelete' => ['color' => 'danger', 'bg' => 'danger', 'icon' => 'fas fa-trash'],
-        // 'archive' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-archive'],
-        // 'unarchive' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-archive'],
+        //'restore' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-undo'],
+        //'approve' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-check'],
+        //'reject' => ['color' => 'danger', 'bg' => 'danger', 'icon' => 'fas fa-times'],
+        //'send' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-paper-plane'],
+        //'forceDelete' => ['color' => 'danger', 'bg' => 'danger', 'icon' => 'fas fa-trash'],
+        //'archive' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-archive'],
+        //'unarchive' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-archive'],
 
         
     ];
-    public $resourceControlButtonGroup = [];
 
+    public $resourceControlButtonGroup = [];
 
 
 
@@ -73,6 +73,7 @@ class AccessControlManager extends Component
 
         $this->checkPermissionsExistsOrCreate($this->resourceNames);
         $this->setupResourceControlButtonGroup();*/
+
 
     }
 
@@ -120,6 +121,7 @@ class AccessControlManager extends Component
         //$this->dispatch('$refresh');
         //$this->dispatch('refreshComponentEvent');
         $this->showResourceControlButtonGroup = true;
+        
 
     }
 
@@ -190,6 +192,9 @@ class AccessControlManager extends Component
 
 
     private function setupResourceControlButtonGroup () {
+        $this->resourceControlButtonGroup = [];
+
+
         foreach ($this->resourceNames as $resourceName) {
             $resourcePermissionNames = $this->getResourcePermissionNames($resourceName);
             if (empty($this->resourceControlButtonGroup[$resourceName]))
