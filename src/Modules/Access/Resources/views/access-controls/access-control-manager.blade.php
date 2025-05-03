@@ -1,7 +1,7 @@
 
         <x-dashboard.views::layouts.dashboards.default-dashboard>
             <x-slot name="mainTitle"> <strong class="text-info text-gradient">{{ $selectedScope?->name}}</strong> Access Control</x-slot>
-            <x-slot name="subtitle"> {{ $selectedModule? ucfirst($selectedModule. " Module"): ''}}</x-slot>
+            <x-slot name="subtitle"> {{ $selectedModuleName? ucfirst($selectedModuleName. " Module"): ''}}</x-slot>
             <x-slot name="controls">
                @include("access.views::access-controls.module-selector")
             </x-slot>

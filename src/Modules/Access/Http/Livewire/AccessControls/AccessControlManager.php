@@ -24,6 +24,8 @@ class AccessControlManager extends Component
     public $selectedScope = null;
     public $selectedScopeId;
     public $selectedModule = null;
+    public $selectedModuleName = null;
+    
 
     public $isUrlAccess = false;
 
@@ -122,7 +124,8 @@ class AccessControlManager extends Component
         //$this->dispatch('$refresh');
         //$this->dispatch('refreshComponentEvent');
         $this->showResourceControlButtonGroup = true;
-        
+        $this->selectedModuleName = $this->selectedModule;
+        $this->selectedModule = null;
 
     }
 
