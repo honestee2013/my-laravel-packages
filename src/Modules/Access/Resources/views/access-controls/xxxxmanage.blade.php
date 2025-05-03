@@ -69,6 +69,7 @@
                                                                 <span class="badge rounded-pill bg-gradient-danger" style="font-size: 0.6em">Delete records</span>
                                                                 <span class="badge rounded-pill bg-gradient-primary" style="font-size: 0.6em">Export records</span>-->
 
+                                                                
                                                 @foreach ($accessController['scope']->permissions as $permission)
                                                     @foreach ($accessController['allControls'] as $control)
                                                         @php

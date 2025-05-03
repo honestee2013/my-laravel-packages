@@ -9,6 +9,7 @@ use App\Modules\Access\Models\Role;
 
 use Illuminate\Support\Facades\File;
 use App\Modules\Access\Models\Permission;
+use QuickerFaster\CodeGen\Services\AccessControl\AccessControlPermissionService;
 
 class AccessControlManager extends Component
 {
@@ -115,7 +116,7 @@ class AccessControlManager extends Component
         $this->resourceNames = $this->getAllModelNames($directory, $namespace);
 
 
-        $this->checkPermissionsExistsOrCreate($this->resourceNames);
+        AccessControlPermissionService::checkPermissionsExistsOrCreate($this->resourceNames);
         $this->setupResourceControlButtonGroup();
 
         //$this->dispatch('$refresh');
@@ -184,7 +185,7 @@ class AccessControlManager extends Component
             $permissionNames = $this->getResourcePermissionNames($resourceName);
             foreach($permissionNames as $permissionName) {
                 if(!Permission::where("name", $permissionName)->first())
-                Permission::create(['name' => $permissionName, 'description' => 'Allow role or user to '.str_replace('_', ' ',$permissionName)]);
+                    Permission::create(['name' => $permissionName, 'description' => 'Allow role or user to '.str_replace('_', ' ',$permissionName)]);
             }
         }
     }

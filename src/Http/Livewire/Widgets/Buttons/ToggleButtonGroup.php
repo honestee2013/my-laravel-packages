@@ -27,6 +27,7 @@ class ToggleButtonGroup extends Component
 
     public function mount()
     {
+
         $this->description = $this->getUpdatedDescription();
 
         // Ensure children are properly initialized
@@ -115,15 +116,21 @@ class ToggleButtonGroup extends Component
 
     protected function getUpdatedDescription() {
 
+
         $resourceName = $this->data["resourceName"];
         $controlsCSSClasses = $this->data["controlsCSSClasses"];
         $scopeAllPermissionNames = $this->data["selectedScope"]?->getPermissionNames()->toArray();
         $description = "";
 
+
+
+
        if ($scopeAllPermissionNames && $resourceName && $controlsCSSClasses){
             foreach ($scopeAllPermissionNames as $key => $scopeAllPermissionName) {
-                $control = explode('_',$scopeAllPermissionName)[0];
-                $resource = explode('_',$scopeAllPermissionName)[1];
+                $searchPos = strpos($scopeAllPermissionName, '_');
+                $control = substr($scopeAllPermissionName, 0, $searchPos);
+                $resource = substr($scopeAllPermissionName, $searchPos+1);
+
                 if (strtolower(\Str::snake($resourceName)) == $resource)
                     $description .= "<span class='badge rounded-pill bg-gradient-".$controlsCSSClasses[$control]['bg']. "' style='font-size: 0.7em; margin: 0em 0.2em;'>".$control."</span>";
             }
