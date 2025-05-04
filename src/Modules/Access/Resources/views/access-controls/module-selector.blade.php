@@ -1,6 +1,7 @@
 
+<div class="row g-2">
+    @hasanyrole('admin|super_admin')
 
-    <div class="row g-2">
         <!-- Scope Selection Dropdown -->
         <div class="input-group col-12 w-100 col-sm-auto w-sm-auto">
             <select id="scopeSelect" wire:model.live.500ms="selectedScopeId"  class="form-select rounded-pill p-1 ps-3 pe-sm-5 px-sm-4 m-0 small-control"  >
@@ -35,7 +36,8 @@
             </button>
         </div>
 
+    @endhasanyrole
+</div>
 
-    </div>
 
 

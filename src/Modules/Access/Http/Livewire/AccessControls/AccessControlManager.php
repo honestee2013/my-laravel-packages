@@ -26,7 +26,7 @@ class AccessControlManager extends Component
     public $selectedScopeId;
     public $selectedModule = null;
     public $selectedModuleName = null;
-    
+
 
     public $isUrlAccess = false;
 
@@ -52,7 +52,20 @@ class AccessControlManager extends Component
         //'archive' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-archive'],
         //'unarchive' => ['color' => 'success', 'bg' => 'success', 'icon' => 'fas fa-archive'],
 
-        
+
+    ];
+
+
+    const CUSTOM_VIEW_MODEL_NAMES = [
+        'user-role-management' => 'role',
+        'user-role-assignment' => 'role',
+        'access-control-management' => 'role',
+    ];
+
+    const ROLE_ADMIN_ONLY_VIEWS = [
+        'user-role-management',
+        'user-role-assignment',
+        'access-control-management'
     ];
 
     public $resourceControlButtonGroup = [];
@@ -70,6 +83,20 @@ class AccessControlManager extends Component
         $selectedScopeClassName = "App\Modules\Access\Models\\".$this->selectedScopeName;
         $this->scopeNames =  $selectedScopeClassName::all()->pluck("name", "id");
     }
+
+
+    public static function getViewPerminsionModelName($view){
+        // Check if the view is in the custom permission model names and return it
+        if (array_key_exists($view, self::CUSTOM_VIEW_MODEL_NAMES)) {
+            return self::CUSTOM_VIEW_MODEL_NAMES[$view];
+        }
+
+        // Convert the view name to a permission model name
+        $view = str_replace('-', '_', $view);
+        $view = Str::singular($view);
+        return $view;
+    }
+
 
 
     public function updatedSelectedScopeId($id) {
@@ -112,8 +139,7 @@ class AccessControlManager extends Component
         AccessControlPermissionService::checkPermissionsExistsOrCreate($this->resourceNames);
         $this->setupResourceControlButtonGroup();
 
-        //$this->dispatch('$refresh');
-        //$this->dispatch('refreshComponentEvent');
+
         $this->showResourceControlButtonGroup = true;
         $this->selectedModuleName = $this->selectedModule;
         $this->selectedModule = null;

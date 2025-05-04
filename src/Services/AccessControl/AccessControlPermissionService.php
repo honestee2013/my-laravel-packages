@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use QuickerFaster\CodeGen\Services\Core\ApplicationInfo;
 use function Laravel\Prompts\error;
 use App\Modules\Access\Models\Permission;
+use App\Models\User;
 
 class AccessControlPermissionService
 {
@@ -70,6 +71,37 @@ class AccessControlPermissionService
         
 
         }
+
+
+        public static function isOwner($model, $id) {
+            // Query the model record
+            $model = $model::find($id);
+
+            // Check if the model is a user and the user is accessing his profile
+            if ($model instanceof User ) {
+                // Extract the last url part which is view or id
+                $url = url()->previous(); // OR request()->headers->get('referer')
+                $segments = explode("/", $url);
+                $view = end($segments);
+                if ($view == "my-profile")
+                    return $model->id == $id;
+            }
+
+            // Check other possible resource ownership 
+            $user = auth()->user();
+            if ($model->user_id == $user->id) {
+                return true;
+            } else if ($model->team_id == $user->current_team_id) {
+                return true;
+            } else if ($model->created_by == $user->id) {
+                return true;
+            } else if ($model->updated_by == $user->id) {
+                return true;
+            }
+            return false;
+
+        }
+
 
 
 

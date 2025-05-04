@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Controllers\ChangePasswordController;
@@ -6,6 +7,8 @@ use App\Http\Controllers\InfoUserController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResetController;
 use App\Http\Controllers\SessionsController;
+use App\Modules\Access\Http\Livewire\AccessControls\AccessControlManager;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +25,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-/*
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -66,6 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/logout', [SessionsController::class, 'destroy']);
 	Route::get('/user-profile', [InfoUserController::class, 'create']);
 	Route::post('/user-profile', [InfoUserController::class, 'store']);
+
     Route::get('/login', function () {
 		return view('dashboard');
 	})->name('sign-up');
@@ -94,12 +97,19 @@ Route::get('/login', function () {
 
 
 
+
 Route::group([
     'prefix' => 'access',
 ], function () {
-    Route::get('access-control-management/{module}', function(){
-        return view('access.views::access-control-management',
-        [
+    Route::get('access-control-management/{module}', function () {
+
+        // Chech if only admin can access this view. If the user is not admin do not proceed
+        if (!auth()->check() || !auth()->user()->hasRole(['admin', 'super_admin'])) {
+            abort(403, 'Unauthorized');
+        }
+
+
+        return view('access.views::access-control-management', [
             'selectedModule' => request("module"),
             'isUrlAccess' => true,
         ]);
@@ -108,31 +118,54 @@ Route::group([
 
 
 
+
+
 Route::get('/{module}/{view}', function ($module, $view) {
-    // Validate module and view parameters
+    // Validation
     Validator::make(['module' => $module, 'view' => $view], [
         'module' => 'required|string',
         'view' => 'required|string',
     ])->validate();
 
-    // Define an allowed list of modules (you can modify this as needed)
-    $allowedModules = [
-        'core', 'billing', 'sales', 'organization', 'hr', 'profile', 'item', 'warehouse',
-    ]; // Add your allowed modules here
+    $allowedModules = ['core', 'billing', 'sales', 'organization', 'hr', 'profile', 'item', 'warehouse', 'user', 'access'];
+
     if (!in_array($module, $allowedModules)) {
         abort(404, 'Invalid module');
     }
 
-    // Construct the view name securely. App\Modules\[Module Name]\Resources\views IS MAPPED TO [Module Name]::
+
+
+    // Chech if only admin can access this view. If the user is not admin do not proceed
+    if (in_array($view, AccessControlManager::ROLE_ADMIN_ONLY_VIEWS)) {
+        // Check if the user has the role
+        if (!auth()->check() || !auth()->user()->hasRole(['admin', 'super_admin'])) {
+            abort(403, 'Unauthorized');
+        }
+
+    // If user is  not admin, check if the user has the permission
+    } else if (auth()->check() && !auth()->user()->hasRole(['admin', 'super_admin'])) {
+        // Build a dynamic permission name
+        $permission = "view_".AccessControlManager::getViewPerminsionModelName(($view));
+
+        // Check permission or role
+        if (!auth()->check() || !auth()->user()->can($permission)) {
+            if ($view !=="my-profile") {
+                abort(403, 'Unauthorized');
+            }
+        }
+    }
+
+
+
+    // Compose view path
     $viewName = $module . '.views::' . $view;
 
-    // Check if the view file exists
+    // Check view existence
     if (view()->exists($viewName)) {
         return view($viewName);
-    } else {
-        // Handle the case where the view doesn't exist
-        abort(404, 'View not found');
     }
+
+    abort(404, 'View not found');
 });
 
 
@@ -140,4 +173,9 @@ Route::get('/{module}/{view}', function ($module, $view) {
 
 
 
-*/
+
+
+
+
+
+

@@ -1,16 +1,19 @@
 
-<li class="nav-item mt-4">
-    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Security</h6>
-</li>
+@hasanyrole('admin|super_admin')
+
+    <li class="nav-item mt-4">
+        <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Security</h6>
+    </li>
 
 
 
-<x-core.views::layouts.navbars.sidebar-link-item
-    iconClasses="fas fa-key sidebar-icon"
-    url="access/access-control-management/{{$moduleName}}"
-    title="Control User Access"
-    target="_blank"
-/>
+    <x-core.views::layouts.navbars.sidebar-link-item
+        iconClasses="fas fa-key sidebar-icon"
+        url="access/access-control-management/{{$moduleName}}"
+        title="Control User Access"
+        target="_blank"
+    />
+@endhasanyrole
 
 
 

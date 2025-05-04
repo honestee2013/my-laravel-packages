@@ -32,7 +32,7 @@
                 </div>
               </div>
               <div class="col-auto my-auto">
-                <span wire:click="editRecord( {{$user->id}}, 'App\\Modules\\User\\Models\\User', 'User')" style="cursor: pointer" >
+                <span wire:click="editRecord( {{$user->id}}, 'App\\Models\\User', 'User')" style="cursor: pointer" >
                   <i class="fas fa-user-edit text-secondary text-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i>
                 </span>
               </div>
@@ -183,11 +183,13 @@
                       </div>
                       <div class="col-md-4 text-end">
 
-                        @if($user->profile())
-                          <span wire:click="editRecord( {{$user->basicInfo?->id}}, 'App\\Modules\\User\\Models\\{{$user->user_type}}Profile', '{{$user->user_type}}Profile')" style="cursor: pointer" >
-                            <i class="fas fa-edit text-secondary text-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit {{$user->user_type}} Info"></i>
-                          </span>
-                        @endif
+                        {{--@if($user->profile())
+                          @hasanyrole('admin|super_admin')
+                            <span wire:click="editRecord( {{$user->basicInfo?->id}}, 'App\\Modules\\User\\Models\\{{$user->user_type}}Profile', '{{$user->user_type}}Profile')" style="cursor: pointer" >
+                              <i class="fas fa-edit text-secondary text-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit {{$user->user_type}} Info"></i>
+                            </span>
+                          @endhasanyrole
+                        @endif--}}
 
                       </div>
                     </div>
@@ -203,7 +205,7 @@
 
                           <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Department:</strong> &nbsp; {{$user->profile()?->department}}</li>
                           <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Designation:</strong> &nbsp; {{$user->profile()?->designation}}</li>
-                          <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Meporting Manager:</strong> &nbsp; {{$user->profile()?->reportingManager->name}}</li>
+                          <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Meporting Manager:</strong> &nbsp; {{$user->profile()?->reportingManager?->name}}</li>
 
                           <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Joining Date:</strong> &nbsp; {{$user->profile()?->joining_date}}</li>
                           <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Work Location:</strong> &nbsp; {{$user->profile()?->jobTitle->work_location}}</li>
@@ -243,7 +245,11 @@
 
     {{-- ----------------- MAIN MODAL FOR ADD-EDIT ----------------- --}}
 
-    <livewire:forms.form-manager model="App\\Modules\\User\\Models\\User" modalId="User"/>
+    <livewire:forms.form-manager model="App\\Models\\User" modalId="User" :hiddenFields="[
+      'onEditForm' => ['roles'], 'onQuery' => ['roles'],
+    ]"
+    
+    />
     <livewire:forms.form-manager model="App\\Modules\\User\\Models\\BasicInfo" modalId="BasicInfo"  :readOnlyFields="['user_id']" />
     <livewire:forms.form-manager model="App\\Modules\\User\\Models\\EmployeeProfile" modalId="EmployeeProfile"  :readOnlyFields="['user_id']" />
 

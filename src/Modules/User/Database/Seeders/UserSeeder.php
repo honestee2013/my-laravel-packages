@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
         // Create user
         $user = User::create([
             'id' => 1,
-            'name' => 'admin',
+            'name' => 'Super Admin',
             'email' => 'admin@softui.com',
             'password' => Hash::make('secret'),
             'created_at' => now(),
@@ -42,10 +42,10 @@ class UserSeeder extends Seeder
         );
 
 
-        /////$permissions = Permission::where('guard_name', 'web')->get();
+        $permissions = Permission::where('guard_name', 'web')->get();
 
         // Assign permissions to role
-        /////$role->syncPermissions($permissions);
+        $role->syncPermissions($permissions);
 
         // Assign role to user using correct guard
         $user->assignRole($role);

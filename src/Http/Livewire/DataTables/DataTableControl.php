@@ -12,7 +12,8 @@ use QuickerFaster\CodeGen\Services\Imports\DataImport;
 use Maatwebsite\Excel\Excel;
 
 
-use QuickerFaster\CodeGen\Services\AccessControl\AccessControlService;
+use QuickerFaster\CodeGen\Services\AccessControl\AccessControlPermissionService;
+
 use QuickerFaster\CodeGen\Services\GUI\SweetAlertService;
 
 
@@ -141,8 +142,8 @@ class DataTableControl extends Component
     public function export($fileType, $fileName = "", $rows = "table")
     {
         // Check if the user has permission to perform the action
-        if (!AccessControlService::checkPermission( 'export', $this->modelName)) {
-            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+        if (!AccessControlPermissionService::checkPermission( 'export', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlPermissionService::MSG_PERMISSION_DENIED);
             return;
         }
 
@@ -330,8 +331,8 @@ class DataTableControl extends Component
     {
 
         // Check if the user has permission to perform the action
-        if (!AccessControlService::checkPermission( 'import', $this->modelName)) {
-            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+        if (!AccessControlPermissionService::checkPermission( 'import', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlPermissionService::MSG_PERMISSION_DENIED);
             return;
         }
 
@@ -342,8 +343,8 @@ class DataTableControl extends Component
     public function printTable()
     {
         // Check if the user has permission to perform the action
-        if (!AccessControlService::checkPermission( 'print', $this->modelName)) {
-            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+        if (!AccessControlPermissionService::checkPermission( 'print', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlPermissionService::MSG_PERMISSION_DENIED);
             return;
         }
         

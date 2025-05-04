@@ -23,7 +23,7 @@ use QuickerFaster\CodeGen\Events\DataTableFormEvent;
 use QuickerFaster\CodeGen\Events\DataTableFormFieldEvent;
 
 use Illuminate\Support\Facades\Hash;
-use QuickerFaster\CodeGen\Services\AccessControl\AccessControlService;
+use QuickerFaster\CodeGen\Services\AccessControl\AccessControlPermissionService;
 
 use QuickerFaster\CodeGen\Services\GUI\SweetAlertService;
 
@@ -327,9 +327,12 @@ class DataTableForm extends Component
     {
 
 
+    
         // Check if the user has permission to perform the action
-        if (!AccessControlService::checkPermission( 'edit', $this->modelName)) {
-            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+        if (!AccessControlPermissionService::checkPermission( 'edit', $this->modelName)
+            &&  !AccessControlPermissionService::isOwner($this->model, $this->selectedItemId)
+        ) {
+            SweetAlertService::showError($this, "Error!", AccessControlPermissionService::MSG_PERMISSION_DENIED);
             return;
         }
 
@@ -783,8 +786,10 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
     {
 
         // Check if the user has permission to perform the action
-        if (!AccessControlService::checkPermission( 'edit', $this->modelName)) {
-            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+        if (!AccessControlPermissionService::checkPermission( 'edit', $this->modelName)
+            &&  !AccessControlPermissionService::isOwner($model, $id)
+        ) {
+            SweetAlertService::showError($this, "Error!", AccessControlPermissionService::MSG_PERMISSION_DENIED);
             return;
         }
 
@@ -937,8 +942,8 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
     {
 
         // Check if the user has permission to perform the action
-        if (!AccessControlService::checkPermission( 'create', $this->modelName)) {
-            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+        if (!AccessControlPermissionService::checkPermission( 'create', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlPermissionService::MSG_PERMISSION_DENIED);
             return;
         }
 
@@ -960,8 +965,8 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
     {
 
         // Check if the user has permission to perform the action
-        if (!AccessControlService::checkPermission( 'edit', $this->modelName)) {
-            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+        if (!AccessControlPermissionService::checkPermission( 'edit', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlPermissionService::MSG_PERMISSION_DENIED);
             return;
         }
 
@@ -986,8 +991,8 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
     {
 
         // Check if the user has permission to perform the action
-        if (!AccessControlService::checkPermission( 'edit', $this->modelName)) {
-            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+        if (!AccessControlPermissionService::checkPermission( 'edit', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlPermissionService::MSG_PERMISSION_DENIED);
             return;
         }
 
@@ -1016,8 +1021,8 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
     {
 
         // Check if the user has permission to perform the action
-        if (!AccessControlService::checkPermission( 'edit', $this->modelName)) {
-            SweetAlertService::showError($this, "Error!", AccessControlService::MSG_PERMISSION_DENIED);
+        if (!AccessControlPermissionService::checkPermission( 'edit', $this->modelName)) {
+            SweetAlertService::showError($this, "Error!", AccessControlPermissionService::MSG_PERMISSION_DENIED);
             return;
         }
 
