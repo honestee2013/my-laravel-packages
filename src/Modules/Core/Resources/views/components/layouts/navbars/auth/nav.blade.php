@@ -35,23 +35,23 @@
 
 
                 @auth
-                <div class="dropdown ">
-                    <a href="#" class=" bg-none dropdown-toggle " data-bs-toggle="dropdown" id="navbarDropdownMenuLink2">
-                        <i class="fa fa-user me-sm-1"></i> {{auth()->user()?->name}}
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="navbarDropdownMenuLink2">
-                        <li class="mb-2">
-                            <a class="dropdown-item border-radius-md" href="{{ url('/user/my-profile') }}" >
-                                <i class="fa fa-user-edit me-sm-1"></i> My Profile
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a class="dropdown-item border-radius-md" href="{{ url('/logout') }}" >
-                                <i class="fa fa-sign-out me-sm-1"></i> Sign Out
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                    <div class="dropdown ">
+                        <a href="#" class=" bg-none dropdown-toggle " data-bs-toggle="dropdown" id="navbarDropdownMenuLink2">
+                            <i class="fa fa-user me-sm-1"></i> {{auth()->user()?->name}}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="navbarDropdownMenuLink2">
+                            <li class="mb-2">
+                                <a class="dropdown-item border-radius-md" href="{{ url('/user/my-profile') }}" >
+                                    <i class="fa fa-user-edit me-sm-1"></i> My Profile
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a class="dropdown-item border-radius-md" href="{{ url('/logout') }}" >
+                                    <i class="fa fa-sign-out me-sm-1"></i> Sign Out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 @endauth
 
                 {{--<li class="nav-item d-flex align-items-center">

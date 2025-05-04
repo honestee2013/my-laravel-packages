@@ -16,8 +16,8 @@
                     <pan class="m-2 text-uppercase text-xs fw-bolder">Export</pan>
                     <hr class="m-2 p-0 bg-gray-500" />
                     @if (in_array('xls', $controls['files']['export']))
-                        <li>
-                            <a wire:click="export('xlsx')" class="dropdown-item" href="#">
+                        <li class="mb-2">
+                            <a wire:click="export('xlsx')" class="dropdown-item  border-radius-md" href="#">
                                 <span class="btn-inner--icon me-1"><i
                                         class="fas fa-file-excel text-sm me-1 text-success"></i></span>
                                 <span class="btn-inner--text">XLS</span>
@@ -25,8 +25,8 @@
                         </li>
                     @endif
                     @if (in_array('csv', $controls['files']['export']))
-                        <li>
-                            <a wire:click="export('csv')" class="dropdown-item" href="#">
+                        <li class="mb-2">
+                            <a wire:click="export('csv')" class="dropdown-item  border-radius-md" href="#">
                                 <span class="btn-inner--icon me-1"><i
                                         class="fa-solid fa-file-csv me-1 text-info"></i></span>
                                 <span class="btn-inner--text">CVS</span>
@@ -34,8 +34,8 @@
                         </li>
                     @endif
                     @if (in_array('pdf', $controls['files']['export']))
-                        <li>
-                            <a wire:click="export('pdf')" class="dropdown-item" href="#">
+                        <li class="mb-2">
+                            <a wire:click="export('pdf')" class="dropdown-item  border-radius-md" href="#">
                                 <span class="btn-inner--icon me-1"><i
                                         class="fas fa-file-pdf text-sm me-1 text-danger"></i></span>
                                 <span class="btn-inner--text">PDF</span>
@@ -46,7 +46,7 @@
                     {{--
                     @if (in_array('pdf', $controls['files']['export']))
                         <li>
-                            <a wire:click="export('print')" target="_blank" class="dropdown-item" href="#">
+                            <a wire:click="export('print')" target="_blank" class="dropdown-item  border-radius-md" href="#">
                                 <span class="btn-inner--icon me-1"><i
                                         class="fas fa-file-pdf text-sm me-1 text-danger"></i></span>
                                 <span class="btn-inner--text">Print</span>
@@ -61,8 +61,8 @@
                 <!-- Print Option -->
                 @if (in_array('print', $controls['files']))
                     <hr class="m-2 p-0 bg-gray-500" />
-                    <li>
-                        <a wire:click="printTable()" class="dropdown-item" href="#">
+                    <li class="mb-2">
+                        <a wire:click="printTable()" class="dropdown-item  border-radius-md" href="#">
                             <span class="btn-inner--icon me-1"><i class="fa-solid fa-print text-sm me-1"></i></span>
                             <span class="btn-inner--text">Print</span>
                         </a>
@@ -74,7 +74,7 @@
                     <div class="mt-4"></div>
                     <pan class="m-2 text-uppercase text-xs fw-bolder">Import</pan>
                     <hr class="m-2 p-0 bg-gray-500" />
-                    <li>
+                    <li class="mb-2">
                         <form wire:submit.prevent="import">
                             <input type="file" wire:model="file" class="p-4 pb-4 mb-1" />
 
@@ -193,19 +193,19 @@
                 <span class="btn-inner--text">Filter</span>
             </a>
 
-            <ul class="dropdown-menu p-3 pt-4" aria-labelledby="filterDropdownMenuLink" style="min-width: 300px;">
+            <ul class="dropdown-menu  me-sm-n4 dropdown-menu-end p-3 pt-4 " aria-labelledby="filterDropdownMenuLink" style="min-width: 300px;">
                 <span class="m-2 text-uppercase text-xs fw-bolder">Filter Records</span>
                 <hr class="m-2 p-0 bg-gray-500" />
 
                 {{--------- List filter inputs per column ---------}}
                 @foreach ($columns as $column)
                     @if (!in_array($column, $hiddenFields['onTable']))
-                        <div class="dropdown-item mb-2">
+                        <div class="dropdown-item mb-2 border-radius-md">
                             <label class="form-label mb-1 fw-bold">
                                 {{ $fieldDefinitions[$column]['label'] ?? ucwords(str_replace('_', ' ', str_replace('_id', '', $column))) }}
                             </label>
                             <div class="input-group input-group-sm">
-                                <select class="form-select me-1" wire:model.defer="filters.{{ $column }}.operator" style="width: 4.5em;">
+                                <select class="form-select me-1 " wire:model.defer="filters.{{ $column }}.operator" style="width: 4.5em;">
                                     <option value="like">Contains</option>
                                     <option value="=">=</option>
                                     <option value="!=">!=</option>
@@ -237,13 +237,13 @@
                 <span class="btn-inner--text">Columns</span>
             </a>
 
-            <ul class="dropdown-menu p-3 pt-4" aria-labelledby="navbarDropdownMenuLink2">
+            <ul class="dropdown-menu  me-sm-n4 dropdown-menu-end p-3 pt-4" aria-labelledby="navbarDropdownMenuLink2">
                 <span class="m-2 text-uppercase text-xs fw-bolder">Show/Hide</span>
                 <hr class="m-2 p-0 bg-gray-500" />
                 {{--------- List columns with checkbox ---------}}
                 @foreach ($columns as $column)
                     @if (!in_array($column, $hiddenFields['onTable']))
-                        <div class="dropdown-item">
+                        <div class="dropdown-item  border-radius-md">
                             <div class="form-check">
                                 <input class="form-check-input " type="checkbox" wire:model.defer="selectedColumns"
                                     value="{{ $column }}" class="form-check-input"

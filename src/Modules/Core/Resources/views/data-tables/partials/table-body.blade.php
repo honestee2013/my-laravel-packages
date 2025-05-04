@@ -187,20 +187,20 @@
                             <span class="px-2" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-ellipsis-vertical text-secondary"></i>
                             </span>
-                            <ul class="dropdown-menu px-2 py-3" aria-labelledby="dropdownMenuButton">
+                            <ul class="dropdown-menu dropdown-menu-end me-sm-n4  px-2 py-3" aria-labelledby="dropdownMenuButton">
                                 @foreach ( $moreActions as $actionName => $actionData )
                                     @if(isset($actionData['title']))
                                         <pan class="m-2 text-uppercase text-xs fw-bolder">{{ ucfirst($actionData['title']) }}</pan>
                                         <hr class="m-2 p-0 bg-gray-500" />
                                     @endif
 
-                                    <li>
+                                    <li class="mb-2">
                                         @if(isset($actionData['route']))
-                                            <a class="dropdown-item" href="javascript:void(0)" wire:click="openLink('{{ $actionData['route'] }}', {{ $row->id }})">
+                                            <a class="dropdown-item border-radius-md" href="javascript:void(0)" wire:click="openLink('{{ $actionData['route'] }}', {{ $row->id }})">
                                         @elseif(isset($actionData['updateModelField']) && isset($actionData['fieldName']) && isset($actionData['fieldValue']))
-                                            <a class="dropdown-item" onclick="Livewire.dispatch('updateModelFieldEvent',['{{$row->id}}', '{{$actionData['fieldName']}}', '{{$actionData['fieldValue']}}'])">
+                                            <a class="dropdown-item border-radius-md" onclick="Livewire.dispatch('updateModelFieldEvent',['{{$row->id}}', '{{$actionData['fieldName']}}', '{{$actionData['fieldValue']}}'])">
                                         @else
-                                            <a class="dropdown-item" href="javascript:void(0)">
+                                            <a class="dropdown-item border-radius-md" href="javascript:void(0)">
                                         @endif
                                         @if(isset($actionData['icon']))
                                                 <i class="{{$actionData['icon']}}"></i>
