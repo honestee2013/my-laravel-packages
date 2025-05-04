@@ -23,33 +23,72 @@
                     <input type="text" class="form-control" placeholder="Type here...">
                 </div>
             </div>--}}
+            
             <ul class="navbar-nav  justify-content-end">
-                <li class="nav-item d-flex align-items-center">
+
+                {{--<li class="nav-item d-flex align-items-center">
                     <a href="{{ url('/logout') }}" class="nav-link text-body font-weight-bold px-0">
                         <i class="fa fa-user me-sm-1"></i>
                         <span class="d-sm-inline d-none">Sign Out</span>
                     </a>
-                </li>
-                <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                </li>--}}
+
+
+                @auth
+                <div class="dropdown ">
+                    <a href="#" class=" bg-none dropdown-toggle " data-bs-toggle="dropdown" id="navbarDropdownMenuLink2">
+                        <i class="fa fa-user me-sm-1"></i> {{auth()->user()?->name}}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="navbarDropdownMenuLink2">
+                        <li class="mb-2">
+                            <a class="dropdown-item border-radius-md" href="{{ url('/user/my-profile') }}" >
+                                <i class="fa fa-user-edit me-sm-1"></i> My Profile
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a class="dropdown-item border-radius-md" href="{{ url('/logout') }}" >
+                                <i class="fa fa-sign-out me-sm-1"></i> Sign Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                @endauth
+
+                {{--<li class="nav-item d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
                         <div class="sidenav-toggler-inner">
-                            <i class="sidenav-toggler-line"></i>
-                            <i class="sidenav-toggler-line"></i>
-                            <i class="sidenav-toggler-line"></i>
+                            <i class="sidenav-toggler-line">ccc</i>
+                            <i class="sidenav-toggler-line">ccc</i>
+                            <i class="sidenav-toggler-line">xxx</i>
+                        </div>
+                    </a>
+
+
+
+
+
+
+
+                {{--<li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                    <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                        <div class="sidenav-toggler-inner">
+                            <i class="sidenav-toggler-line">ccc</i>
+                            <i class="sidenav-toggler-line">ccc</i>
+                            <i class="sidenav-toggler-line">xxx</i>
                         </div>
                     </a>
                 </li>
-                <li class="nav-item px-3 d-flex align-items-center">
+                {{--<li class="nav-item px-3 d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-body p-0">
                         <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
                     </a>
-                </li>
-                <li class="nav-item dropdown pe-2 d-flex align-items-center">
+                </li>--}}
+                {{--<li class="nav-item dropdown pe-2 d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa fa-bell cursor-pointer"></i>
                     </a>
-                    {{--<ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4"
+                    <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4"
                         aria-labelledby="dropdownMenuButton">
                         <li class="mb-2">
                             <a class="dropdown-item border-radius-md" href="javascript:;">
@@ -125,8 +164,8 @@
                                 </div>
                             </a>
                         </li>
-                    </ul>--}}
-                </li>
+                    </ul>
+                </li>--}}
             </ul>
         </div>
     </div>
