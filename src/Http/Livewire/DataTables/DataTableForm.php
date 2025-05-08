@@ -340,6 +340,11 @@ class DataTableForm extends Component
         //SweetAlertService::showSuccess($this, "Success!", "Record saved successfully.");
 
 
+        // Check for seeded data which should not be editatble
+        if ($this->selectedItemId && $this->model::find($this->selectedItemId)->editable && $this->model::find($this->selectedItemId)->editable == "No") {
+            SweetAlertService::showError($this, "Error!", "This record is not editable.");
+            return;
+        }
 
         //Log::info("DataTableForm->saveRecord(): ".$this->getId());
 
@@ -796,6 +801,12 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
         // handle only for the intended mode
         if ($this->model !== $model) return;
 
+        // Check for seeded data which should not be editatble
+        if ($model::find($id)->editable && $model::find($id)->editable == "No") {
+            SweetAlertService::showError($this, "Error!", "This record is not editable.");
+            return;
+        }
+
 
 
         Log::info("DataTableForm->openEditModal(): Id: ".$id." this->model: ".$this->model);
@@ -970,6 +981,13 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
             return;
         }
 
+        // Check for seeded data which should not be editatble
+        if ($this->model::whereIn('id', is_array($ids)? $ids : [$ids]  )->where('editable', "No")->count()) {
+            SweetAlertService::showError($this, "Error!", "This record is not editable.");
+            return;
+        }
+        
+
         // Sanitize the input
         if (is_array($ids)) {
             $ids = array_filter(
@@ -993,6 +1011,12 @@ array:4 [▼ // /Users/mac/LaravelProjects/packages/quicker-faster/code-gen/src/
         // Check if the user has permission to perform the action
         if (!AccessControlPermissionService::checkPermission( 'edit', $this->modelName)) {
             SweetAlertService::showError($this, "Error!", AccessControlPermissionService::MSG_PERMISSION_DENIED);
+            return;
+        }
+
+        // Check for seeded data which should not be editatble
+        if ($this->model::whereIn('id', $this->selectedRows)->where('editable', "No")->count()) {
+            SweetAlertService::showError($this, "Error!", "This record is not editable.");
             return;
         }
 

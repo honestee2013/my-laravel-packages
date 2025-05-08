@@ -1,7 +1,7 @@
 <?php
 
 return [
-  'model' => 'App\\Modules\\User\\Models\\User',
+  'model' => 'App\Models\User',
   'fieldDefinitions' =>  [
     'name' =>    [
       'display' => 'inline',
@@ -16,6 +16,28 @@ return [
       'validation' => 'required|email|unique:users,email',
       'label' => 'Email',
     ], 
+
+
+
+    'user_status_id' => [
+      'field_type' => 'select',
+      'options' => [
+          'model' => 'App\Modules\User\Models\UserStatus',
+          'column' => 'display_name',
+      ],
+      'relationship' => [
+          'model' => 'App\Modules\User\Models\UserStatus',
+          'type' => 'hasOne',
+          'display_field' => 'display_name',
+          'dynamic_property' => 'userStatus',
+          'foreign_key' => 'user_status_id',
+      ],
+      'label' => 'User Status',
+      'display' => 'block',
+
+  ],
+
+
 
     'email_verified_at' =>    [
       'display' => 'inline',
@@ -131,7 +153,8 @@ return [
         0 => 'name',
         1 => 'email',
         2 => 'user_type',
-        3 => 'roles',
+        3 => 'user_status_id',
+        4 => 'roles',
       ], 
 
     ], 

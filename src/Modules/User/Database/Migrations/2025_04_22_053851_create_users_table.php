@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
 			$table->string('email');
+            $table->foreignId('user_status_id')->nullable()->constrained('user_statuses')->onDelete('cascade');
 			$table->datetime('email_verified_at')->nullable();
 			$table->string('password');
 			$table->string('remember_token')->nullable();

@@ -114,6 +114,8 @@
                                 <textarea wire:model.{{$reactivity}}="fields.{{ $field }}" id="{{ $field }}" class="form-control"
                                     name = "{{ $field }}" value= "{{ $field }}" rows="3" @if(in_array($field, $readOnlyFields)) disabled @endif>{{ $fields[$field] ?? '' }}</textarea>
 
+
+
                             @elseif ($type === 'select')
                                 <!--------- Opening the Select Element -------->
 
@@ -160,7 +162,9 @@
                                             <input wire:key="multi-check-{{$key}}" class="form-check-input" type="{{ $type }}"
                                                 id="{{ $key }}"
                                                 wire:model.{{$reactivity}}="multiSelectFormFields.{{ $field }}"
-                                                value="{{ $key }}" {{-- The key should match the saved values --}} name="{{ $field }}">
+                                                value="{{ $key }}" {{-- The key should match the saved values --}} name="{{ $field }}"
+                                                @if(in_array($field, $readOnlyFields)) disabled @endif
+                                                >
 
                                             <!----- Normal field selection handled manually------>
                                         @else
@@ -191,7 +195,8 @@
 
                                             <input wire:key="radio-{{$key}}" class="form-check-input" type="{{ $type }}"
                                                 id="{{ $key }}" wire:model.{{$reactivity}}="singleSelectFormFields.{{ $field }}"
-                                                value="{{ $key }}" >
+                                                value="{{ $key }}" 
+                                                @if(in_array($field, $readOnlyFields)) disabled @endif>
 
 
 
@@ -214,7 +219,9 @@
                                     <div class="col-9">
                                         <!--- INPUT Field ---->
                                         <input type="{{ $type }}" wire:model.{{$reactivity}}="fields.{{ $field }}" accept="image/*"
-                                            id="{{ $field }}" class="form-control rounded-pill" value="{{ $fields[$field] ?? '' }}">
+                                            id="{{ $field }}" class="form-control rounded-pill" value="{{ $fields[$field] ?? '' }}"
+                                            @if(in_array($field, $readOnlyFields)) disabled @endif
+                                            >
 
                                         <!--- INPUT Info ---->
                                         @if (isset($fields[$field]) && is_object($fields[$field]) && $fields[$field]->temporaryUrl())
@@ -267,6 +274,7 @@
                                 <input type="{{ $type }}" wire:model.{{$reactivity}}="fields.{{ $field }}" id="{{ $field }}"
                                     class="form-control rounded-pill {{ (str_contains($type, "time")? 'datetimepicker': 'datepicker')   }}" value="{{ $fields[$field] ?? '' }}" name="{{ $field }}"
                                         placeholder="Please provide the {{strtolower(str_replace('_', ' ', $field))}}..."
+                                        @if(in_array($field, $readOnlyFields)) disabled @endif
                                     >
 
 
@@ -279,6 +287,7 @@
 
                                         {{--- Auto Generate Code Field--}}
                                         @if($autoGenerate) wire:focus="generateOrderNumber('{{addslashes($model)}}', '{{ $modelName }}',  '{{ $field }}')" @endif
+                                        @if(in_array($field, $readOnlyFields)) disabled @endif
                                     >
 
                                     {{--- Auto Generate Code Field--}}

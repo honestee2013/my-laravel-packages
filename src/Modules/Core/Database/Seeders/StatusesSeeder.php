@@ -17,7 +17,7 @@ class StatusesSeeder extends Seeder
 {
     public function run()
     {
-        $statuses = [
+        /*$statuses = [
             // General workflow
             ['name' => 'Draft', 'description' => 'Initial unsubmitted version.', 'editable' => false],
             ['name' => 'Pending', 'description' => 'Waiting for action or approval.', 'editable' => false],
@@ -34,6 +34,7 @@ class StatusesSeeder extends Seeder
             ['name' => 'Hired', 'description' => 'Candidate accepted and onboarded.', 'editable' => false],
             ['name' => 'Rejected - HR', 'description' => 'Not selected by HR team.', 'editable' => false],
             ['name' => 'Terminated', 'description' => 'Employment ended.', 'editable' => false],
+            ['name' => 'Resigned', 'description' => 'Employee voluntarily left.', 'editable' => false],
             ['name' => 'Resigned', 'description' => 'Employee voluntarily left.', 'editable' => false],
 
             // Finance
@@ -67,7 +68,7 @@ class StatusesSeeder extends Seeder
             ['name' => 'Escalated', 'description' => 'Issue raised to higher authority.', 'editable' => false],
         ];
 
-        DB::table('statuses')->insert($statuses);
+        DB::table('statuses')->insert($statuses);*/
     }
 }
 

@@ -38,19 +38,22 @@
                 </select>
             </div>
 
-            <select wire:model.live.500ms="selectedProcessId" id="time_duration"
+            {{--<select wire:model.live.500ms="selectedProcessId" id="time_duration"
                 class="col form-select  rounded-pill p-1 ps-3  px-sm-3 m-1 small-control">
                 <option value="" disabled>Select Process...</option>
                 @foreach (App\Modules\Production\Models\ProductionProcess::all() as $process )
                     <option value="{{$process->id}}">{{ucfirst($process->name)}}</option>
                 @endforeach
-            </select>
+            </select>--}}
         </div>
     </x-slot>
 
 
     {{------ DASHBOAD BODY CONTENT --------}}
-    <div class="row g-4 mb-4">
+    {{ $body?? '' }}
+
+
+    {{---<div class="row g-4 mb-4">
         <div class="col-12 col-sm-3">
             <livewire:dashboard.visualisation.widgets.cards.icon-card
                 recordModel="App\Modules\Production\Models\ProductionProcessLog"
@@ -199,7 +202,7 @@
             :controls="['chartType']"
             key="chart3"
         />
-    </div>
+    </div>--}}
 
 
 

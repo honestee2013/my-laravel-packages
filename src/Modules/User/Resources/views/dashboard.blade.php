@@ -3,8 +3,8 @@
 
 <x-core.views::layouts.app>
     <x-slot name="sidebar">
-        <x-core.views::layouts.navbars.auth.sidebar moduleName="access">
-            <x-access.views::layouts.navbars.auth.sidebar-links />
+        <x-core.views::layouts.navbars.auth.sidebar moduleName="user">
+            <x-user.views::layouts.navbars.auth.sidebar-links />
         </x-core.views::layouts.navbars.auth.sidebar>
     </x-slot>
 
@@ -13,10 +13,8 @@
         @include('core.views::components.layouts.navbars.auth.content-header', [ "pageTitile" => ""])
     </x-slot>
 
-
-
-    {{--<livewire:dashboard.dashboard-manager />--}}
-
+ 
+    <livewire:dashboard.dashboard-manager moduleName="user" />
 
 
     <x-slot name="pageFooter">

@@ -5,6 +5,7 @@ namespace App\Models;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Models\Role;
 use App\Modules\user\Models\BasicInfo;
+use App\Modules\user\Models\UserStatus;
 
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -21,11 +22,11 @@ class User extends Authenticatable
 
     protected $guard_name = 'web'; // ✅ important line
 
-    protected $table = 'users';
+    //protected $table = 'users';
 
 
     protected $fillable = [
-        'name', 'email', 'email_verified_at', 'password', 'password_confirmation', 'remember_token', 'user_type' // Fillable properties will be inserted here
+        'name', 'email', 'user_status_id', 'email_verified_at', 'password', 'password_confirmation', 'remember_token', 'user_type' // Fillable properties will be inserted here
     ];
 
      // Relations will be inserted here
@@ -39,6 +40,15 @@ class User extends Authenticatable
 
     public function profile() {
         return $this->employeeProfile;
+    }
+
+    public function userStatus()
+    {
+        return $this->hasOne(UserStatus::class, 'user_status_id');
+    }
+    public function getUserStatusNameAttribute()
+    {
+        return $this->userStatus ? $this->userStatus->display_name : null;
     }
 
 

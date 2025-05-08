@@ -25,3 +25,21 @@
         title="Employee Profiles"
     />
 @endif
+
+
+@if(auth()->user()?->can('view_user_status'))
+    <x-core.views::layouts.navbars.sidebar-link-item
+        iconClasses="fas fas fa-user-tie sidebar-icon"
+        url="user/user-statuses"
+        title="Manage User Statuses"
+    />
+@endif
+
+
+@if(auth()->user()?->can('view_user_status_category'))
+    <x-core.views::layouts.navbars.sidebar-link-item
+        iconClasses="fas fas fa-user-friends sidebar-icon"
+        url="user/user-status-categories"
+        title="User Status  Categories"
+    />
+@endif

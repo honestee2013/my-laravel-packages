@@ -25,7 +25,7 @@ class User extends Authenticatable
 
 
     protected $fillable = [
-        'name', 'email', 'email_verified_at', 'password', 'password_confirmation', 'remember_token', 'user_type' // Fillable properties will be inserted here
+        'name', 'email',  'email_verified_at', 'password', 'password_confirmation', 'remember_token', 'user_type' // Fillable properties will be inserted here
     ];
 
      // Relations will be inserted here

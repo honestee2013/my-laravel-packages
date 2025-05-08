@@ -1,26 +1,18 @@
 <?php
 
-namespace QuickerFaster\CodeGen\Http\Livewire\Dashboard;
+namespace QuickerFaster\CodeGen\Http\Livewire\Dashboard\Layouts;
 
 
 use Livewire\Component;
 
 
 
-class DashboardManager extends Component
+class DashboardControl extends Component
 {
 
 
 
-    public $moduleName = "dashboard";
-  
     public $timeDuration = "this_month";
-
-
-
-
-
-
 
 
 
@@ -33,8 +25,7 @@ class DashboardManager extends Component
 
     public function render()
     {
-        $view = $this->moduleName.".views::dashboard-manager";
-      
+        $view = "dashboard.views::components.layouts.dashboards.dashboard-control";
         return view($view, []);
     }
 

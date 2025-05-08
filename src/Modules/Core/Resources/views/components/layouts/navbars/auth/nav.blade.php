@@ -37,7 +37,7 @@
                 @auth
                     <div class="dropdown ">
                         <a href="#" class=" bg-none dropdown-toggle " data-bs-toggle="dropdown" id="navbarDropdownMenuLink2">
-                            <i class="fa fa-user me-sm-1"></i> {{auth()->user()?->name}}
+                            <i class="fa fa-user me-sm-1"></i> <span class="font-weight-bold ">Welcome {{auth()->user()?->name}}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="navbarDropdownMenuLink2">
                             <li class="mb-2">
