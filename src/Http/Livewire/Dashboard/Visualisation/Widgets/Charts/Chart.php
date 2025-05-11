@@ -28,8 +28,20 @@ class Chart extends AggregatorAbstractWidget
 
 
 
+
+
+
+
+
+
     public function mount()
     {
+
+
+        
+        //dd($this->pivotTable, $this->pivotModelKey, $this->pivotRelatedKey, $this->pivotModelType);
+
+
         if (!isset($this->chartId))
             $this->chartId = 'chart-' . uniqid();
 

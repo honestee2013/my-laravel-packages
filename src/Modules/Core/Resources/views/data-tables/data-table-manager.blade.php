@@ -1,4 +1,4 @@
-<section class="m-0 m-md-4">
+<section class="m-0 my-md-4">
 
     {{-- ----------------- MAIN MODAL FOR ADD-EDIT ----------------- --}}
     @include('core.views::data-tables.modals.modal-header', [

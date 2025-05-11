@@ -62,6 +62,16 @@ abstract class AggregatorAbstractWidget extends Component
 
 
 
+    public ?string $pivotTable = null;
+    public ?string $pivotModelColumn = null;
+    public ?string $pivotRelatedColumn = null;
+    public ?string $pivotModelType = null;
+
+
+    public $title = "";
+    
+
+
 
 
     protected $listeners = [
@@ -121,7 +131,7 @@ abstract class AggregatorAbstractWidget extends Component
             if (isset($this->recordModel))
                 $aggregator->setModel($this->recordModel);
             else
-                $aggregator->setTable($this->recordTable);
+                $aggregator->setTable($this->recordTable);                
 
 
             $aggregator->setColumn($this->column)
@@ -129,7 +139,9 @@ abstract class AggregatorAbstractWidget extends Component
                 ->setGroupByTable($this->groupByTable)
                 ->setGroupByTableColumn($this->groupByTableColumn)
                 ->setAggregationMethod($this->aggregationMethod)
-                ->setFilters($this->filters);
+                ->setFilters($this->filters)
+                ->setPivotJoin($this->pivotTable, $this->pivotModelColumn, $this->pivotRelatedColumn, $this->pivotModelType)
+                ;
 
             if ($this->timeDuration === 'custom' && $this->fromTime && $this->toTime) {
                 $aggregator->setTimeRange($this->fromTime, $this->toTime);

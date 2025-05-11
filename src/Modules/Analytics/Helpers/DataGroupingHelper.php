@@ -29,8 +29,4 @@ class DataGroupingHelper
         ];
     }
 
-
-
-
-
 }

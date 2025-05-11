@@ -4,9 +4,15 @@
 
         <div class="d-flex justify-content-between">
             <div >
-                <h6>{{ str_contains($this->groupBy, "_id")? '': ucfirst($this->groupBy) }} {{$recordName}} <span
-                        class="text-primary text-xs fst-italic">{{ $timeDuration !== 'custom' ? ucfirst(str_replace('_', ' ', $timeDuration)) : $fromTime . ' to ' . $toTime }}</span>
-                </h6>
+                @if(!$this->title)
+                    <h6>{{ str_contains($this->groupBy, "_id")? '': ucfirst($this->groupBy) }} {{$recordName}} <span
+                            class="text-primary text-xs fst-italic">{{ $timeDuration !== 'custom' ? ucfirst(str_replace('_', ' ', $timeDuration)) : $fromTime . ' to ' . $toTime }}</span>
+                    </h6>
+                @else
+                    <h6>{{ $this->title }} <span
+                            class="text-primary text-xs fst-italic">{{ $timeDuration !== 'custom' ? ucfirst(str_replace('_', ' ', $timeDuration)) : $fromTime . ' to ' . $toTime }}</span>
+                    </h6>
+                @endif
                 <p class="text-sm">
                     @if($this->valueChange > 0 && $timeDuration != 'custom')
                         <i class="fa fa-arrow-up text-success"></i>

@@ -23,5 +23,12 @@ trait HasEditableTraits
 
 
 
+    public static function getIdByName($name)
+    {
+        $name = strtolower($name);
+        return self::where('name', $name)->value('id') ?? 0; // Defaults to 0 if not found
+    }
+
+
 
 }
