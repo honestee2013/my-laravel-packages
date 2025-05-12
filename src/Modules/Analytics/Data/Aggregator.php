@@ -21,6 +21,9 @@ class Aggregator
     public ?string $pivotModelColumn = null;
     public ?string $pivotRelatedColumn = null;
     public ?string $pivotModelType = null;
+    public $pivotRelatedColumnIn;
+
+    
     
 
 
@@ -75,12 +78,13 @@ class Aggregator
     }
 
 
-    public function setPivotJoin($pivotTable, $pivotModelColumn, $pivotRelatedColumn, $pivotModelType): static
+    public function setPivotJoin($pivotTable, $pivotModelColumn, $pivotRelatedColumn, $pivotModelType, $pivotRelatedColumnIn): static
     {
         $this->pivotTable = $pivotTable;
         $this->pivotModelColumn = $pivotModelColumn;
         $this->pivotRelatedColumn = $pivotRelatedColumn;
         $this->pivotModelType = $pivotModelType;
+        $this->pivotRelatedColumnIn = $pivotRelatedColumnIn;
         return $this;
     }
 
@@ -284,15 +288,22 @@ class Aggregator
             '=',
             "{$this->pivotTable}.{$this->pivotModelColumn}"
         );
-
+    
         if ($this->pivotModelType) {
             $query->where("{$this->pivotTable}.model_type", $this->pivotModelType);
         }
 
+    
+       
+
+        if ($this->pivotRelatedColumnIn && is_array($this->pivotRelatedColumnIn)) {
+            $query->whereIn("{$this->pivotTable}.{$this->pivotRelatedColumn}", $this->pivotRelatedColumnIn);
+        }
+
+    
         $query->selectRaw(
             "{$this->pivotTable}.{$this->pivotRelatedColumn} as label, {$this->aggregationMethod}({$aggregationColumn}) as value"
         );
-       
     } else {
 
         if ($this->groupByTable && $this->groupByTableColumn) {

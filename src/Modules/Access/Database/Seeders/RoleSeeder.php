@@ -83,7 +83,7 @@ class RoleSeeder extends Seeder
                 [
                     'description' => $data['description'],
                     'guard_name' => 'web',
-                    'editable' => false
+                    'editable' => 'No',
                 ]
             );
         }

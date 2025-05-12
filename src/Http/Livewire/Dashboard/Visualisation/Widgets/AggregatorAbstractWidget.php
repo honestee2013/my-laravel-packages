@@ -66,6 +66,7 @@ abstract class AggregatorAbstractWidget extends Component
     public ?string $pivotModelColumn = null;
     public ?string $pivotRelatedColumn = null;
     public ?string $pivotModelType = null;
+    public  $pivotRelatedColumnIn;
 
 
     public $title = "";
@@ -140,7 +141,7 @@ abstract class AggregatorAbstractWidget extends Component
                 ->setGroupByTableColumn($this->groupByTableColumn)
                 ->setAggregationMethod($this->aggregationMethod)
                 ->setFilters($this->filters)
-                ->setPivotJoin($this->pivotTable, $this->pivotModelColumn, $this->pivotRelatedColumn, $this->pivotModelType)
+                ->setPivotJoin($this->pivotTable, $this->pivotModelColumn, $this->pivotRelatedColumn, $this->pivotModelType, $this->pivotRelatedColumnIn)
                 ;
 
             if ($this->timeDuration === 'custom' && $this->fromTime && $this->toTime) {

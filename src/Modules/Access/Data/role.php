@@ -9,6 +9,30 @@ return [
                     'validation' => 'required|string|max:255',
                 ],
                 'description' =>'textarea',
+
+                'permissions' => [
+                    'field_type' => 'checkbox',
+                    'options' => [
+                        'model' => 'App\Modules\Access\Models\Permission',
+                        'column' => 'name',
+                    ],
+                    'relationship' => [
+                        'model' => 'App\Modules\Access\Models\Permission',
+                        'type' => 'belongsToMany',
+                        'display_field' => 'name',
+                        'dynamic_property' => 'permissions',
+                        'multiSelect' => true,
+                        'foreign_key' => 'permission_id',
+                        'inlineAdd' => true,
+                    ],
+                    'label' => 'Role Permissions',
+                    'display' => 'inline',
+                    
+                    'validation' => 'required'
+                ],
+
+
+
                 'editable' => [
                     'field_type' => 'boolean',
                     'label' => 'Editable',
@@ -19,6 +43,7 @@ return [
 
         "hiddenFields"=>[
             'onTable' => [
+                'permissions',
             ],
             'onNewForm' => [
                 'editable',

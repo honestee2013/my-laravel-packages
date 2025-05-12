@@ -2,6 +2,11 @@
 
 namespace App\Modules\Access\Models;
 
+use App\Modules\Access\Models\Permission;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+
+
 use App\Modules\Core\Traits\HasEditableTraits;
 use Spatie\Permission\Models\Role as SpatieRole;
 
@@ -55,6 +60,23 @@ class Role extends SpatieRole
      * @var array
      */
     protected $casts = [];
+
+
+
+
+
+
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Permission::class,
+            'role_has_permissions',
+            'role_id',
+            'permission_id'
+        );
+    }
+
+
 
     /*
      * Get the team for this model.

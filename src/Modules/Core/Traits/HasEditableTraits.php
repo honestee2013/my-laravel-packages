@@ -21,6 +21,12 @@ trait HasEditableTraits
         $this->attributes['editable'] = "Yes";
     }
 
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = strtolower(str_replace(" ", "_", $value));
+        $this->attributes['editable'] = "Yes";
+    }
+
 
 
     public static function getIdByName($name)

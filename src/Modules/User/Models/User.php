@@ -53,6 +53,17 @@ class User extends Authenticatable
 
 
 
+    // In App\Models\User.php
+public function scopeWithAdminRoles($query)
+{
+    $query->whereHas('roles', function ($q) {
+        $q->whereIn('name', ['admin', 'super_admin']);
+    });
+}
+
+
+
+
 
   
 

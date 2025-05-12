@@ -15,7 +15,7 @@
 
 
 
-    {{--<livewire:dashboard.dashboard-manager />--}}
+    <livewire:dashboard.dashboard-manager moduleName="access" />
 
 
 
