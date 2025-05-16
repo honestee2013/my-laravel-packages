@@ -169,7 +169,8 @@
         }
 
         .menu-item,
-        .submenu {
+        .submenu,
+        .submenu-popup {
             cursor: pointer;
             position: relative;
             border-radius: 0.5em;
@@ -202,14 +203,18 @@
             display: block;
         }
 
-        .submenu a {
+        .submenu a, .submenu-popup a {
             display: block;
             padding: 0.5em 0em 0.5em 2.5em;
             margin: 0.5em 0.8em;
             text-decoration: none;
         }
 
-        .submenu a:hover, .submenu a.active {
+        .submenu a:hover,
+        .submenu a.active,
+        .submenu-popup a:hover,
+        .submenu-popup a.active
+        {
             background: rgba(103, 116, 142, 0.1);
             /* Added transparency (alpha value of 0.5) */
             color: #67024f;
@@ -235,22 +240,28 @@
             position: absolute;
             left: 80px;
             top: 0;
-            background: #495057;
-            border: 1px solid #6c757d;
+            background:  rgba(255, 255, 255, 0.9);
+            
+            box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07) !important;
+            border-radius: 0.3em;
+            border: solid 0.1em rgba(170, 171, 174, 0.5);
             z-index: 1100;
             min-width: 150px;
         }
 
         .submenu-popup a {
-            padding: 10px;
             display: block;
-            color: #fff;
+            padding-left: 1em;
             text-decoration: none;
+            font-size: 0.9em;
+
         }
 
-        .submenu-popup a:hover {
-            background: #6c757d;
-        }
+
+
+
+
+       
 
         /* Toggle button is fixed so it’s always visible */
         .toggle-btn {

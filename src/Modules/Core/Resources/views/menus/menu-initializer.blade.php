@@ -63,10 +63,17 @@
                 });
             }
 
+            if (states[currentStateIndex] !== 'icons') {
+                document.querySelectorAll('.submenu-popup').forEach(el => {
+                    el.style.display = "none";
+                });
+            }
+
             // 🔽 NEW: Hide all expanded submenus if sidebar is not in 'full' state
             if (states[currentStateIndex] == 'icons') {
                 document.querySelectorAll('.menu-item').forEach(el => {
-                    el.style.margin = '0px';
+                    el.style.marginLeft = '0px';
+                    el.style.marginRight = '0px';
                 });
 
                 document.querySelectorAll('.menu-text').forEach(el => {
@@ -78,10 +85,8 @@
             // Reset styles for the 'full' state
             if (states[currentStateIndex] == 'full') {
                 document.querySelectorAll('.menu-item').forEach(el => {
-                    el.style.margin = '0.5em 0.8em';
-
-    
-
+                    el.style.marginLeft = '0.8em';
+                    el.style.marginRight = '0.8em';
                 });
 
                 document.querySelectorAll('.menu-text').forEach(el => {
@@ -169,14 +174,18 @@
 
                             activePopup = createElem('div', 'submenu-popup');
                             item.submenu.forEach(sub => {
-                                const link = createElem('a', '', sub.title);
+                                const subIsActive = sub.url === currentPath;
+                                const link = createElem('a', subIsActive ? 'active' : '', sub
+                                .title);
                                 link.href = `/${sub.url}`;
+
                                 link.addEventListener('click', () => {
                                     if (activePopup) {
                                         activePopup.remove();
                                         activePopup = null;
                                     }
                                 });
+
                                 activePopup.appendChild(link);
                             });
 
@@ -194,6 +203,14 @@
                                 }
                             });
                         }
+
+
+
+
+
+
+
+
                     });
                 }
             });
