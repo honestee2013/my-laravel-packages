@@ -188,7 +188,13 @@
 
         .menu-item:hover, .menu-item.active {
             background: #fff;
-            color: #67024f;
+            font-weight: bold;
+        }
+
+
+        .menu-item:hover .sidebar-icon, .menu-item.active .sidebar-icon {
+            background: #cb0c9f;
+            color: #fff;
         }
 
 
@@ -280,6 +286,31 @@
             cursor: pointer;
             transition: left 0.3s;
         }
+
+
+        .menu-item-header, .menu-item-footer {
+          padding: 1.5em;
+          margin: 0em;
+          background: #F8F9FA;
+          border-radius: 0em;
+        }
+
+        .menu-header, .menu-footer {
+          position: sticky;
+          z-index: 10;
+        }
+
+        .menu-header {
+          top: 0;
+        }
+        .menu-footer {
+          bottom: 0;
+        }
+
+     
+
+
+
 
         /* Responsive default sidebar widths (for first load) */
         @media (max-width: 576px) {

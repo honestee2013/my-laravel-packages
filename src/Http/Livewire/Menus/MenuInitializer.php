@@ -25,6 +25,7 @@ class MenuInitializer extends Component
     public function initializeMenu() {
         $user = Auth::user();
         $sidebarLinks = $this->getSidebarLinks($user);
+        $sidebarLinks = $this->getSidebarLinks($user);
         $this->dispatch('sidebar-data-loaded', $sidebarLinks);
     }
 
@@ -34,7 +35,11 @@ class MenuInitializer extends Component
 
     private function getSidebarLinks($user)
     {
-        $links = $this->loadSidebarLinks($this->moduleName);
+        $header = $this->getSidebarHeader();
+        $body = $this->loadSidebarLinks($this->moduleName);
+        $footer = $this->getSidebarFooter();
+        $links = array_merge($header, $body, $footer);
+
 
         return collect($links)
             ->filter(fn ($link) => !isset($link['permission']) || $user->can($link['permission']))
@@ -51,6 +56,65 @@ class MenuInitializer extends Component
             ->values()
             ->toArray();
     }
+
+
+    private function getSidebarHeader() {
+        return [
+            [
+                'title' => 'Main Dashboard',
+                'icon' => 'fas fa-th fs-4 ms-2',
+                'url' => strtolower($this->moduleName) . '/dashboard',
+                'cssClasses' => "menu-item-header menu-header",
+                'itemType' => 'header',
+                
+                //'permission' => 'view-dashboard'
+            ],
+            [
+                'itemType' => 'item-separator',
+                'title' => '<hr class="horizontal dark mt-0 item-separator" />',
+                //'permission' => 'view-dashboard'
+            ],
+            [
+                'title' => 'Small Dashboard',
+                'icon' => 'fas fa-tachometer-alt fs-5 ms-2',
+                'url' => strtolower($this->moduleName) . '/dashboard',
+                'cssClasses' => "menu-item-header",
+                'itemType' => 'header',
+                //'permission' => 'view-dashboard'
+            ],
+            [
+                'itemType' => 'item-separator',
+                'title' => '<h6 class="ps-4 mb-1 mt-3 text-uppercase text-xs font-weight-bolder opacity-6 item-separator">Laravel Management Header Examples</h6>',
+                //'permission' => 'view-dashboard'
+            ],
+
+
+
+        ];
+    }
+
+
+    private function getSidebarFooter() {
+        return [
+            [
+               'title' => 'Settings',
+                'icon' => 'fas fa-cogs sidebar-icon',
+                'url' => strtolower($this->moduleName) . '/settings',
+                'cssClasses' => "menu-item-footer menu-footer",
+                'itemType' => 'footer',
+                //'permission' => 'view-dashboard'
+            ],
+            [
+                'title' => 'Advance',
+                'icon' => 'fas fa-gear sidebar-icon',
+                'url' => strtolower($this->moduleName) . '/advance',
+                'cssClasses' => "menu-item-footer menu-footer",
+                'itemType' => 'footer',
+                //'permission' => 'view-advance'
+            ],
+        ];
+    }
+
 
 
 

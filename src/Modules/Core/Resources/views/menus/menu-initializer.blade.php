@@ -53,8 +53,8 @@
 
             // Set the toggle arrow icon.
             toggleIcon.className = (states[currentStateIndex] === 'hidden') ?
-                'bi bi-chevron-right' :
-                'bi bi-chevron-left';
+                'fas fa-angle-right' :
+                'fas fa-angle-left';
 
             // 🔽 NEW: Hide all expanded submenus if sidebar is not in 'full' state
             if (states[currentStateIndex] !== 'full') {
@@ -79,6 +79,11 @@
                 document.querySelectorAll('.menu-text').forEach(el => {
                     el.style.fontSize = '0.8em';
                 });
+
+                document.querySelectorAll('.item-separator').forEach(el => {
+                    el.classList.add('ps-2');
+                    el.classList.remove('ps-4');
+                });
             }
 
 
@@ -92,7 +97,16 @@
                 document.querySelectorAll('.menu-text').forEach(el => {
                     el.style.fontSize = '1em';
                 });
+
+                document.querySelectorAll('.item-separator').forEach(el => {
+                    el.classList.remove('ps-2');
+                    el.classList.add('ps-4');
+                });
             }
+
+            document.querySelectorAll('.menu-item-header').forEach(el => {
+                el.style.margin = '0px';
+            });
 
 
         }
@@ -113,12 +127,31 @@
             sidebar.innerHTML = '';
 
             sidebarMenuData.forEach((item, index) => {
+                const prepend = item.prepend || '';
+                const append = item.append || '';
+                const itemType = item.itemType || '';
+                const cssClasses = item.cssClasses || '';
+                const iconCssClasses = item.iconCssClasses || '';
                 const isActiveMenu = item.url === currentPath;
-                const menuDiv = createElem('div', `menu-item${isActiveMenu ? ' active' : ''}`);
-                menuDiv.dataset.index = index;
-                menuDiv.innerHTML =
-                    `<i class="${item.icon} sidebar-icon"></i><span class="menu-text">${item.title}</span>`;
 
+                const menuDiv = document.createElement('div');
+                menuDiv.dataset.index = index;
+
+                let content = "";
+                if (itemType == "header") {
+                    content = `<i class="${item.icon} "></i><span class="menu-text menu-header-text">${item.title}</span>`;
+                    menuDiv.className = `menu-item ${isActiveMenu ? 'active' : ''} ${cssClasses}`.trim();
+
+                } else if (itemType == "item-separator") {
+                    content = `${item.title}`;
+                } else {
+                    content = `<i class="${item.icon} sidebar-icon"></i><span class="menu-text">${item.title}</span>`;
+                    menuDiv.className = `menu-item ${isActiveMenu ? 'active' : ''} ${cssClasses}`.trim();
+                }
+                menuDiv.innerHTML = `${prepend}${content}${append}`;
+
+                
+                    
                 // If the menu item has a submenu
                 if (item.submenu && Array.isArray(item.submenu)) {
                     const submenuDiv = createElem('div', 'submenu');
