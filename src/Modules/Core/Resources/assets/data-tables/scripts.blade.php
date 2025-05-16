@@ -2,6 +2,7 @@
     <script>
         document.addEventListener('livewire:initialized', function() {
 
+            
 
 
                 ///************ PRINT EVENT  *************///

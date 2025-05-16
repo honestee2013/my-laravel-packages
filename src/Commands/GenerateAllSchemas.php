@@ -27,9 +27,9 @@ class GenerateAllSchemas extends Command
 
     // Define strict module execution order
     protected $modules = [
-        //'Core' => [],
+        'Core' => [],
         //'Organization' => [],
-        //'Hr' => [],
+        'Hr' =>  [],// 'onboarding_task.yaml', 'user_onboarding_status.yaml', 'bonus_type.yaml', 'user_bonus.yaml', 'deduction_type.yaml', 'user_deduction.yaml','time_off_request.yaml', 'leave_balance.yaml', 'payroll.yaml', 'user_payroll.yaml'],
         //'Profile' => [],
         //'Item' => [],
         //'User' => ['user.yaml', 'job_title.yaml', 'basic_info.yaml', 'employee_profile.yaml'],

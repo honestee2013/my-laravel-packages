@@ -1,0 +1,73 @@
+models:
+  UserDeduction:
+    module: hr
+    fields:
+      user_payroll_id:
+        type: select
+        foreign:
+          table: user_payrolls
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      deduction_type_id:
+        type: select
+        foreign:
+          table: deduction_types
+          column: id
+          onDelete: restrict
+        validation:
+          - required
+      amount:
+        type: decimal
+        modifiers:
+          precision: 10,2
+        validation:
+          - required|numeric|min:0
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: User Deductions
+      group: payroll-management
+      id: user-deductions
+      parentPageTitle: Payroll Management
+      pageTitle: User Deductions
+      view: user-deductions
+      url: hr/user-deductions
+
+    fieldGroups:
+      - title: Deduction Details
+        groupType: hr
+        fields:
+          - user_payroll_id
+          - deduction_type_id
+          - amount
+
+    relations:
+      userPayroll:
+        type: belongsTo
+        model: App\Modules\HR\Models\UserPayroll
+        foreignKey: user_payroll_id
+        displayField: id # Or a more descriptive field if available
+      deductionType:
+        type: belongsTo
+        model: App\Modules\HR\Models\DeductionType
+        foreignKey: deduction_type_id
+        displayField: name
+
+    sidebar:
+      add: true
+      title: User Deductions
+      iconClasses: fas fa-money-bill-alt # Or a more suitable icon
+
+    iconClasses: fas fa-minus # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']

@@ -31,6 +31,12 @@ models:
           nullable: true
         validation:
           - required|string|max:255
+      termination_date:
+        type: datepicker
+        modifiers:
+          nullable: true
+        validation:
+          - required|string|max:255
       reporting_manager_id:
         type: select
         foreign:

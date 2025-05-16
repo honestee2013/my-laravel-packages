@@ -1,0 +1,74 @@
+models:
+  SalaryHistory:
+    module: hr
+    fields:
+      user_id:
+        type: select
+        foreign:
+          table: users
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      salary:
+        type: decimal
+        modifiers:
+          precision: 12,2
+        validation:
+          - required|numeric|min:0
+      currency:
+        type: string
+        validation:
+          - required
+      effective_date:
+        type: datetimepicker
+        validation:
+          - required
+      reason:
+        type: string
+        modifiers:
+          nullable: true
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Salary History
+      group: payroll-management
+      id: salary-history
+      parentPageTitle: Payroll Management
+      pageTitle: Salary History
+      view: salary-history
+      url: hr/salary-history
+
+    fieldGroups:
+      - title: Salary Change Details
+        groupType: hr
+        fields:
+          - user_id
+          - salary
+          - currency
+          - effective_date
+          - reason
+
+    relations:
+      user:
+        type: belongsTo
+        model: App\Models\User # Adjust namespace if needed
+        foreignKey: user_id
+        displayField: name # Or appropriate display field
+
+    sidebar:
+      add: true
+      title: Salary History
+      iconClasses: fas fa-history # Or a more suitable icon
+
+    iconClasses: fas fa-chart-line # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']

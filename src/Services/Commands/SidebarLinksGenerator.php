@@ -14,36 +14,64 @@ class SidebarLinksGenerator extends Command
 
     public function generateSidebarLinks($module, $modelName, $modelData, $command)
     {
+        $sidebar = $modelData['sidebar'] ?? [];
 
-        $sidebar = $modelData['sidebar']?? [];
-        if(isset($sidebar, $sidebar['add']) && !$sidebar['add']) // Add sidebar Set to false
+        if (isset($sidebar['add']) && !$sidebar['add']) {
             return;
-
-        $sidebarLinksPath = app_path("Modules/{$module}/Resources/views/components/layouts/navbars/auth/sidebar-links.blade.php");
-
-
-        $newLink = $this->getSidebarLinksStub($module, $modelName, $modelData);
-
-        if (File::exists($sidebarLinksPath)) {
-            // Append the new link if it doesn't already exist.
-            $existingContent = File::get($sidebarLinksPath);
-
-            // Check if the link already exists (avoid duplicates):
-            if (!str_contains($existingContent, $newLink)) { // Check for near-duplicates
-                File::append($sidebarLinksPath, "\n" . $newLink);
-                $command->info("New sidebar link appended to: {$sidebarLinksPath}");
-            } else {
-                $command->info("Sidebar link already exists in: {$sidebarLinksPath}. Skipping.");
-            }
-
-        } else {
-            // Create the file with the new link if it doesn't exist.
-            if (!File::exists(dirname($sidebarLinksPath))) {
-                File::makeDirectory(dirname($sidebarLinksPath), 0755, true);
-            }
-            File::put($sidebarLinksPath, "<hr class = 'horizontal dark' /> \n\n$newLink");
-            $command->info("Sidebar links file created: {$sidebarLinksPath}");
         }
+
+        $sidebarConfigPath = base_path("app/Modules/{$module}/Config/sidebar_menu.php");
+
+        $newEntry = $this->getSidebarEntryArray($module, $modelName, $modelData);
+
+        $existing = [];
+
+        if (File::exists($sidebarConfigPath)) {
+            $existing = include $sidebarConfigPath;
+        }
+
+        // Avoid duplicate entries by checking title and url
+        $isDuplicate = collect($existing)->contains(function ($entry) use ($newEntry) {
+            return $entry['title'] === $newEntry['title'] && $entry['url'] === $newEntry['url'];
+        });
+
+        if (!$isDuplicate) {
+            $existing[] = $newEntry;
+
+            $export = var_export($existing, true);
+            File::ensureDirectoryExists(dirname($sidebarConfigPath));
+            File::put($sidebarConfigPath, "<?php\n\nreturn {$export};\n");
+
+            $command->info("Sidebar menu updated: {$sidebarConfigPath}");
+        } else {
+            $command->info("Sidebar entry already exists. Skipping: {$sidebarConfigPath}");
+        }
+    }
+
+    protected function getSidebarEntryArray($module, $modelName, $modelData)
+    {
+        $sidebar = $modelData['sidebar'] ?? [];
+
+        $icon = $sidebar['iconClasses'] ?? $modelData['iconClasses'] ?? 'fas fa-cube';
+        $url = $sidebar['url'] ?? Str::kebab(Str::plural($modelName));
+        $title = $sidebar['title'] ?? Str::title(Str::snake(Str::plural($modelName), ' '));
+
+        $entry = [
+            'title' => $title,
+            'icon'  => $icon,
+            'url'   => "{$module}/{$url}",
+        ];
+
+        if (!empty($sidebar['submenu']) && is_array($sidebar['submenu'])) {
+            $entry['submenu'] = collect($sidebar['submenu'])->map(function ($sub) use ($module) {
+                return [
+                    'title' => $sub['title'] ?? 'Subitem',
+                    'url'   => "{$module}/" . ltrim($sub['url'] ?? '', '/'),
+                ];
+            })->toArray();
+        }
+
+        return $entry;
     }
 
 

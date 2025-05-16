@@ -1,0 +1,67 @@
+models:
+  Goal:
+    module: hr
+    fields:
+      user_id:
+        type: select
+        foreign:
+          table: users
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      description:
+        type: textarea
+        validation:
+          - required
+      target_date:
+        type: datepicker
+        modifiers:
+          nullable: true
+      status:
+        type: select
+        options: to_do, in_progress, achieved, missed
+        default: to_do
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Goals
+      group: performance-management
+      id: goals
+      parentPageTitle: Performance Management
+      pageTitle: User Goals
+      view: goals
+      url: hr/goals
+
+    fieldGroups:
+      - title: Goal Details
+        groupType: hr
+        fields:
+          - user_id
+          - description
+          - target_date
+          - status
+
+    relations:
+      user:
+        type: belongsTo
+        model: App\Models\User # Adjust namespace if needed
+        foreignKey: user_id
+        displayField: name # Or appropriate display field
+
+    sidebar:
+      add: true
+      title: User Goals
+      iconClasses: fas fa-bullseye # Or a more suitable icon
+
+    iconClasses: fas fa-flag-checkered # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']

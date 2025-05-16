@@ -1,0 +1,62 @@
+models:
+  PerformanceReview:
+    module: hr
+    fields:
+      name:
+        type: string
+        validation:
+          - required
+      start_date:
+        type: datepicker
+        modifiers:
+          nullable: true
+      end_date:
+        type: datepicker
+        modifiers:
+          nullable: true
+      description:
+        type: textarea
+        modifiers:
+          nullable: true
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Performance Reviews
+      group: performance-management
+      id: performance-reviews
+      parentPageTitle: Performance Management
+      pageTitle: Performance Reviews Overview
+      view: performance-reviews
+      url: hr/performance-reviews
+
+    fieldGroups:
+      - title: Review Details
+        groupType: hr
+        fields:
+          - name
+          - start_date
+          - end_date
+          - description
+
+    relations:
+      userReviews:
+        type: hasMany
+        model: App\Modules\HR\Models\UserReview
+        foreignKey: review_id
+
+    sidebar:
+      add: true
+      title: Performance Reviews
+      iconClasses: fas fa-file-alt # Or a more suitable icon
+
+    iconClasses: fas fa-clipboard-list # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']

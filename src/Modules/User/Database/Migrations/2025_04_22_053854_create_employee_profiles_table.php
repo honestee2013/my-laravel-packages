@@ -15,6 +15,7 @@ return new class extends Migration
 			$table->string('department')->nullable();
 			$table->string('designation')->nullable();
 			$table->date('joining_date')->nullable();
+            $table->date('termination_date')->nullable();
 			$table->foreignId('reporting_manager_id')->nullable()->constrained('users', 'id')->setNullOnDelete();
 			$table->foreignId('job_title_id')->nullable()->constrained('job_titles', 'id')->setNullOnDelete();
 			$table->string('employment_type')->nullable();

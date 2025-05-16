@@ -79,6 +79,26 @@ class MigrationGenerator extends Command
                         }
                         break;
 
+                    case 'hasMany':
+                        $isPivot = $modelData['isPivot'] ?? false;
+                        if (!$isPivot) {
+                            $fields = $modelData['fields'];
+                            $migrationFullPath = $this->getMigrationPath($module, $modelName, $isPivot);
+                            $stub = $this->getMigrationStub($module, $modelName, $fields);
+                            File::put($migrationFullPath, $stub);
+                        }
+                        break;
+                    case 'hasOne':
+                        $isPivot = $modelData['isPivot'] ?? false;
+                        if (!$isPivot) {
+                            $fields = $modelData['fields'];
+                            $migrationFullPath = $this->getMigrationPath($module, $modelName, $isPivot);
+                            $stub = $this->getMigrationStub($module, $modelName, $fields);
+                            File::put($migrationFullPath, $stub);
+                        }
+                        break;
+                        
+                        
                     case 'morphTo':
                         break;
 

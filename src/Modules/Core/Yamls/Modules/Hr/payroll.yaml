@@ -1,0 +1,69 @@
+models:
+  Payroll:
+    module: hr
+    fields:
+      title:
+        type: string
+        validation:
+          - required
+      payroll_number:
+        type: string
+        validation:
+          - required|unique:payrolls,payroll_number
+      payroll_date:
+        type: datepicker
+        validation:
+          - required
+      payment_date:
+        type: datepicker
+        modifiers:
+          nullable: true
+      description:
+        type: textarea
+        modifiers:
+          nullable: true
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Payrolls
+      group: payroll-management
+      id: payrolls
+      parentPageTitle: Payroll Management
+      pageTitle: Payrolls Overview
+      view: payrolls
+      url: hr/payrolls
+
+    fieldGroups:
+      - title: Payroll Information
+        groupType: hr
+        fields:
+          - title
+          - payroll_number
+          - payroll_date
+          - payment_date
+          - description
+
+    relations:
+      employees:
+        type: hasMany
+        model: App\Models\User
+        foreignKey: payroll_id
+
+    sidebar:
+      add: true
+      title: Payrolls
+      iconClasses: fas fa-file-invoice-dollar # Or a more suitable icon
+
+    iconClasses: fas fa-money-bill-wave # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+  

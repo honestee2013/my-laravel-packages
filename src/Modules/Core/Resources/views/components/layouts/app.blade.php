@@ -68,20 +68,19 @@
             height: 2.3em;
             width: 2.3em;
             padding: 0.7em;
-            margin-right:0.5em;
+
             border-radius: 1em;
             text-align: center;
 
             background-color: rgba(250, 250, 250, 1);
-            color:  rgba(000, 000, 000, 0.6);
-            box-shadow: 0.1em 0.1em 0.5em  rgba(000, 000, 000, 0.1);
+            color: rgba(000, 000, 000, 0.6);
 
             font-size: 1.1em;
             cursor: pointer;
             transition: all 0.3s ease;
 
             box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07) !important;
-
+            margin-right: 0em !important;
         }
 
 
@@ -104,13 +103,6 @@
         #sidebarLogo {
             margin-left: 20px;
         }
-
-
-
-
-
-
-
     </style>
 
 
@@ -124,223 +116,310 @@
 
 
 
-  <style>
-    /* Flex container for sidebar and content */
-    #wrapper {
-      display: flex;
-      min-height: 100vh;
-      transition: margin 0.3s;
-    }
-    /* Sidebar base */
-    .sidebar {
-      box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07) !important;
-      color: #67024f;
-      overflow-x: hidden;
-      transition: width 0.3s;
-      height: 100vh;
-      transition: width 0.3s ease;
-    
+    <style>
+        /* Flex container for sidebar and content */
+        #wrapper {
+            display: flex;
+            min-height: 100vh;
+            transition: margin 0.3s;
+        }
 
-    }
-    /* Sidebar states */
-    .sidebar.full   { width: 250px; }
-    .sidebar.icons  { width: 80px; }
-    .sidebar.hidden { width: 0; }
-    
-    /* Main content styles */
-    .content {
-      flex: 1;
-      transition: margin 0.3s;
-    }
-    
-    /* Menu item styling */
-    .menu-item {
-      padding: 15px;
-      cursor: pointer;
-      position: relative;
-    }
-    .menu-item i { margin-right: 10px; }
-    .menu-item:hover { background: #67024f; color: #fff; }
-    
-    /* Inline submenu for full state */
-    .submenu {
-      display: none;
-      background: #8a026b;
-      padding-left: 20px;
-    }
-    .submenu.active { display: block; }
-    .submenu a {
-      display: block;
-      padding: 10px 15px;
-      color: #fff;
-      text-decoration: none;
-    }
-    .submenu a:hover { background: #6c757d; }
-    
-    /* Popup submenu for icon state */
-    .submenu-popup {
-      position: absolute;
-      left: 80px;
-      top: 0;
-      background: #495057;
-      border: 1px solid #6c757d;
-      z-index: 1100;
-      min-width: 150px;
-    }
-    .submenu-popup a {
-      padding: 10px;
-      display: block;
-      color: #fff;
-      text-decoration: none;
-    }
-    .submenu-popup a:hover { background: #6c757d; }
-    
-    /* Toggle button is fixed so it’s always visible */
-    .toggle-btn {
-      position: fixed;
-      top: 10px;
-      z-index: 1300;
-      background-color: #007bff;
-      border: none;
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: left 0.3s;
-    }
-    
-    /* Responsive default sidebar widths (for first load) */
-    @media (max-width: 576px)  { .sidebar { width: 0; } }
-    @media (min-width: 577px) and (max-width: 992px)  { .sidebar { width: 80px; } }
-    @media (min-width: 993px) { .sidebar { width: 250px; } }
+        /* Sidebar base */
+        .sidebar {
+            box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07) !important;
+            color: #67748e;
+            font-weight: 500;
+            font-family: "Open Sans";
+            font-size: 0.9em;
+            overflow-x: hidden;
+            transition: width 0.3s;
+            height: 100vh;
+            transition: width 0.3s ease;
+        }
 
 
-    .sidebar.icons .menu-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 10px;
-    }
-    
-    .sidebar.icons .menu-item .menu-text {
-      display: block;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-    
-    
 
-    .sidebar .menu-item {
-      transition: all 0.3s ease;
-    }
-    
-    .sidebar .menu-item .menu-text {
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
+        /* Sidebar states */
+        .sidebar.full {
+            width: 250px;
+        }
+
+        .sidebar.icons {
+            width: 80px;
+        }
+
+        .sidebar.hidden {
+            width: 0;
+        }
+
+        /* Main content styles */
+        .content {
+            flex: 1;
+            transition: margin 0.3s;
+        }
+
+        /* Menu item styling */
+        .menu-item {
+            padding: 0.5em;
+            margin: 0em 0.8em;
+        }
+
+        .menu-text {
+            margin: 0em 0.5em;
+        }
+
+        .menu-item,
+        .submenu {
+            cursor: pointer;
+            position: relative;
+            border-radius: 0.5em;
+            /* Adjust the radius value to control the roundness */
+            color: #67748e;
+            font-weight: 500;
+            font-family: "Open Sans";
+            font-size: 0.97em;
+
+        }
+
+        .menu-item i {
+            margin-right: 10px;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: #fff;
+            color: #67024f;
+        }
+
+
+
+        /* Inline submenu for full state */
+        .submenu {
+            display: none;
+            padding: 0em;
+        }
+
+        .submenu.active {
+            display: block;
+        }
+
+        .submenu a {
+            display: block;
+            padding: 0.5em 0em 0.5em 2.5em;
+            margin: 0.5em 0.8em;
+            text-decoration: none;
+        }
+
+        .submenu a:hover, .submenu a.active {
+            background: rgba(103, 116, 142, 0.1);
+            /* Added transparency (alpha value of 0.5) */
+            color: #67024f;
+            border-radius: 0.5em;
+            /* Adjust the radius value to control the roundness */
+        }
+        
+        .menu-item, .submenu {
+          margin-top: 0.5em;
+          margin-bottom: 0.5em;
+        }
+        
 
 
 
 
-    .navbar-nav {
-        padding: 0.7em;
-       
-    }
 
 
-    .navbar-nav .nav-link {
-        padding: 0.5em 1em;
-        font-size: 14px;
-        color: #344767;
-        text-decoration: none;
-    }
-    .navbar-nav .nav-link:hover {
-        background-color: #f8f9fa;
-        color: #d94fb9;
-    }
-    .navbar-nav .nav-link.active {
-        background-color: #f8f9fa;
-        color: #d94fb9;
-    }
-    .navbar-nav .nav-link i {
-        margin-right: 0.5em;
-    }
-    .navbar-nav .nav-link span {
-        font-size: 14px;
-        font-weight: 500;
-    }
 
-    #toggleSidebar {
-      z-index: 130 !important;
-    }
 
-  
-  </style>
+        /* Popup submenu for icon state */
+        .submenu-popup {
+            position: absolute;
+            left: 80px;
+            top: 0;
+            background: #495057;
+            border: 1px solid #6c757d;
+            z-index: 1100;
+            min-width: 150px;
+        }
+
+        .submenu-popup a {
+            padding: 10px;
+            display: block;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .submenu-popup a:hover {
+            background: #6c757d;
+        }
+
+        /* Toggle button is fixed so it’s always visible */
+        .toggle-btn {
+            position: fixed;
+            top: 10px;
+            z-index: 1300;
+            background-color: #007bff;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: left 0.3s;
+        }
+
+        /* Responsive default sidebar widths (for first load) */
+        @media (max-width: 576px) {
+            .sidebar {
+                width: 0;
+            }
+        }
+
+        @media (min-width: 577px) and (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+            }
+        }
+
+        @media (min-width: 993px) {
+            .sidebar {
+                width: 250px;
+            }
+        }
+
+
+        .sidebar.icons .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .sidebar.icons .menu-item .menu-text {
+            display: block;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+
+
+        .sidebar .menu-item {
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .menu-item .menu-text {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+
+
+
+        .navbar-nav {
+            padding: 0.7em;
+
+        }
+
+
+        .navbar-nav .nav-link {
+            padding: 0.5em 1em;
+            font-size: 14px;
+            color: #344767;
+            text-decoration: none;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #f8f9fa;
+            color: #d94fb9;
+        }
+
+        .navbar-nav .nav-link.active {
+            background-color: #f8f9fa;
+            color: #d94fb9;
+        }
+
+        .navbar-nav .nav-link i {
+            margin-right: 0.5em;
+        }
+
+        .navbar-nav .nav-link span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        #toggleSidebar {
+            z-index: 130 !important;
+        }
+    </style>
 </head>
-<body class="g-sidenav-show  bg-gray-100 {{ \Request::is('rtl') ? 'rtl' : (Request::is('virtual-reality') ? 'virtual-reality' : '') }} ">
+
+<body
+    class="g-sidenav-show  bg-gray-100 {{ \Request::is('rtl') ? 'rtl' : (Request::is('virtual-reality') ? 'virtual-reality' : '') }} ">
 
 
-    
+
     @auth
-  <div id="wrapper" class="flex-nowrap">
-
-      
-
-       
-        {{------ Sidebar content. The <x-slot name="sidebar" /> content goes here------}}
-        {{ $sidebar?? "" }}
-
-        <div class="content" style="overflow-x: scroll" id="contentArea">
-            {{------ Navbar content. The <x-slot name="navbar" /> content goes here------}}
-            {{--{{ $navbar }}--}}
-            <x-core.views::layouts.navbars.auth.nav />
-
-            <div class="container-fluid py-4">
-
-                {{------ Header content. The <x-slot name="pageHeader" /> content goes here------}}
-                {{ $pageHeader?? "" }}
+        <div id="wrapper" class="flex-nowrap">
 
 
-                {{------ Page content. The default template [CONTENT] goes here------}}
-                {{ $slot }}
 
 
-                {{------ Footer content. The <x-slot name="pageFooter" /> content goes here------}}
-                {{ $pageFooter?? "" }}
+            {{-- ---- Sidebar content. The <x-slot name="sidebar" /> content goes here---- --}}
+            {{ $sidebar ?? '' }}
 
-                <x-core.views::layouts.footers.auth.footer />
+            <div class="content" style="overflow-x: scroll" id="contentArea">
+                {{-- ---- Navbar content. The <x-slot name="navbar" /> content goes here---- --}}
+                {{-- {{ $navbar }} --}}
+                <x-core.views::layouts.navbars.auth.nav />
+
+                <div class="container-fluid py-4">
+
+                    {{-- ---- Header content. The <x-slot name="pageHeader" /> content goes here---- --}}
+                    {{ $pageHeader ?? '' }}
+
+
+                    {{-- ---- Page content. The default template [CONTENT] goes here---- --}}
+                    {{ $slot }}
+
+
+                    {{-- ---- Footer content. The <x-slot name="pageFooter" /> content goes here---- --}}
+                    {{ $pageFooter ?? '' }}
+
+                    <x-core.views::layouts.footers.auth.footer />
+                </div>
             </div>
+
+
+
+
+
+
+
+        </div>
         </div>
 
 
 
+        <!-- Toggle button placed outside the sidebar so it stays visible -->
+        <button id="toggleSidebar" class="toggle-btn bg-gradient-primary">
+            <i id="toggleIcon" class="bi"></i>
+        </button>
 
 
 
 
-    </div>
-  </div>
+    @endauth
+
+
+    {{-- <script>
+
 
   
 
-  <!-- Toggle button placed outside the sidebar so it stays visible -->
-  <button id="toggleSidebar" class="toggle-btn bg-gradient-primary">
-    <i id="toggleIcon" class="bi"></i>
-  </button>
 
-
-
-
-
-  @endauth
-
-
-  <script>
     const sidebar    = document.getElementById('sidebar');
     const content    = document.getElementById('contentArea');
     const toggleBtn  = document.getElementById('toggleSidebar');
@@ -539,10 +618,11 @@
 
     window.addEventListener('resize', initialize);
     initialize();
-  </script>
-  
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </script> --}}
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+        < /scrip>
 
 
 
@@ -553,18 +633,26 @@
 
 
 
-<!--------------------------------  ORIGINAL LINKS --------------------------------->
+        <
+        !-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --ORIGINAL LINKS-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- - >
 
-    @if (session()->has('success'))
-        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show"
-            class="position-fixed bg-success rounded right-3 text-sm py-2 px-4">
-            <p class="m-0">{{ session('success') }}</p>
-        </div>
-    @endif
+        @if (session()->has('success'))
+            <
+            div x - data = "{ show: true }"
+            x - init = "setTimeout(() => show = false, 4000)"
+            x - show = "show"
+            class = "position-fixed bg-success rounded right-3 text-sm py-2 px-4" >
+            <
+            p class = "m-0" > {{ session('success') }} < /p> <
+                /div>
+        @endif
 
-    <!--   Core JS Files   -->
-    <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
-    {{--<script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>--}}
+        <
+        !--Core JS Files-- >
+        <
+        script src = "{{ asset('assets/js/core/popper.min.js') }}" >
+    </script>
+    {{-- <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script> --}}
     <script src="{{ asset('assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/smooth-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/fullcalendar.min.js') }}"></script>
@@ -609,4 +697,5 @@
 
 
 </body>
+
 </html>

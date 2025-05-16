@@ -15,7 +15,7 @@ models:
       category_id:
         type: select
         modifiers:
-          - nullable: true # Allow weight to be nullable
+          nullable: true # Allow weight to be nullable
         foreign:
           table: categories
           column: id
@@ -36,8 +36,8 @@ models:
       weight:
         type: decimal
         modifiers:
-          - precision: 10,2
-          - nullable: true # Allow weight to be nullable
+          precision: 10,2
+          nullable: true # Allow weight to be nullable
 
       dimensions:
         type: string

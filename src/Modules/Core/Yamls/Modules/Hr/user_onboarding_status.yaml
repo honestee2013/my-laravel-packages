@@ -1,0 +1,85 @@
+models:
+  UserOnboardingStatus:
+    module: hr
+    fields:
+      user_id:
+        type: select
+        foreign:
+          table: users
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      task_id:
+        type: select
+        foreign:
+          table: onboarding_tasks
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      status:
+        type: select
+        options: to_do, in_progress, completed
+        default: to_do
+      due_date:
+        type: datepicker
+        modifiers:
+          nullable: true
+      completed_at:
+        type: datetimepicker
+        modifiers:
+          nullable: true
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: User Onboarding Status
+      group: onboarding-management
+      id: user-onboarding-status
+      parentPageTitle: Onboarding Management
+      pageTitle: User Onboarding Status
+      view: user-onboarding-statuses
+      url: hr/user-onboarding-statuses
+
+    fieldGroups:
+      - title: Assignment
+        groupType: hr
+        fields:
+          - user_id
+          - task_id
+
+      - title: Status
+        groupType: hr
+        fields:
+          - status
+          - due_date
+          - completed_at
+
+    relations:
+      user:
+        type: belongsTo
+        model: App\Models\User # Adjust namespace if needed
+        foreignKey: user_id
+        displayField: name # Or appropriate display field
+      task:
+        type: belongsTo
+        model: App\Modules\HR\Models\OnboardingTask
+        foreignKey: task_id
+        displayField: name
+
+    sidebar:
+      add: true
+      title: User Onboarding Status
+      iconClasses: fas fa-user-plus # Or a more suitable icon
+
+    iconClasses: fas fa-check-square # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
