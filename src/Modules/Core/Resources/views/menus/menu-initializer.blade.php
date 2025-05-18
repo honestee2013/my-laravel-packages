@@ -80,10 +80,11 @@
                     el.style.fontSize = '0.8em';
                 });
 
-                document.querySelectorAll('.item-separator').forEach(el => {
-                    el.classList.add('ps-2');
-                    el.classList.remove('ps-4');
+                document.querySelectorAll('.group-title').forEach(el => {
+                    el.style.display = 'none';
                 });
+
+                
             }
 
 
@@ -98,9 +99,8 @@
                     el.style.fontSize = '1em';
                 });
 
-                document.querySelectorAll('.item-separator').forEach(el => {
-                    el.classList.remove('ps-2');
-                    el.classList.add('ps-4');
+                document.querySelectorAll('.group-title').forEach(el => {
+                    el.style.display = 'block';
                 });
             }
 
@@ -184,10 +184,12 @@
                     menuDiv.appendChild(submenuDiv);
                 } else {
                     // No submenu, make the whole div a link
-                    menuDiv.style.cursor = 'pointer';
-                    menuDiv.addEventListener('click', () => {
-                        window.location.href = `/${item.url}`;
-                    });
+                    if (item.url !="#") {
+                        menuDiv.style.cursor = 'pointer';
+                        menuDiv.addEventListener('click', () => {
+                            window.location.href = `/${item.url}`;
+                        });
+                    }
                 }
 
                 sidebar.appendChild(menuDiv);

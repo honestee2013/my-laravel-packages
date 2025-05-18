@@ -82,11 +82,11 @@ class MenuInitializer extends Component
                 'itemType' => 'header',
                 //'permission' => 'view-dashboard'
             ],
-            [
+            /*[
                 'itemType' => 'item-separator',
-                'title' => '<h6 class="ps-4 mb-1 mt-3 text-uppercase text-xs font-weight-bolder opacity-6 item-separator">Laravel Management Header Examples</h6>',
+                'title' => '<h6 class="ps-3 my-3 text-uppercase text-xs font-weight-bolder opacity-6 group-title">Manage Payment Structure</h6>',
                 //'permission' => 'view-dashboard'
-            ],
+            ],*/
 
 
 
@@ -96,7 +96,7 @@ class MenuInitializer extends Component
 
     private function getSidebarFooter() {
         return [
-            [
+            /*[
                'title' => 'Settings',
                 'icon' => 'fas fa-cogs sidebar-icon',
                 'url' => strtolower($this->moduleName) . '/settings',
@@ -111,7 +111,7 @@ class MenuInitializer extends Component
                 'cssClasses' => "menu-item-footer menu-footer",
                 'itemType' => 'footer',
                 //'permission' => 'view-advance'
-            ],
+            ],*/
         ];
     }
 

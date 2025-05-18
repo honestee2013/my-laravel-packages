@@ -1,0 +1,184 @@
+models:
+  Payroll:
+    module: hr
+    fields:
+      title:
+        type: string
+        validation:
+          - required
+      payroll_number:
+        type: string
+        validation:
+          - required|unique:payrolls,payroll_number
+      payroll_date:
+        type: datepicker
+        validation:
+          - required
+      payment_date:
+        type: datepicker
+        modifiers:
+          nullable: true
+      description:
+        type: textarea
+        modifiers:
+          nullable: true
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Payrolls
+      group: payroll-processing
+      id: payrolls
+      parentPageTitle: Payroll Processing
+      pageTitle: Payrolls Overview
+      view: payrolls
+      url: hr/payrolls
+
+    fieldGroups:
+      - title: Payroll Information
+        groupType: hr
+        fields:
+          - title
+          - payroll_number
+          - payroll_date
+          - payment_date
+          - description
+
+    relations:
+      employees:
+        type: hasMany
+        model: App\Models\User
+        foreignKey: payroll_id
+
+    sidebar:
+      add: true
+      groupTitle: Payroll Management
+      title: Payroll Processing
+      iconClasses: fas fa-file-invoice-dollar # Or a more suitable icon
+      submenu:
+        - title: Payrolls
+          url: payrolls
+        - title: User Payrolls
+          url: user-payrolls
+
+
+    iconClasses: fas fa-money-bill-wave # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+  
+
+
+  UserPayroll:
+    module: hr
+    fields:
+      payroll_id:
+        type: select
+        foreign:
+          table: payrolls
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      user_id:
+        type: select
+        foreign:
+          table: users
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      base_salary:
+        type: decimal
+        modifiers:
+          precision: 10,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      gross_salary:
+        type: decimal
+        modifiers:
+          precision: 10,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      total_deductions:
+        type: decimal
+        modifiers:
+          precision: 10,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      net_salary:
+        type: decimal
+        modifiers:
+          precision: 10,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      comments:
+        type: textarea
+        modifiers:
+          nullable: true
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: User Payrolls
+      parentPageTitle: Payroll Management
+      group: payroll-processing
+      id: user-payrolls
+      pageTitle: User Payrolls
+      view: user-payrolls
+      url: hr/user-payrolls
+
+    fieldGroups:
+      - title: Payroll Assignment
+        groupType: hr
+        fields:
+          - payroll_id
+          - user_id
+
+      - title: Salary Details
+        groupType: hr
+        fields:
+          - base_salary
+          - gross_salary
+          - total_deductions
+          - net_salary
+          - comments
+
+    relations:
+      payroll:
+        type: belongsTo
+        model: App\Modules\HR\Models\Payroll
+        foreignKey: payroll_id
+        displayField: title # Or appropriate display field
+      user:
+        type: belongsTo
+        model: App\Models\User # Adjust namespace if needed
+        foreignKey: user_id
+        displayField: name # Or appropriate display field
+
+    sidebar:
+      add: false
+      title: User Payrolls
+      iconClasses: fas fa-user-cog # Or a more suitable icon
+
+    iconClasses: fas fa-receipt # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']

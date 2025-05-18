@@ -36,6 +36,15 @@ class SidebarLinksGenerator extends Command
         });
 
         if (!$isDuplicate) {
+            if (isset($newEntry['groupTitle']))  {
+                // Prepend with the title entry
+                $existing[] = [
+                    'itemType' => 'item-separator',
+                    'title' => '<h6 class="ps-3 mt-4 mb-2 text-uppercase text-xs font-weight-bolder opacity-6 group-title">'.$newEntry['groupTitle'].'</h6>',
+                    'url' => null,
+                ];
+            }
+
             $existing[] = $newEntry;
 
             $export = var_export($existing, true);
@@ -61,6 +70,9 @@ class SidebarLinksGenerator extends Command
             'icon'  => $icon,
             'url'   => "{$module}/{$url}",
         ];
+        // Add groupTitle if it exist
+        if (isset($sidebar['groupTitle']))
+            $entry["groupTitle"] = $sidebar['groupTitle'];
 
         if (!empty($sidebar['submenu']) && is_array($sidebar['submenu'])) {
             $entry['submenu'] = collect($sidebar['submenu'])->map(function ($sub) use ($module) {
