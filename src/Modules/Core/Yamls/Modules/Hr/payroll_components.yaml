@@ -1,0 +1,121 @@
+models:
+  BonusType:
+    module: hr
+    fields:
+      name:
+        type: string
+        validation:
+          - required|unique:bonus_types,name
+      description:
+        type: textarea
+        modifiers:
+          nullable: true
+      editable:
+        type: string
+        default: No
+
+    hiddenFields:
+      onTable: []
+      onNewForm: ['editable']
+      onEditForm: ['editable']
+      onQuery: []
+
+    tab:
+      label: Bonus Types
+      group: payroll-components
+      id: bonus-types
+      parentPageTitle: Payroll Components
+      pageTitle: Bonus Types Overview
+      view: bonus-types
+      url: hr/bonus-types
+
+    fieldGroups:
+      - title: Bonus Type Information
+        groupType: hr
+        fields:
+          - name
+          - description
+
+    #relations:
+    #  employeeBonuses:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\EmployeeBonus
+    #    foreignKey: bonus_type_id
+
+    sidebar:
+      add: false
+    
+
+    iconClasses: fas fa-certificate # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+
+  DeductionType:
+    module: hr
+    fields:
+      name:
+        type: string
+        validation:
+          - required|unique:deduction_types,name
+      description:
+        type: textarea
+        modifiers:
+          nullable: true
+      editable:
+        type: string
+        default: No
+
+    hiddenFields:
+      onTable: []
+      onNewForm: ['editable']
+      onEditForm: ['editable']
+      onQuery: []
+
+    tab:
+      label: Deduction Types
+      group: payroll-components
+      id: deduction-types
+      parentPageTitle: Payroll Components
+      pageTitle: Deduction Types Overview
+      view: deduction-types
+      url: hr/deduction-types
+
+    fieldGroups:
+      - title: Deduction Type Information
+        groupType: hr
+        fields:
+          - name
+          - description
+
+    #relations:
+    #  userDeductions:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\UserDeduction
+    #    foreignKey: deduction_type_id
+
+    #sidebar:
+    #  add: true
+    #  title: Deduction Types
+    #  iconClasses: fas fa-minus-circle # Or a more suitable icon
+    sidebar:
+      add: true
+      title: Payroll Components
+      iconClasses: fas fa-gift
+      url: deduction-types
+      submenu:
+        - title: Deduction Types
+          url: deduction-types
+        - title: Bonus Types
+          url: bonus-types
+
+
+    iconClasses: fas fa-list-alt # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']

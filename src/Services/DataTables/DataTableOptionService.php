@@ -68,15 +68,31 @@ class DataTableOptionService
             })->toArray();
         } else {
             // Handle regular columns (no relationship)
-            if (!$hintField)
-                return $query->pluck($column, $key);
+            if (!$hintField) {
+                $model = $query->getModel();
+                $columns = $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
+                if (in_array($column, $columns) && in_array($key, $columns)) {
+                    return $query->pluck($column, $key);
+                } else {
+                    // Handle the case where either $column or $key doesn't exist
+                    return []; // Or you could throw an exception or return a specific error
+                }
+            }
+        
+            return $query->get()->mapWithKeys(function ($obj) use ($column, $key, $hintField) {
+                $localObj = $obj->getAttributes(); // Get the attributes array
+                $keyVal = $obj->$key;
+                $val = null;
+                if (array_key_exists($column, $localObj)) {
+                    $val = $obj->$column;
+                    if (array_key_exists($hintField, $localObj) && !empty($obj->$hintField)) {
+                        $val .= " (" . $obj->$hintField . ")";
+                    }
+                    return [$keyVal => $val];
+                }
 
-            return $query->get()->mapWithKeys(function ($obj)use($column, $key, $hintField) {
-                $key = $obj->$key;
-                $val = $obj->$column;
-                if (!empty($obj->$hintField))
-                    $val .= " (".$obj->$hintField. ")";
-                return [ $key => $val ];
+                return [$keyVal => $obj->$column];
+                
             })->toArray();
         }
 

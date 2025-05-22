@@ -5,9 +5,10 @@ models:
       title:
         type: string
         validation:
-          - required
+          - required|unique:payrolls,title
       payroll_number:
         type: string
+        autoGenerate: true
         validation:
           - required|unique:payrolls,payroll_number
       payroll_date:
@@ -29,6 +30,10 @@ models:
       onEditForm: []
       onQuery: []
 
+    displayFields:
+      - title
+      - payroll_number
+
     tab:
       label: Payrolls
       group: payroll-processing
@@ -48,11 +53,11 @@ models:
           - payment_date
           - description
 
-    relations:
-      employees:
-        type: hasMany
-        model: App\Models\User
-        foreignKey: payroll_id
+    #relations:
+    #  employees:
+    #    type: hasMany
+    #    model: App\Models\User
+    #    foreignKey: payroll_id
 
     sidebar:
       add: true
@@ -87,14 +92,23 @@ models:
           onDelete: cascade
         validation:
           - required
-      user_id:
+      employee_profile_id:
         type: select
+        label: Employee ID
         foreign:
-          table: users
+          table: employee_profiles
           column: id
           onDelete: cascade
         validation:
           - required
+      #user_id:
+      #  type: select
+      #  foreign:
+      #    table: users
+      #    column: id
+      #    onDelete: cascade
+      #  validation:
+      #    - required
       base_salary:
         type: decimal
         modifiers:
@@ -136,7 +150,7 @@ models:
 
     tab:
       label: User Payrolls
-      parentPageTitle: Payroll Management
+      parentPageTitle: Payroll Processing
       group: payroll-processing
       id: user-payrolls
       pageTitle: User Payrolls
@@ -148,7 +162,7 @@ models:
         groupType: hr
         fields:
           - payroll_id
-          - user_id
+          - employee_profile_id
 
       - title: Salary Details
         groupType: hr
@@ -164,12 +178,20 @@ models:
         type: belongsTo
         model: App\Modules\HR\Models\Payroll
         foreignKey: payroll_id
-        displayField: title # Or appropriate display field
-      user:
+        displayField: display_name # Or appropriate display field
+        hintField: payroll_number
+
+      employeeProfile:
         type: belongsTo
-        model: App\Models\User # Adjust namespace if needed
-        foreignKey: user_id
-        displayField: name # Or appropriate display field
+        model: App\Modules\User\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or appropriate display field
+
+      #user:
+      #  type: belongsTo
+      #  model: App\Models\User # Adjust namespace if needed
+      #  foreignKey: user_id
+      #  displayField: name # Or appropriate display field
 
     sidebar:
       add: false

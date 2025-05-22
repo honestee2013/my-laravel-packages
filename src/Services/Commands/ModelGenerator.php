@@ -117,6 +117,12 @@ class ModelGenerator extends Command
         $stub = str_replace('{{relations}}', $relationDefinitions, $stub);
         $stub = str_replace('{{fillable}}', $fillableString, $stub);
 
+        // Handle imports related
+        $stub = str_replace('{{imports}}', $this->getImports($modelData), $stub);
+        $stub = str_replace('{{importList}}', $this->getImportLists($modelData), $stub);
+        $stub = str_replace('{{displayFields}}', $this->getDisplayNames($modelName, $modelData), $stub);
+
+
 
         $tableName = Str::snake(Str::plural($modelName)); // plural for normal table
         if ($modelData['isPivot'] ?? false) { // singular for pivot table
@@ -128,6 +134,34 @@ class ModelGenerator extends Command
         $stub = str_replace('{{tableName}}', $tableName, $stub);
 
         return $stub;
+    }
+
+
+    protected function getImports($modelData) {
+        if (isset($modelData["displayFields"])) {
+            return "use QuickerFaster\CodeGen\Traits\GUI\HasDisplayName;";
+        }
+        return '';
+    }
+
+
+    protected function getImportLists($modelData) {
+        if (isset($modelData["displayFields"])) {
+            return "use HasDisplayName;";
+        }
+        return '';
+    }
+
+
+    protected function getDisplayNames($modelName, $modelData) {
+
+        if (isset($modelData["displayFields"])) {
+            // Add 
+            $displayFields = array_map( fn ($element) => "'$element'", $modelData["displayFields"]);
+            $displayFields = implode(",",$displayFields);
+            return 'protected $displayFields ='. "[".$displayFields."]; \n";
+        }
+        return '';
     }
 
 

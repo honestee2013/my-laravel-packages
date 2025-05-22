@@ -29,7 +29,18 @@ class GenerateAllSchemas extends Command
     protected $modules = [
         'Core' => [],
         //'Organization' => [],
-        'Hr' =>  [],// 'onboarding_task.yaml', 'user_onboarding_status.yaml', 'bonus_type.yaml', 'user_bonus.yaml', 'deduction_type.yaml', 'user_deduction.yaml','time_off_request.yaml', 'leave_balance.yaml', 'payroll.yaml', 'user_payroll.yaml'],
+        'Hr' =>  [
+            'onboarding_and_employee_lifecycle.yaml',
+            'time_off_and_leaves.yaml',
+            'payroll_processing.yaml', 
+            'payroll_adjustments.yaml', 
+            'payroll_components.yaml',
+            'role_scheduling.yaml',
+            'user_scheduling.yaml',
+            'work_day.yaml',
+            'salaries_and_payment_structure.yaml',
+            'user_salary_records.yaml'
+        ],// 'onboarding_task.yaml', 'user_onboarding_status.yaml', 'bonus_type.yaml', 'user_bonus.yaml', 'deduction_type.yaml', 'user_deduction.yaml','time_off_request.yaml', 'leave_balance.yaml', 'payroll.yaml', 'user_payroll.yaml'],
         //'Profile' => [],
         //'Item' => [],
         //'User' => ['user.yaml', 'job_title.yaml', 'basic_info.yaml', 'employee_profile.yaml'],

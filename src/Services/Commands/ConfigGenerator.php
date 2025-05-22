@@ -69,6 +69,7 @@ class ConfigGenerator extends Command
                     $relatedModel = null;
                     $relationshipType = null;
                     $displayField = null;
+                    $hintField = null;
                     $inlineAdd = null;
                     // Find the related model and relationship type from the relations section
                     if (isset($modelData['relations'])) {
@@ -77,6 +78,7 @@ class ConfigGenerator extends Command
                                 $relatedModel = $relationData['model'];
                                 $relationshipType = $relationData['type'];
                                 $displayField = $relationData['displayField'] ?? 'name';
+                                $hintField = $relationData['hintField'] ?? null;
                                 $inlineAdd = $relationData['inlineAdd'] ?? false;
                                 break; // Found it, exit the loop
                             }
@@ -96,6 +98,7 @@ class ConfigGenerator extends Command
                         $yamlFieldDefinitions[$fieldName]['options'] = [
                             'model' => $relatedModel, // Correct model path from relations
                             'column' => $displayField, // Or whichever field you want to display
+                            'hintField' => $hintField, // Or whichever field you want to display
                         ];
                     } else {
                         $command->warn("Relationship not found for field: {$fieldName}. Ensure it's defined in the 'relations' section.");
@@ -115,6 +118,7 @@ class ConfigGenerator extends Command
                     $relationshipType = $relationData['type'];
                     $foreignKey = $relationData['foreignKey'] ?? null; // Make foreignKey nullable
                     $displayField = $relationData['displayField'] ?? 'name';
+                    $hintField = $relationData['hintField'] ?? null;
                     $label = Str::title(str_replace("_", " ", Str::snake($relationName)));
                     $inlineAdd = $relationData['inlineAdd'] ?? false;
 
@@ -131,6 +135,7 @@ class ConfigGenerator extends Command
                                     'model' => $relatedModel,
                                     'type' => $relationshipType,
                                     'display_field' => $displayField, // Or the field you want to display
+                                    'hintField' => $hintField, // Or whichever field you want to display
                                     'dynamic_property' => $relationName, // The name of the relationship
                                     'foreign_key' => $foreignKey,
                                     'local_key' => 'id', // Local key for the relationship
@@ -139,6 +144,7 @@ class ConfigGenerator extends Command
                                 'options' => [
                                     'model' => $relatedModel,
                                     'column' => $displayField, // Or the field you want to display
+                                    'hintField' => $hintField, // Or whichever field you want to display
                                 ],
                                 'label' => Str::title($label), // Label for the field
                                 'multiSelect' => true,
@@ -183,6 +189,7 @@ class ConfigGenerator extends Command
                                 'options' => [
                                     'model' => $relatedModel,
                                     'column' => $displayField,
+                                    'hintField' => $hintField, // Or whichever field you want to display
                                 ],
                                 'label' => Str::title($relationName),
                                 'multiSelect' => true,

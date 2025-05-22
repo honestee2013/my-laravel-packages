@@ -4,10 +4,15 @@ namespace App\Modules\{{module}}\Models; // Important: Include the module namesp
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+{{imports}}
+
 
 class {{modelName}} extends Model
 {
     use HasFactory;
+    {{importList}}
+    {{displayFields}}
+
 
     {{tableName}}
 
