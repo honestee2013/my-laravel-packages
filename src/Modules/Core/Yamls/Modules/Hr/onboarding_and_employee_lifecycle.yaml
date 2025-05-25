@@ -68,14 +68,16 @@ models:
   UserOnboardingStatus:
     module: hr
     fields:
-      user_id:
+      employee_profile_id:
         type: select
+        label: Employee ID
         foreign:
-          table: users
+          table: employee_profiles
           column: id
           onDelete: cascade
         validation:
           - required
+
       onboarding_task_id:
         type: select
         foreign:
@@ -116,7 +118,7 @@ models:
       - title: Assignment
         groupType: hr
         fields:
-          - user_id
+          - employee_profile_id
           - onboarding_task_id
 
       - title: Status
@@ -127,12 +129,14 @@ models:
           - completed_at
 
     relations:
-      user:
+      employeeProfile:
         type: belongsTo
-        model: App\Models\User # Adjust namespace if needed
-        foreignKey: user_id
-        displayField: name # Or appropriate display field
-      task:
+        model: App\Modules\User\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or appropriate display field
+
+
+      onboardingTask:
         type: belongsTo
         model: App\Modules\HR\Models\OnboardingTask
         foreignKey: onboarding_task_id

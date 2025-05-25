@@ -3,10 +3,11 @@ models:
   TimeOffRequest:
     module: hr
     fields:
-      user_id:
+      employee_profile_id:
         type: select
+        label: Employee ID
         foreign:
-          table: employee_profiles # Assuming you have an 'employee_profiles' table
+          table: employee_profiles
           column: id
           onDelete: cascade
         validation:
@@ -50,21 +51,21 @@ models:
         validation:
           - required
       submission_date:
-        type: datepicker
+        type: datetimepicker
         modifiers:
           nullable: true
       status:
         type: select
         options: pending, approved, rejected
         default: pending
-      manager_id:
+
+      user_id:
         type: select
+        label: Reporting Manager
         foreign:
-          table: employee_profiles # Assuming you have an 'employee_profiles' table
+          table: users
           column: id
-          onDelete: set null
-        modifiers:
-          nullable: true
+          onDelete: cascade
 
     hiddenFields:
       onTable: []
@@ -86,7 +87,7 @@ models:
       - title: Request Details
         groupType: hr
         fields:
-          - user_id
+          - employee_profile_id
           - leave_type
           - start_date
           - end_date
@@ -95,22 +96,23 @@ models:
         groupType: hr
         fields:
           - status
-          - manager_id
+          - user_id
           - submission_date
 
     relations:
+      employeeProfile:
+        type: belongsTo
+        model: App\Modules\User\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or appropriate display field
+
       user:
         type: belongsTo
-        model: App\Models\User # Adjust namespace if needed
+        model: App\Models\User
         foreignKey: user_id
-        displayField: name # Or appropriate display field
-
-      manager:
-        type: belongsTo
-        model: App\Models\User # Adjust namespace if needed
-        foreignKey: manager_id
-        displayField: name # Or appropriate display field
-
+        displayField: name
+        hintField: email
+        
     sidebar:
       add: false
       title: Time Off Requests
@@ -131,10 +133,11 @@ models:
   LeaveBalance:
     module: hr
     fields:
-      user_id:
+      employee_profile_id:
         type: select
+        label: Employee ID
         foreign:
-          table: users
+          table: employee_profiles
           column: id
           onDelete: cascade
         validation:
@@ -194,16 +197,17 @@ models:
       - title: Leave Balance Information
         groupType: hr
         fields:
-          - user_id
+          - employee_profile_id
           - leave_type
           - remaining_days
 
     relations:
-      user:
+      employeeProfile:
         type: belongsTo
-        model: App\Models\User # Adjust namespace if needed
-        foreignKey: user_id
-        displayField: name # Or appropriate display field
+        model: App\Modules\User\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or appropriate display field
+
 
     sidebar:
       add: true

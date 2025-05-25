@@ -2,14 +2,15 @@ models:
   UserSchedule:
     module: hr
     fields:
-      user_id:
+      employee_profile_id:
         type: select
+        label: Employee ID
         foreign:
-          table: users
+          table: employee_profiles
           column: id
           onDelete: cascade
         validation:
-          - required|unique:user_schedules,user_id
+          - required
       start_time:
         type: timepicker
         modifiers:
@@ -38,16 +39,16 @@ models:
       - title: User Schedule Override
         groupType: hr
         fields:
-          - user_id
+          - employee_profile_id
           - start_time
           - end_time
 
     relations:
-      user:
+      employeeProfile:
         type: belongsTo
-        model: App\Models\User # Adjust namespace if needed
-        foreignKey: user_id
-        displayField: name # Or appropriate display field
+        model: App\Modules\User\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or appropriate display field
 
 
     sidebar:
@@ -78,10 +79,11 @@ models:
   UserWorkDay:
     module: hr
     fields:
-      user_id:
+      employee_profile_id:
         type: select
+        label: Employee ID
         foreign:
-          table: users
+          table: employee_profiles
           column: id
           onDelete: cascade
         validation:
@@ -114,15 +116,15 @@ models:
       - title: User Specific Work Days
         groupType: hr
         fields:
-          - user_id
+          - employee_profile_id
           - work_day_id
 
     relations:
-      user:
+      employeeProfile:
         type: belongsTo
-        model: App\Models\User # Adjust namespace if needed
-        foreignKey: user_id
-        displayField: name # Or appropriate display field
+        model: App\Modules\User\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or appropriate display field
       workDay:
         type: belongsTo
         model: App\Modules\HR\Models\WorkDay

@@ -12,11 +12,16 @@ models:
           nullable: true
         validation:
           - nullable|integer|min:1|max:7
+      editable: 
+        type: string
+        modifiers:
+          default: Yes
+
 
     hiddenFields:
       onTable: []
-      onNewForm: []
-      onEditForm: []
+      onNewForm: ['editable']
+      onEditForm: ['editable']
       onQuery: []
 
     tab:
@@ -35,15 +40,15 @@ models:
           - day_name
           - day_of_week
 
-    relations:
-      roleWorkDays:
-        type: hasMany
-        model: App\Modules\HR\Models\RoleWorkDay
-        foreignKey: work_day_id
-      userWorkDays:
-        type: hasMany
-        model: App\Modules\HR\Models\UserWorkDay
-        foreignKey: work_day_id
+    #relations:
+    #  roleWorkDays:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\RoleWorkDay
+    #    foreignKey: work_day_id
+    #  userWorkDays:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\UserWorkDay
+    #    foreignKey: work_day_id
 
     sidebar:
       add: true

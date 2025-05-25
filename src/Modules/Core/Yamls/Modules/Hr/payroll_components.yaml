@@ -12,7 +12,8 @@ models:
           nullable: true
       editable:
         type: string
-        default: No
+        modifiers:
+          default: 'Yes'
 
     hiddenFields:
       onTable: []
@@ -67,7 +68,8 @@ models:
           nullable: true
       editable:
         type: string
-        default: No
+        modifiers:
+          default: 'Yes'
 
     hiddenFields:
       onTable: []

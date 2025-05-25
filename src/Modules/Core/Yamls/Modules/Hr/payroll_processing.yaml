@@ -86,12 +86,14 @@ models:
     fields:
       payroll_id:
         type: select
+        label: Payroll Number
         foreign:
           table: payrolls
           column: id
           onDelete: cascade
         validation:
           - required
+
       employee_profile_id:
         type: select
         label: Employee ID
@@ -178,8 +180,7 @@ models:
         type: belongsTo
         model: App\Modules\HR\Models\Payroll
         foreignKey: payroll_id
-        displayField: display_name # Or appropriate display field
-        hintField: payroll_number
+        displayField: payroll_number # Or appropriate display field
 
       employeeProfile:
         type: belongsTo

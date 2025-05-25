@@ -5,8 +5,6 @@
         <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Security</h6>
     </li>
 
-
-
     <x-core.views::layouts.navbars.sidebar-link-item
         iconClasses="fas fa-key sidebar-icon"
         url="access/access-control-management/{{$moduleName}}"

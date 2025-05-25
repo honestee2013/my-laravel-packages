@@ -4,6 +4,7 @@ models:
     fields:
       payroll_id:
         type: select
+        label: Payroll Number
         foreign:
           table: payrolls
           column: id
@@ -63,7 +64,8 @@ models:
         type: belongsTo
         model: App\Modules\HR\Models\Payroll
         foreignKey: payroll_id
-        displayField: title # Or appropriate display field
+        displayField: payroll_number # Or appropriate display field
+
       employeeProfile:
         type: belongsTo
         model: App\Modules\User\Models\EmployeeProfile # Adjust namespace if needed
@@ -106,6 +108,7 @@ models:
     fields:
       payroll_id:
         type: select
+        label: Payroll Number
         foreign:
           table: payrolls
           column: id
@@ -173,8 +176,8 @@ models:
         type: belongsTo
         model: App\Modules\HR\Models\Payroll
         foreignKey: payroll_id
-        displayField: title # Or appropriate display field
-      #userPayroll:
+        displayField: payroll_number # Or appropriate display field
+        
       #  type: belongsTo
       #  model: App\Modules\HR\Models\UserPayroll
       #  foreignKey: user_payroll_id

@@ -240,18 +240,20 @@ class MigrationGenerator extends Command
     {
         // Handle modifiers (nullable, unique, default) as chained methods
         foreach ($modifiers as $modifierName => $modifierValue) {
-
             if ($modifierName === 'nullable' && $modifierValue === true) { // Check for nullable: true
                 $columnDefinition .= "->nullable()";
             } elseif ($modifierName === 'unique' && $modifierValue === true) {
                 $columnDefinition .= "->unique()";
             } elseif ($modifierName === 'default') { //e.g default:100
-                if ($modifierValue === true)
+                if ($modifierValue === true) {
                     $columnDefinition .= "->default(true)";
-                else if ($modifierValue === false)
+                } elseif ($modifierValue === false) {
                     $columnDefinition .= "->default(false)";
-                else
+                } elseif (is_string($modifierValue)) {
+                    $columnDefinition .= "->default('" . str_replace("'", "\\'", $modifierValue) . "')";
+                } else {
                     $columnDefinition .= "->default($modifierValue)";
+                }
             }
         }
 

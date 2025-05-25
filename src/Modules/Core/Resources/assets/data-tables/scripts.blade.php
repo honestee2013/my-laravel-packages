@@ -275,6 +275,15 @@
             enableTime: true,
         });
     }
+
+    // Time picker initialiser
+    if (document.querySelector('.timepicker')) {
+        flatpickr('.timepicker', {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+        });
+    }
 </script>
 
 

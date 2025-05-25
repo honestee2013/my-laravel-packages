@@ -266,13 +266,11 @@
                                     </div>
                                 </div>
 
-                            @elseif (str_contains($type, "date"))
-
-
+                            @elseif (str_contains($type, "date") || str_contains($type, "time"))
 
                                 <!----------- DATE FIELD ------------->
                                 <input type="{{ $type }}" wire:model.{{$reactivity}}="fields.{{ $field }}" id="{{ $field }}"
-                                    class="form-control rounded-pill {{ (str_contains($type, "time")? 'datetimepicker': 'datepicker')   }}" value="{{ $fields[$field] ?? '' }}" name="{{ $field }}"
+                                    class="form-control rounded-pill {{ $type }}"  value="{{ $fields[$field] ?? '' }}" name="{{ $field }}"
                                         placeholder="Please provide the {{strtolower(str_replace('_', ' ', $field))}}..."
                                         @if(in_array($field, $readOnlyFields)) disabled @endif
                                     >

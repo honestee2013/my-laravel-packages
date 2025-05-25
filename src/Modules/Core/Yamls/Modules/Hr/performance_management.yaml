@@ -87,10 +87,11 @@ models:
           onDelete: cascade
         validation:
           - required
-      user_id:
+      employee_profile_id:
         type: select
+        label: Employee ID
         foreign:
-          table: users
+          table: employee_profiles
           column: id
           onDelete: cascade
         validation:
@@ -134,7 +135,7 @@ models:
         groupType: hr
         fields:
           - review_id
-          - user_id
+          - employee_profile_id
 
       - title: Feedback
         groupType: hr
@@ -150,11 +151,12 @@ models:
         model: App\Modules\HR\Models\PerformanceReview
         foreignKey: review_id
         displayField: name
-      user:
+      employeeProfile:
         type: belongsTo
-        model: App\Models\User # Adjust namespace if needed
-        foreignKey: user_id
-        displayField: name # Or appropriate display field
+        model: App\Modules\User\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or appropriate display field
+
 
     sidebar:
       add: false
@@ -174,10 +176,11 @@ models:
   Goal:
     module: hr
     fields:
-      user_id:
+      employee_profile_id:
         type: select
+        label: Employee ID
         foreign:
-          table: users
+          table: employee_profiles
           column: id
           onDelete: cascade
         validation:
@@ -214,17 +217,18 @@ models:
       - title: Goal Details
         groupType: hr
         fields:
-          - user_id
+          - employee_profile_id
           - description
           - target_date
           - status
 
     relations:
-      user:
+      employeeProfile:
         type: belongsTo
-        model: App\Models\User # Adjust namespace if needed
-        foreignKey: user_id
-        displayField: name # Or appropriate display field
+        model: App\Modules\User\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or appropriate display field
+
 
     sidebar:
       add: false

@@ -71,7 +71,7 @@ class MenuInitializer extends Component
             ],
             [
                 'itemType' => 'item-separator',
-                'title' => '<hr class="horizontal dark mt-0 item-separator" />',
+                'title' => '<hr class="horizontal dark my-4 item-separator" />',
                 //'permission' => 'view-dashboard'
             ],
             [
@@ -95,7 +95,28 @@ class MenuInitializer extends Component
 
 
     private function getSidebarFooter() {
+
+
+
+
         return [
+            [
+                'itemType' => 'item-separator',
+                'title' => '<hr class="horizontal dark my-4 item-separator" />',
+                //'permission' => 'view-dashboard'
+            ],
+            [
+               'title' => 'Access Control',
+                'icon' => 'fas fa-key sidebar-icon',
+                'url' => "access/access-control-management/$this->moduleName",
+                'cssClasses' => "menu-item-footer menu-footer",
+                'itemType' => 'footer',
+                //'permission' => 'view-dashboard'
+            ],
+
+
+
+
             /*[
                'title' => 'Settings',
                 'icon' => 'fas fa-cogs sidebar-icon',
