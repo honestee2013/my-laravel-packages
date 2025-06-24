@@ -61,7 +61,7 @@ class MenuInitializer extends Component
     private function getSidebarHeader() {
         return [
             [
-                'title' => 'Main Dashboard',
+                'title' => 'System Modules',
                 'icon' => 'fas fa-th fs-4 ms-2',
                 'url' => strtolower($this->moduleName) . '/dashboard',
                 'cssClasses' => "menu-item-header menu-header",
@@ -75,7 +75,7 @@ class MenuInitializer extends Component
                 //'permission' => 'view-dashboard'
             ],
             [
-                'title' => 'Small Dashboard',
+                'title' => 'Module\'s Dashboard',
                 'icon' => 'fas fa-tachometer-alt fs-5 ms-2',
                 'url' => strtolower($this->moduleName) . '/dashboard',
                 'cssClasses' => "menu-item-header",

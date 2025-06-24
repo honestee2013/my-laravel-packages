@@ -12,10 +12,9 @@ abstract class BaseStatusCategoryMigration extends Migration
     {
         $table->id();
         $table->string('name')->unique();
-        $table->string('display_name');
-        $table->string('module_name')->nullable(); // Optional: to specify the module this category belongs to
+        //$table->string('module_name')->nullable(); // Optional: to specify the module this category belongs to
         $table->text('description')->nullable();
-        $table->string('editable')->default("No");
+        $table->string('editable')->default("Yes");
         $table->timestamps();
     }
 }

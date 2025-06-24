@@ -47,7 +47,6 @@ models:
       add: true
       title: Onboarding 
       iconClasses: fas fa-user-plus # Or a more suitable icon
-      groupTitle: Employee Management
       submenu:
         - title: Onboarding Tasks
           url: onboarding-tasks

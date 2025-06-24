@@ -1,0 +1,214 @@
+models:
+  Attendance:
+    module: hr
+    fields:
+      employee_id:
+        type: string
+        label: Employee ID
+        autoGenerate: true
+        modifiers:
+          nullable: true
+        validation:
+          - required|unique:employee_profiles,employee_id
+      attendance_time:
+        type: datetimepicker
+        validation:
+          - required
+
+      scheduled_start:
+        type: datetimepicker
+        modifiers:
+          nullable: true
+      checkin_status:
+        type: select
+        options: Early, On Time, Late
+        modifiers:
+          nullable: true
+      minutes_difference:
+        type: integer
+        default: 0
+        validation:
+          - integer|min:0
+        modifiers:
+          nullable: true
+
+
+      scheduled_end:
+        type: datetimepicker
+        modifiers:
+          nullable: true
+
+      attendance_type:
+        type: string
+        validation:
+          - required
+      device_id:
+        type: string
+        validation:
+          - required
+      latitude:
+        type: integer
+        modifiers:
+          nullable: true
+          precision: 10,6 # Common precision for latitude/longitude
+      longitude:
+        type: integer
+        modifiers:
+          nullable: true
+          precision: 10,6 # Common precision for latitude/longitude
+      sync_status:
+        type: select
+        options: pending, success, failed # Example statuses
+        default: pending
+      sync_attempts:
+        type: integer
+        default: 0
+        validation:
+          - required|integer|min:0
+      attendance_date:
+        type: datepicker
+        validation:
+          - required
+
+
+      notes:
+        type: textarea
+        modifiers:
+          nullable: true
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Attendances
+      group: attendance-management
+      id: attendances
+      parentPageTitle: Attendance Management
+      pageTitle: Attendances Overview
+      view: attendances
+      url: hr/attendances
+
+    fieldGroups:
+      - title: Attendance Details
+        groupType: hr
+        fields:
+          - employee_id
+          - attendance_date
+          - attendance_time
+          - attendance_type
+          - device_id
+
+      - title: Location & Sync
+        groupType: hr
+        fields:
+          - latitude
+          - longitude
+          - sync_status
+          - sync_attempts
+          - notes
+
+    relations:
+      user:
+        type: belongsTo
+        model: App\Models\User # Adjust namespace if needed
+        foreignKey: user_id
+        displayField: name # Or appropriate display field
+
+    sidebar:
+      add: true
+      title: Attendance & Earnings
+      iconClasses: fas fa-clipboard-check # Or a more suitable icon
+      submenu:
+        - title: Attendances
+          url: attendances
+          iconClasses: fas fa-list # Or a more suitable icon
+        - title: Daily Earnings
+          url: daily-earnings
+          iconClasses: fas fa-money-bill-wave-alt # Or a more suitable icon
+
+    iconClasses: fas fa-fingerprint # Or a more suitable icon
+    includeHeader: false
+    includeFooter: false
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+
+
+
+
+  DailyEarning:
+    module: hr
+    fields:
+      employee_profile_id:
+        type: select
+        foreign:
+          table: employee_profiles # Assuming your table name is 'employee_profiles'
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      work_date:
+        type: datepicker
+        validation:
+          - required
+      hours_worked:
+        type: decimal
+        modifiers:
+          precision: 5,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      amount_earned:
+        type: decimal
+        modifiers:
+          precision: 10,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Daily Earnings
+      group: attendance-management
+      id: daily-earnings
+      parentPageTitle: Attendance Management
+      pageTitle: Daily Earnings Overview
+      view: daily-earnings
+      url: hr/daily-earnings
+
+    fieldGroups:
+      - title: Earning Details
+        groupType: hr
+        fields:
+          - employee_profile_id
+          - work_date
+          - hours_worked
+          - amount_earned
+
+    relations:
+      employeeProfile:
+        type: belongsTo
+        model: App\Modules\Hr\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or 'user.name' if joining through user
+
+    sidebar:
+      add: false
+    #  title: Daily Earnings
+    #  iconClasses: fas fa-money-bill-wave-alt # Or a more suitable icon
+
+    iconClasses: fas fa-wallet # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']

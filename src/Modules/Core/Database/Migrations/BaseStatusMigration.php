@@ -13,10 +13,9 @@ abstract class BaseStatusMigration extends Migration
     {
         $table->id();
         $table->string('name')->unique();
-        $table->string('display_name');
         $table->text('description')->nullable();
         $table->foreignId('category_id')->nullable(); // Assuming you might have a categories table
-        $table->string('editable')->default("No");
+        $table->string('editable')->default("Yes");
         $table->timestamps(); // Optional, but often useful
     }
 }

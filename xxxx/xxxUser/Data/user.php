@@ -1,0 +1,174 @@
+<?php
+
+return [
+  'model' => 'App\Models\User',
+  'fieldDefinitions' =>  [
+    'name' =>    [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'validation' => 'required',
+      'label' => 'Name',
+    ], 
+
+    'email' =>    [
+      'display' => 'inline',
+      'field_type' => 'email',
+      'validation' => 'required|email|unique:users,email',
+      'label' => 'Email',
+    ], 
+
+
+
+    'user_status_id' => [
+      'field_type' => 'select',
+      'options' => [
+          'model' => 'App\Modules\User\Models\UserStatus',
+          'column' => 'display_name',
+      ],
+      'relationship' => [
+          'model' => 'App\Modules\User\Models\UserStatus',
+          'type' => 'hasOne',
+          'display_field' => 'display_name',
+          'dynamic_property' => 'userStatus',
+          'foreign_key' => 'user_status_id',
+      ],
+      'label' => 'User Status',
+      'display' => 'block',
+
+  ],
+
+
+
+    'email_verified_at' =>    [
+      'display' => 'inline',
+      'field_type' => 'datetime',
+      'label' => 'Email Verified At',
+    ], 
+
+    'password' =>    [
+      'display' => 'inline',
+      'field_type' => 'password',
+      'validation' => 'required|min:8|confirmed',
+      'label' => 'Password',
+    ], 
+
+    'password_confirmation' =>    [
+      'display' => 'inline',
+      'field_type' => 'password',
+      'label' => 'Confirm Password',
+    ], 
+
+    'remember_token' =>    [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'label' => 'Remember Token',
+    ], 
+
+    'user_type' =>    [
+      'display' => 'inline',
+      'field_type' => 'select',
+      'validation' => 'required|string:max:255',
+      'options' =>      [
+        'Employee' => 'Employee',
+        'Customer' => 'Customer',
+        'Supplier' => 'Supplier',
+      ], 
+
+      'label' => 'User Type',
+    ], 
+
+
+
+    'roles' => [
+      'field_type' => 'checkbox',
+      'options' => [
+          'model' => 'App\Modules\Access\Models\Role',
+          'column' => 'name',
+      ],
+      'relationship' => [
+          'model' => 'App\Modules\Access\Models\Role',
+          'type' => 'belongsToMany',
+          'display_field' => 'name',
+          'dynamic_property' => 'roles',
+          'multiSelect' => true,
+          'foreign_key' => 'role_id',
+          'inlineAdd' => true,
+      ],
+      'label' => 'User Roles',
+      'display' => 'inline',
+      'multiSelect' => true,
+      'validation' => 'required'
+  ],
+
+
+
+
+
+  ], 
+
+  'hiddenFields' =>  [
+    'onTable' =>    [
+      0 => 'password',
+      1 => 'remember_token',
+      2 => 'email_verified_at',
+      3 => 'password_confirmation',
+    ], 
+
+    'onNewForm' =>    [
+      0 => 'email_verified_at',
+      1 => 'remember_token',
+    ], 
+
+    'onDetail' =>    [
+      0 => 'email_verified_at',
+      1 => 'remember_token',
+    ], 
+
+    'onEditForm' =>    [
+      0 => 'email_verified_at',
+      1 => 'remember_token',
+    ], 
+
+    'onQuery' =>    [
+      1 => 'remember_token',
+      2 => 'password_confirmation',
+    ], 
+
+  ], 
+
+  'simpleActions' =>  [
+    0 => 'show',
+    1 => 'edit',
+    2 => 'delete',
+  ], 
+
+  'isTransaction' => false,
+  'dispatchEvents' => false,
+  'controls' => 'all',
+  'fieldGroups' =>  [
+    0 =>    [
+      'title' => 'Basic Information',
+      'groupType' => 'hr',
+      'fields' =>      [
+        0 => 'name',
+        1 => 'email',
+        2 => 'user_type',
+        3 => 'user_status_id',
+        4 => 'roles',
+      ], 
+
+    ], 
+
+    1 =>    [
+      'title' => 'Password',
+      'groupType' => 'hr',
+      'fields' =>      [
+        0 => 'password',
+        1 => 'password_confirmation',
+      ], 
+
+    ], 
+
+  ], 
+
+];

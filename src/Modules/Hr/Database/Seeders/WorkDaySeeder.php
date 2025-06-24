@@ -28,8 +28,7 @@ class WorkDaySeeder extends Seeder
         ];
 
         foreach ($days as $day) {
-            DB::table('work_days')->insert($day);
-
+            ///DB::table('work_days')->insert($day);
         }
     }
 }

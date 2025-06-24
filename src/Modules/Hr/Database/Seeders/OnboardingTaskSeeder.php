@@ -34,7 +34,7 @@ class OnboardingTaskSeeder extends Seeder
         ];
 
         foreach ($tasks as $task) {
-            DB::table('onboarding_tasks')->insert($task);
+            ////DB::table('onboarding_tasks')->insert($task);
         }
     }
 }

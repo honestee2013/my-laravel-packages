@@ -31,6 +31,7 @@ use App\Modules\Core\Repositories\DataTables\FieldRepository;
 
 use QuickerFaster\CodeGen\Commands\GenerateAllSchemas;
 use QuickerFaster\CodeGen\Commands\GenerateFromSchema;
+use Illuminate\Support\Facades\Route;
 
 
 
@@ -283,7 +284,8 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
             //so you don’t have to manually include each route file for every module.
             $routePath = $module . '/Routes/web.php';
             if (File::exists($routePath)) {
-                $this->loadRoutesFrom($routePath);
+                Route::middleware('web')
+                    ->group($routePath);
             }
 
 

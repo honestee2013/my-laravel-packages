@@ -25,7 +25,7 @@ class BonusAndDeductionTypeSeeders extends Seeder
         ];
 
         foreach ($bonusTypes as $type) {
-            DB::table('bonus_types')->insert($type);
+            ///DB::table('bonus_types')->insert($type);
         }
 
         // Seed deduction types
@@ -38,7 +38,7 @@ class BonusAndDeductionTypeSeeders extends Seeder
         ];
 
         foreach ($deductionTypes as $type) {
-            DB::table('deduction_types')->insert($type);
+            ///DB::table('deduction_types')->insert($type);
         }
 
 
