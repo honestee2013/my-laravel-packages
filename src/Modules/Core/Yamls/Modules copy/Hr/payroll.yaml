@@ -9,7 +9,7 @@ models:
       payroll_number:
         type: string
         validation:
-          - required|unique:payrolls,payroll_number
+          - required|unique:payroll_runs,payroll_number
       payroll_date:
         type: datepicker
         validation:
@@ -30,13 +30,13 @@ models:
       onQuery: []
 
     tab:
-      label: Payrolls
+      label: Payroll_runs
       group: payroll-management
-      id: payrolls
+      id: payroll_runs
       parentPageTitle: Payroll Management
-      pageTitle: Payrolls Overview
-      view: payrolls
-      url: hr/payrolls
+      pageTitle: Payroll_runs Overview
+      view: payroll_runs
+      url: hr/payroll_runs
 
     fieldGroups:
       - title: Payroll Information
@@ -52,11 +52,11 @@ models:
       employees:
         type: hasMany
         model: App\Models\User
-        foreignKey: payroll_id
+        foreignKey: payroll_run_id
 
     sidebar:
       add: true
-      title: Payrolls
+      title: Payroll_runs
       iconClasses: fas fa-file-invoice-dollar # Or a more suitable icon
 
     iconClasses: fas fa-money-bill-wave # Or a more suitable icon

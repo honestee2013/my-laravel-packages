@@ -1,0 +1,398 @@
+models:
+  RoleBonus:
+    module: hr
+    fields:
+      payroll_run_id:
+        type: select
+        label: Payroll Number
+        foreign:
+          table: payroll_runs
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      role_id:
+        type: select
+        label: Role
+        foreign:
+          table: roles
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      bonus_type_id:
+        type: select
+        foreign:
+          table: bonus_types
+          column: id
+          onDelete: restrict
+        validation:
+          - required
+      amount:
+        type: decimal
+        modifiers:
+          precision: 10,2
+        validation:
+          - required|numeric|min:0
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Role Bonuses
+      group: bonuses-and-deductions
+      id: role-bonuses
+      parentPageTitle: Bonuses & Deductions
+      pageTitle: Role Bonuses Overview
+      view: role-bonuses
+      url: hr/role-bonuses
+
+    fieldGroups:
+      - title: Bonus Details
+        groupType: hr
+        fields:
+          - payroll_run_id
+          - role_id
+          - bonus_type_id
+          - amount
+
+    relations:
+      payroll:
+        type: belongsTo
+        model: App\Modules\HR\Models\Payroll
+        foreignKey: payroll_run_id
+        displayField: payroll_number # Or appropriate display field
+        
+      role:
+        type: belongsTo
+        model: App\Modules\Access\Models\Role # Adjust namespace if needed
+        foreignKey: role_id
+        displayField: name # Or appropriate display field
+        
+      bonusType:
+        type: belongsTo
+        model: App\Modules\HR\Models\BonusType
+        foreignKey: bonus_type_id
+        displayField: name
+
+    sidebar:
+      add: false # Allow adding new role bonuses from the sidebar menu.
+      title: Role Bonuses & Deductions # Title for the sidebar menu.
+      iconClasses: fas fa-award # Icon for the sidebar menu.
+
+
+    iconClasses: fas fa-users-gear # Represents managing settings/configurations for groups/roles related to bonuses
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+
+
+  RoleDeduction:
+    module: hr
+    fields:
+      payroll_run_id:
+        type: select
+        label: Payroll Number 
+        foreign:
+          table: payroll_runs
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      role_id:
+        type: select
+        label: Role
+        foreign:
+          table: roles
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      deduction_type_id:
+        type: select
+        foreign:
+          table: deduction_types
+          column: id
+          onDelete: restrict
+        validation:
+          - required
+      amount:
+        type: decimal
+        modifiers:
+          precision: 10,2
+        validation:
+          - required|numeric|min:0
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []  
+      onQuery: [] 
+    tab:
+      label: Role Deductions
+      group: bonuses-and-deductions
+      id: role-deductions
+      parentPageTitle: Bonuses & Deductions
+      pageTitle: Role Deductions Overview
+      view: role-deductions
+      url: hr/role-deductions
+    fieldGroups:
+      - title: Deduction Details
+        groupType: hr
+        fields:
+          - payroll_run_id
+          - role_id
+          - deduction_type_id
+          - amount  
+    relations:
+      payroll:
+        type: belongsTo
+        model: App\Modules\HR\Models\Payroll
+        foreignKey: payroll_run_id
+        displayField: payroll_number # Or appropriate display field
+      role:
+        type: belongsTo
+        model: App\Modules\Access\Models\Role # Adjust namespace if needed
+        foreignKey: role_id
+        displayField: name # Or appropriate display field
+      deductionType:
+        type: belongsTo
+        model: App\Modules\HR\Models\DeductionType
+        foreignKey: deduction_type_id
+        displayField: name  
+    sidebar:
+      add: false # Allow adding new role deductions from the sidebar menu.
+      title: Role Bonuses & Deductions # Title for the sidebar menu.
+      iconClasses: fas fa-money-bill-alt # Icon for the sidebar menu.
+
+    iconClasses: fas fa-file-invoice # Suggests a bill or invoice, common for deductions from a group/role
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+
+
+  UserBonus:
+    module: hr
+    fields:
+      payroll_run_id:
+        type: select
+        label: Payroll Number
+        foreign:
+          table: payroll_runs
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      employee_profile_id:
+        type: select
+        label: Employee ID
+        foreign:
+          table: employee_profiles
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      bonus_type_id:
+        type: select
+        foreign:
+          table: bonus_types
+          column: id
+          onDelete: restrict
+        validation:
+          - required
+      amount:
+        type: decimal
+        modifiers:
+          precision: 10,2
+        validation:
+          - required|numeric|min:0
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: User Bonuses
+      group: bonuses-and-deductions
+      id: user-bonuses
+      parentPageTitle: Bonuses & Deductions
+      pageTitle: User Bonuses
+      view: user-bonuses
+      url: hr/user-bonuses
+
+    fieldGroups:
+      - title: Bonus Details
+        groupType: hr
+        fields:
+          - payroll_run_id
+          - employee_profile_id
+          - bonus_type_id
+          - amount
+
+    relations:
+      payroll:
+        type: belongsTo
+        model: App\Modules\HR\Models\Payroll
+        foreignKey: payroll_run_id
+        displayField: payroll_number # Or appropriate display field
+
+      employeeProfile:
+        type: belongsTo
+        model: App\Modules\Hr\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or appropriate display field
+      bonusType:
+        type: belongsTo
+        model: App\Modules\HR\Models\BonusType
+        foreignKey: bonus_type_id
+        displayField: name
+
+
+    sidebar:
+      add: true
+      title: Bonuses & Deductions
+      iconClasses: fas fa-award # Icon for the sidebar menu.
+      submenu:
+        - title: Role Bonuses
+          url: role-bonuses
+          iconClasses: fas fa-users-gear # Represents managing settings/configurations for groups/roles related to bonuses
+        - title: Role Deductions
+          url: role-deductions
+          iconClasses: fas fa-file-invoice # Suggests a bill or invoice, common for deductions from a group/role
+        - title: User Bonuses
+          url: user-bonuses
+          iconClasses: fas fa-user-plus # Signifies adding something to a specific user
+        - title: User Deductions
+          url: user-deductions
+          iconClasses: fas fa-user-minus # Signifies subtracting something from a specific user
+
+
+
+
+
+
+
+      
+
+    iconClasses: fas fa-user-plus # Signifies adding something to a specific user
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+
+
+  UserDeduction:
+    module: hr
+    fields:
+      payroll_run_id:
+        type: select
+        label: Payroll Number
+        foreign:
+          table: payroll_runs
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      #user_payroll_id:
+      #  type: select
+      #  foreign:
+      #    table: user_payrolls
+      #    column: id
+      #    onDelete: cascade
+      #  validation:
+      #    - required
+      employee_profile_id:
+        type: select
+        label: Employee ID
+        foreign:
+          table: employee_profiles
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+      deduction_type_id:
+        type: select
+        foreign:
+          table: deduction_types
+          column: id
+          onDelete: restrict
+        validation:
+          - required
+      amount:
+        type: decimal
+        modifiers:
+          precision: 10,2
+        validation:
+          - required|numeric|min:0
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: User Deductions
+      group: bonuses-and-deductions
+      id: user-deductions
+      parentPageTitle: Bonuses & Deductions
+      pageTitle: User Deductions
+      view: user-deductions
+      url: hr/user-deductions
+
+    fieldGroups:
+      - title: Deduction Details
+        groupType: hr
+        fields:
+          - payroll_run_id
+          - employee_profile_id
+          - deduction_type_id
+          - amount
+
+    relations:
+      payroll:
+        type: belongsTo
+        model: App\Modules\HR\Models\Payroll
+        foreignKey: payroll_run_id
+        displayField: payroll_number # Or appropriate display field
+        
+      #  type: belongsTo
+      #  model: App\Modules\HR\Models\UserPayroll
+      #  foreignKey: user_payroll_id
+      #  displayField: payroll.title # Or a more descriptive field if available
+      employeeProfile:
+        type: belongsTo
+        model: App\Modules\Hr\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or appropriate display field
+      deductionType:
+        type: belongsTo
+        model: App\Modules\HR\Models\DeductionType
+        foreignKey: deduction_type_id
+        displayField: name
+
+    sidebar:
+      add: false
+      title: User Deductions
+      iconClasses: fas fa-money-bill-alt # Or a more suitable icon
+
+    iconClasses: fas fa-minus # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+

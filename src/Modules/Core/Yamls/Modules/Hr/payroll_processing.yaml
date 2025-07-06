@@ -1,33 +1,128 @@
 models:
-  Payroll:
+  PayrollRun:
     module: hr
     fields:
-      title:
-        type: string
-        validation:
-          - required|unique:payrolls,title
       payroll_number:
         type: string
         autoGenerate: true
         validation:
-          - required|unique:payrolls,payroll_number
-      payroll_date:
+          - required|unique:payroll_runs,payroll_number
+
+      title:
+        type: string
+        validation:
+          - required|unique:payroll_runs,title
+
+      from_date:
         type: datepicker
+        label: daily earning from
         validation:
           - required
-      payment_date:
+
+      to_date:
         type: datepicker
+        label: daily earning to
+        validation:
+          - required
+
+
+      status:
+        type: select
+        options: draft, components_pending, awaiting_approval, approved, processing, awaiting_payment, paid, cancelled
+        modifiers:
+          default: draft
+        validation:
+          - required
+
+
+      payroll_components:
+        label: Included Payroll Components
+        type: checkbox
+        multiSelect: true,
+        display: block
+        options: allowances, bonuses, taxes, deductions
+        modifiers:
+          default: allowances, taxes
+        validation:
+          - nullable
+
+
+      attendance_options:
+        label: Included Attendance Exemptions
+        type: checkbox
+        display: block
+        multiSelect: true,
+        options: attendance_exempted_employee, attendance_check_only_employee
+        validation:
+          - nullable
+
+
+      created_by: 
+        type: string
         modifiers:
           nullable: true
-      description:
+        validation:
+          - nullable
+    
+
+      approved_by:
+        type: string
+        modifiers:
+          nullable: true
+        validation:
+          - nullable 
+
+      approved_at:
+        type: datetime
+        modifiers:
+          nullable: true
+
+      paid_by:
+        type: string
+        modifiers:  
+          nullable: true
+        validation:
+          - nullable
+
+      paid_at:
+        type: datetime
+        modifiers:
+          nullable: true  
+        validation:
+          - nullable
+
+      cancelled_by:    
+        type: string
+        modifiers:  
+          nullable: true
+        validation:
+          - nullable
+
+      cancelled_at:
+        type: datetime
+        modifiers:
+          nullable: true
+        validation:
+          - nullable 
+
+
+      notes:
         type: textarea
         modifiers:
           nullable: true
 
+
+      editable:
+        type: string
+        modifiers:
+          default: 'Yes'
+
+
+
     hiddenFields:
-      onTable: []
-      onNewForm: []
-      onEditForm: []
+      onTable: ['roleAllowances', 'roleBonuses', 'empployeeAllowances', 'empployeeBonuses', 'roleDeductions', 'employeeDeductions']
+      onNewForm: ['editable', 'status', 'created_by', 'created_at', 'approved_by', 'approved_at', 'paid_by', 'paid_at', 'cancelled_by', 'cancelled_at', 'roleAllowances', 'roleBonuses', 'empployeeAllowances', 'empployeeBonuses', 'roleDeductions', 'employeeDeductions']
+      onEditForm: ['editable', 'status', 'created_by', 'created_at', 'approved_by', 'approved_at', 'paid_by', 'paid_at', 'cancelled_by', 'cancelled_at', 'roleAllowances', 'roleBonuses', 'empployeeAllowances', 'empployeeBonuses', 'roleDeductions', 'employeeDeductions']
       onQuery: []
 
     displayFields:
@@ -35,40 +130,127 @@ models:
       - payroll_number
 
     tab:
-      label: Payrolls
+      label: Payroll Runs
       group: payroll-processing
-      id: payrolls
+      id: payroll_runs
       parentPageTitle: Payroll Processing
-      pageTitle: Payrolls Overview
-      view: payrolls
-      url: hr/payrolls
+      pageTitle: Payroll Runs Overview
+      view: payroll-runs
+      url: hr/payroll-runs
+
+    auditTrail:
+      - created
+      - updated
+      - approved
+      - paid
+      - cancelled
 
     fieldGroups:
       - title: Payroll Information
         groupType: hr
         fields:
-          - title
           - payroll_number
-          - payroll_date
-          - payment_date
-          - description
+          - title
+          - from_date
+          - to_date
+          - status
+          - notes
+
+      - title: Payroll Components 
+        groupType: hr
+        fields:
+          #- allowances_included
+          #- bonuses_included
+          #- taxes_included
+          #- deductions_included
+          - payroll_components
+
+      - title: Attendance Exemptions
+        groupType: hr
+        fields:  
+          #- include_attendance_exempted
+          #- include_attendance_check_only
+          - attendance_options
+
+      - title: Audit Trails 
+        groupType: hr
+        fields:
+          - created_by
+          - created_at
+          - approved_by
+          - approved_at
+          - paid_by
+          - paid_at
+          - cancelled_by
+          - cancelled_at
+
+
+      - title: Included Allowances
+        groupType: hr
+        fields:
+          - roleAllowances
+          - empployeeAllowances
+
+      - title: Included Bonuses
+        groupType: hr
+        fields:
+          - roleBonuses
+          - empployeeBonuses
+
+      - title: Included Deductions
+        groupType: hr
+        fields:
+          - roleDeductions
+          - employeeDeductions
+
 
     #relations:
-    #  employees:
+    #  roleAllowances:
     #    type: hasMany
-    #    model: App\Models\User
-    #    foreignKey: payroll_id
+    #    model: App\Modules\HR\Models\RoleAllowance # Adjust namespace if needed
+    #    foreignKey: payroll_run_id
+    #    displayField: name # Or appropriate display field
+    #  roleBonuses:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\RoleBonus # Adjust namespace if needed
+    #    foreignKey: payroll_run_id
+    #    displayField: name # Or appropriate display field
+    #  empployeeAllowances:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\EmployeeAllowance # Adjust namespace if needed
+    #    foreignKey: payroll_run_id
+    #    displayField: name # Or appropriate display field
+    #  empployeeBonuses:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\EmployeeBonus # Adjust namespace if needed
+    #    foreignKey: payroll_run_id
+    #    displayField: name # Or appropriate display field
+    #
+    #  roleDeductions:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\RoleDeduction
+    #    foreignKey: payroll_run_id
+    #    displayField: name # Or appropriate display field
+    #  employeeDeductions:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\EmployeeDeduction
+    #    foreignKey: payroll_run_id
+    #    displayField: name # Or appropriate display field  
+
+      
 
     sidebar:
       add: true
-      groupTitle: Payroll Management
       title: Payroll Processing
       iconClasses: fas fa-file-invoice-dollar # Or a more suitable icon
+      groupTitle: Payroll Management
       submenu:
-        - title: Payrolls
-          url: payrolls
-        - title: User Payrolls
-          url: user-payrolls
+        - title: Payroll Runs
+          url: payroll-runs
+        - title: Payroll Employees
+          url: payroll-employees
+        - title: Payroll YTD
+          url: payroll-ytd
 
 
     iconClasses: fas fa-money-bill-wave # Or a more suitable icon
@@ -81,64 +263,78 @@ models:
   
 
 
-  UserPayroll:
+
+  PayrollEmployee:
     module: hr
     fields:
-      payroll_id:
-        type: select
-        label: Payroll Number
-        foreign:
-          table: payrolls
-          column: id
-          onDelete: cascade
+      payroll_number:
+        type: string
         validation:
           - required
 
-      employee_profile_id:
-        type: select
-        label: Employee ID
-        foreign:
-          table: employee_profiles
-          column: id
-          onDelete: cascade
+      employee_id:
+        type: string
         validation:
           - required
-      #user_id:
-      #  type: select
-      #  foreign:
-      #    table: users
-      #    column: id
-      #    onDelete: cascade
-      #  validation:
-      #    - required
+
+      # Core salary components
       base_salary:
         type: decimal
         modifiers:
-          precision: 10,2
+          precision: 12,2
+        validation:
+          - required|numeric|min:0
+
+      # Breakdown additions
+      total_allowances:
+        type: decimal
+        modifiers:
+          precision: 12,2
         default: 0.00
         validation:
           - required|numeric|min:0
+      total_bonuses:
+        type: decimal
+        modifiers:
+          precision: 12,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      total_taxes:
+        type: decimal
+        modifiers:
+          precision: 12,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      total_other_deductions:
+        type: decimal
+        modifiers:
+          precision: 12,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+
+      # Calculated totals
       gross_salary:
         type: decimal
         modifiers:
-          precision: 10,2
-        default: 0.00
+          precision: 12,2
         validation:
           - required|numeric|min:0
       total_deductions:
         type: decimal
         modifiers:
-          precision: 10,2
-        default: 0.00
+          precision: 12,2
         validation:
           - required|numeric|min:0
       net_salary:
         type: decimal
         modifiers:
-          precision: 10,2
-        default: 0.00
+          precision: 12,2
         validation:
           - required|numeric|min:0
+
       comments:
         type: textarea
         modifiers:
@@ -151,57 +347,236 @@ models:
       onQuery: []
 
     tab:
-      label: User Payrolls
-      parentPageTitle: Payroll Processing
+      label: Payroll Employees
       group: payroll-processing
-      id: user-payrolls
-      pageTitle: User Payrolls
-      view: user-payrolls
-      url: hr/user-payrolls
+      id: payroll-employees
+      parentPageTitle: Payroll Processing
+      pageTitle: Payroll Employees Details
+      view: payroll-employees
+      url: hr/payroll-employees
 
     fieldGroups:
-      - title: Payroll Assignment
+      - title: Employee Payroll Assignment
         groupType: hr
         fields:
-          - payroll_id
-          - employee_profile_id
-
-      - title: Salary Details
-        groupType: hr
-        fields:
+          - payroll_number
+          - employee_id
           - base_salary
+
+      - title: Earnings Breakdown
+        groupType: hr
+        fields:
+          - total_allowances
+          - total_bonuses
+          - total_taxes
+          - total_other_deductions
+
+      - title: Final Calculations
+        groupType: hr
+        fields:
           - gross_salary
           - total_deductions
           - net_salary
           - comments
 
-    relations:
-      payroll:
-        type: belongsTo
-        model: App\Modules\HR\Models\Payroll
-        foreignKey: payroll_id
-        displayField: payroll_number # Or appropriate display field
-
-      employeeProfile:
-        type: belongsTo
-        model: App\Modules\User\Models\EmployeeProfile # Adjust namespace if needed
-        foreignKey: employee_profile_id
-        displayField: employee_id # Or appropriate display field
-
-      #user:
-      #  type: belongsTo
-      #  model: App\Models\User # Adjust namespace if needed
-      #  foreignKey: user_id
-      #  displayField: name # Or appropriate display field
 
     sidebar:
       add: false
-      title: User Payrolls
-      iconClasses: fas fa-user-cog # Or a more suitable icon
+      title: Payroll Employees
+      iconClasses: fas fa-file-invoice # Or a more suitable icon
 
-    iconClasses: fas fa-receipt # Or a more suitable icon
+    iconClasses: fas fa-users-cog # Or a more suitable icon
     includeHeader: true
     includeFooter: true
     includeSidebar: true
     controls: all
     simpleActions: ['show', 'edit', 'delete']
+
+
+
+
+
+  PayrollYtd:
+    module: hr
+    fields:
+      employee_id: # Assuming this refers to employee_profiles.employee_id
+        type: string # Or select if linking to employee_profiles table directly by ID
+        validation:
+          - required
+          - unique:payroll_ytd,employee_id,{{id}},id,year,{{year}} # Composite unique
+      year:
+        type: integer
+        validation:
+          - required|integer|min:1900|max:2100 # Reasonable year range
+      gross_earnings:
+        type: decimal
+        modifiers:
+          precision: 12,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      taxable_earnings:
+        type: decimal
+        modifiers:
+          precision: 12,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      federal_income_tax:
+        type: decimal
+        modifiers:
+          precision: 12,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      social_security_tax:
+        type: decimal
+        modifiers:
+          precision: 12,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      medicare_tax:
+        type: decimal
+        modifiers:
+          precision: 12,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      state_income_tax:
+        type: decimal
+        modifiers:
+          precision: 12,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      pre_tax_deductions:
+        type: decimal
+        modifiers:
+          precision: 12,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+      post_tax_deductions:
+        type: decimal
+        modifiers:
+          precision: 12,2
+        default: 0.00
+        validation:
+          - required|numeric|min:0
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Payroll YTD
+      group: payroll-processing
+      id: payroll-ytd
+      parentPageTitle: Payroll Processing
+      pageTitle: Payroll Year-to-Date
+      view: payroll-ytd
+      url: hr/payroll-ytd
+
+    fieldGroups:
+      - title: Employee and Year
+        groupType: hr
+        fields:
+          - employee_id
+          - year
+
+      - title: Earnings YTD
+        groupType: hr
+        fields:
+          - gross_earnings
+          - taxable_earnings
+
+      - title: Taxes YTD
+        groupType: hr
+        fields:
+          - federal_income_tax
+          - social_security_tax
+          - medicare_tax
+          - state_income_tax
+
+      - title: Deductions YTD
+        groupType: hr
+        fields:
+          - pre_tax_deductions
+          - post_tax_deductions
+
+    # No direct relations needed here unless you link employee_id to a specific table
+    # If employee_id is a foreign ID to employee_profiles, change type to 'select' and add 'foreign' key
+    # Example if employee_id is actually foreignId:
+    # relations:
+    #   employeeProfile:
+    #     type: belongsTo
+    #     model: App\Modules\Hr\Models\EmployeeProfile # Adjust namespace if needed
+    #     foreignKey: employee_id
+    #     displayField: employee_id # Or 'user.name' if joining through user
+
+    sidebar:
+      add: false
+      title: Payroll YTD
+      iconClasses: fas fa-chart-line # Or a more suitable icon
+
+    iconClasses: fas fa-dollar-sign # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #relations:
+    #  roleAllowances:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\RoleAllowance # Adjust namespace if needed
+    #    foreignKey: payroll_run_id
+    #    displayField: name # Or appropriate display field
+    #  roleBonuses:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\RoleBonus # Adjust namespace if needed
+    #    foreignKey: payroll_run_id
+    #    displayField: name # Or appropriate display field
+    #  empployeeAllowances:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\EmployeeAllowance # Adjust namespace if needed
+    #    foreignKey: payroll_run_id
+    #    displayField: name # Or appropriate display field
+    #  empployeeBonuses:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\EmployeeBonus # Adjust namespace if needed
+    #    foreignKey: payroll_run_id
+    #    displayField: name # Or appropriate display field
+    #
+    #  roleDeductions:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\RoleDeduction
+    #    foreignKey: payroll_run_id
+    #    displayField: name # Or appropriate display field
+    #  employeeDeductions:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\EmployeeDeduction
+    #    foreignKey: payroll_run_id
+    #    displayField: name # Or appropriate display field 

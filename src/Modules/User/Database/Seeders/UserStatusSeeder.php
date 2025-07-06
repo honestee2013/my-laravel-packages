@@ -96,8 +96,7 @@ class UserStatusSeeder extends Seeder
         ];
 
         foreach ($userAccountStatuses as $status) {
-            // For now, Remove the display_name. It is not needed at this time
-            unset($status['display_name']);
+            unset($status["display_name"]); // No databate table column for this
             // Ensure all required fields are present before merging, especially 'editable'
             $statusData = array_merge(
                 ['editable' => "No"], // Default editable to false
@@ -119,7 +118,5 @@ class UserStatusSeeder extends Seeder
                 $statusData
             );
         }
-
-        
     }
 }

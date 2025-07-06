@@ -1,21 +1,24 @@
 <?php
 
 return [
-  'model' => 'App\\Modules\\core\\Models\\Geolocation',
+  'model' => 'App\\Modules\\Core\\Models\\Geolocation',
   'fieldDefinitions' =>  [
     'name' =>    [
+      'display' => 'inline',
       'field_type' => 'string',
       'validation' => 'required|string|max:255',
       'label' => 'Name',
     ], 
 
     'address' =>    [
+      'display' => 'inline',
       'field_type' => 'textarea',
       'validation' => 'required|string|max:255',
       'label' => 'Address',
     ], 
 
     'description' =>    [
+      'display' => 'inline',
       'field_type' => 'textarea',
       'label' => 'Description',
     ], 

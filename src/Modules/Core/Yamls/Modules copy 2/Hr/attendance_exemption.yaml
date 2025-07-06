@@ -1,0 +1,318 @@
+models:
+  ExemptedRole:
+    module: hr
+    fields:
+      role_id:
+        type: select
+        label: Role
+        foreign:
+          table: roles
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+
+      payment_type:
+        type: select
+        options: Full Day, Half Day, Fixed Amount
+        validation:
+          - required
+
+      fixed_amount:
+        type: decimal
+        modifiers:
+          precision: 10,2
+          default: 0.00
+          nullable: true
+        validation:
+          - nullable|numeric|min:0
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Exempted Roles
+      group: attendance-exemption
+      id: exempted-roles
+      parentPageTitle: Attendance Exemption
+      pageTitle: Exempted Roles Overview
+      view: exempted-roles
+      url: hr/exempted-roles
+
+    fieldGroups:
+      - title: Role Details
+        groupType: hr
+        fields:
+          - role_id
+          - payment_type
+          - fixed_amount
+
+    relations:
+      role:
+        type: belongsTo
+        model: App\Modules\Access\Models\Role # Adjust namespace if needed
+        foreignKey: role_id
+        displayField: name # Or appropriate display field
+
+    sidebar:
+      add: true
+      title: Attendance Exemption
+      iconClasses: fas fa-exclamation-triangle # Or a more suitable icon
+      submenu:
+        - title: Exempted Roles
+          url: exempted-roles
+          iconClasses: fas fa-user-slash # Represents a user group that is excluded/exempt
+        - title: Exempted Users
+          url: exempted-users
+          iconClasses: fas fa-user-times # Represents an individual user who is excluded/exempt
+        - title: Check-In-Only Roles
+          url: check-in-only-roles
+          iconClasses: fas fa-door-open # Suggests entering or 'check-in' for a group
+        - title: Check-In-Only Users
+          url: check-in-only-users
+          iconClasses: fas fa-user-check # Signifies an individual user specifically for check-in
+
+          
+
+
+
+
+
+    iconClasses: fas fa-user-slash # Represents a user group that is excluded/exempt
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+  
+  
+  ExemptedUser:
+    module: hr
+    fields:
+      employee_id:
+        type: select
+        label: Employee ID
+        foreign:
+          table: employee_profiles
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+
+      payment_type:
+        type: select
+        options: Full Day, Half Day, Fixed Amount
+        validation:
+          - required|
+
+      fixed_amount:
+        type: decimal
+        modifiers:
+          precision: 10,2
+          default: 0.00
+          nullable: true
+        validation:
+          - nullable|numeric|min:0
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Exempted Users
+      group: attendance-exemption
+      id: exempted-users
+      parentPageTitle: Attendance Exemption
+      pageTitle: Exempted Users Overview
+      view: exempted-users
+      url: hr/exempted-users
+
+    fieldGroups:
+      - title: User Details
+        groupType: hr
+        fields:
+          - employee_id
+          - payment_type
+          - fixed_amount
+
+    relations:
+      employeeProfile:
+        type: belongsTo
+        model: App\Modules\Hr\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_id
+        displayField: employee_id # Or appropriate display field
+
+    sidebar:
+      add: false
+
+    iconClasses: fas fa-user-times # Represents an individual user who is excluded/exempt
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+
+
+
+  CheckInOnlyRole:
+    module: hr
+    fields:
+      role_id:
+        type: select
+        label: Role 
+        foreign:
+          table: roles
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+
+      payment_type:
+        type: select
+        options: Full Day, Half Day, Fixed Amount
+        validation:
+          - required
+
+      fixed_amount:
+        type: decimal
+        modifiers:
+          precision: 10,2
+          default: 0.00
+          nullable: true
+        validation:
+          - nullable|numeric|min:0
+    hiddenFields:
+      onTable: []
+      onNewForm: []   
+      onEditForm: []
+      onQuery: []
+
+    tab:  
+      label: Check-In-Only Roles
+      group: attendance-exemption
+      id: check-in-only-roles
+      parentPageTitle: Attendance Exemption
+      pageTitle: Check-In-Only Roles Overview
+      view: check-in-only-roles
+      url: hr/check-in-only-roles
+
+    fieldGroups:
+      - title: Role Details
+        groupType: hr
+        fields:
+          - role_id
+          - payment_type
+          - fixed_amount
+
+    relations:
+      role:
+        type: belongsTo
+        model: App\Modules\Access\Models\Role # Adjust namespace if needed
+        foreignKey: role_id
+        displayField: name # Or appropriate display field
+
+
+    sidebar:
+      add: false
+
+
+    iconClasses: fas fa-door-open # Suggests entering or 'check-in' for a group
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+
+
+  CheckInOnlyUser:
+    module: hr
+    fields:
+      employee_id:
+        type: select
+        label: Employee ID
+        foreign:
+          table: employee_profiles
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+
+
+      payment_type:
+        type: select
+        options: Full Day, Half Day, Fixed Amount
+        validation:
+          - required|
+
+
+      fixed_amount:
+        type: decimal
+        modifiers:
+          precision: 10,2
+          default: 0.00
+          nullable: true
+        validation:
+          - nullable|numeric|min:0
+
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    tab:
+      label: Check-In-Only Users
+      group: attendance-exemption
+      id: check-in-only-users
+      parentPageTitle: Attendance Exemption
+      pageTitle: Check-In-Only Users Overview
+      view: check-in-only-users
+      url: hr/check-in-only-users
+      
+
+    fieldGroups:
+      - title: User Details
+        groupType: hr
+        fields:
+          - employee_id
+          - payment_type
+          - fixed_amount
+
+
+    relations:
+      employeeProfile:
+        type: belongsTo
+        model: App\Modules\Hr\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_id
+        displayField: employee_id # Or appropriate display field
+
+
+    sidebar:
+      add: false
+      
+
+    iconClasses: fas fa-user-check # Signifies an individual user specifically for check-in
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+
+
+
+
+
+
+
+
+
+

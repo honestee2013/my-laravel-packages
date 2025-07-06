@@ -289,6 +289,15 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
             }
 
 
+            // Load API Routes
+            $apiRoutePath = $module . '/Routes/api.php';
+            if (File::exists($apiRoutePath)) {
+                Route::prefix('api')
+                    ->middleware('api')
+                    ->group($apiRoutePath);
+            }
+
+
 
             // Load Assets as Views
             $assetPath = $module . '/Resources/assets';

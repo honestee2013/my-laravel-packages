@@ -12,7 +12,8 @@ class CodeGeneratorService
     {
         try {
             $prefix = strtoupper(substr($modelName, 0, 3)); // QUO, ORD, etc.
-            $date = now()->format('Ymd'); // 20250216
+            //$date = now()->format('Ymd'); // 20250216
+            $date = now()->format('Y'); // 2025
             //$latest = DB::table('orders')->where('code', 'LIKE', "$prefix-$date-%")->max('code');
             $latest = $model::where($field, 'LIKE', "$prefix-$date-%")->max($field);
 

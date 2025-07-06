@@ -1,0 +1,190 @@
+models:
+  BonusType:
+    module: hr
+    fields:
+      name:
+        type: string
+        validation:
+          - required|unique:bonus_types,name
+      description:
+        type: textarea
+        modifiers:
+          nullable: true
+      editable:
+        type: string
+        modifiers:
+          default: 'Yes'
+
+    hiddenFields:
+      onTable: []
+      onNewForm: ['editable']
+      onEditForm: ['editable']
+      onQuery: []
+
+    tab:
+      label: Bonus Types
+      group: payroll-components
+      id: bonus-types
+      parentPageTitle: Payroll Components
+      pageTitle: Bonus Types Overview
+      view: bonus-types
+      url: hr/bonus-types
+
+    fieldGroups:
+      - title: Bonus Type Information
+        groupType: hr
+        fields:
+          - name
+          - description
+
+    #relations:
+    #  employeeBonuses:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\EmployeeBonus
+    #    foreignKey: bonus_type_id
+
+    sidebar:
+      add: true
+      title: Payroll Components
+      iconClasses: fas fa-gift
+      url: allowance-types
+      submenu:
+        - title: Allowance Types
+          url: allowance-types
+        - title: Bonus Types
+          url: bonus-types
+        - title: Deduction Types
+          url: deduction-types
+    
+
+    iconClasses: fas fa-certificate # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+
+  DeductionType:
+    module: hr
+    fields:
+      name:
+        type: string
+        validation:
+          - required|unique:deduction_types,name
+      description:
+        type: textarea
+        modifiers:
+          nullable: true
+      editable:
+        type: string
+        modifiers:
+          default: 'Yes'
+
+    hiddenFields:
+      onTable: []
+      onNewForm: ['editable']
+      onEditForm: ['editable']
+      onQuery: []
+
+    tab:
+      label: Deduction Types
+      group: payroll-components
+      id: deduction-types
+      parentPageTitle: Payroll Components
+      pageTitle: Deduction Types Overview
+      view: deduction-types
+      url: hr/deduction-types
+
+    fieldGroups:
+      - title: Deduction Type Information
+        groupType: hr
+        fields:
+          - name
+          - description
+
+    #relations:
+    #  userDeductions:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\UserDeduction
+    #    foreignKey: deduction_type_id
+
+    #sidebar:
+    #  add: true
+    #  title: Deduction Types
+    #  iconClasses: fas fa-minus-circle # Or a more suitable icon
+
+
+    iconClasses: fas fa-list-alt # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+
+
+
+  AllowanceType:
+    module: hr
+    fields:
+      name:
+        type: string
+        validation:
+          - required|unique:allowance_types,name
+      description:
+        type: textarea
+        modifiers:
+          nullable: true
+      editable:
+        type: string
+        modifiers:
+          default: 'Yes'
+
+    hiddenFields:
+      onTable: []
+      onNewForm: ['editable']
+      onEditForm: ['editable']
+      onQuery: []
+
+    tab:
+      label: Allowance Types
+      group: payroll-components
+      id: allowance-types
+      parentPageTitle: Payroll Components
+      pageTitle: Allowance Types Overview
+      view: allowance-types
+      url: hr/allowance-types
+
+    fieldGroups:
+      - title: Allowance Type Information
+        groupType: hr
+        fields:
+          - name
+          - description
+
+    #relations:
+    #  userAllowances:
+    #    type: hasMany
+    #    model: App\Modules\HR\Models\UserAllowance
+    #    foreignKey: allowance_type_id
+
+    sidebar:
+      add: false
+      title: Allowance Types
+      iconClasses: fas fa-plus-square # Or a more suitable icon
+
+
+
+    iconClasses: fas fa-plus-circle # Or a more suitable icon
+    includeHeader: true
+    includeFooter: true
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
+
+
+
+
+
+

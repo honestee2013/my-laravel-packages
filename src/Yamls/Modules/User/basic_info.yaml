@@ -2,6 +2,14 @@ models:
   BasicInfo:
     module: user
     fields:
+      profile_picture: # <--- ADDED THIS FIELD
+        type: file    # Or 'string' if you just store a URL/path and don't want a file upload input
+        modifiers:
+          nullable: true
+        # You might want to hide it from the table or query if it's just a path
+        # onTable: false
+        # onQuery: false
+
       user_id:
         type: select
         foreign:
@@ -9,38 +17,54 @@ models:
           column: id
           onDelete: cascade
         validation:
-          - required|unique:basic_info,user_id
+          - required
+          - unique:basic_infos,user_id # Ensures one basic info record per user
+      about_me:
+        type: textarea
+        modifiers:
+          nullable: true
+
       phone_number:
         type: string
-        nullable: true
+        modifiers:
+          nullable: true
       email:
         type: email
-        nullable: true
+        modifiers:
+          nullable: true
       address_line_1:
         type: string
-        nullable: true
+        modifiers:
+          nullable: true
       address_line_2:
         type: string
-        nullable: true
+        modifiers:
+          nullable: true
       city:
         type: string
-        nullable: true
+        modifiers:
+          nullable: true
       state:
         type: string
-        nullable: true
+        modifiers:
+          nullable: true
       postal_code:
         type: string
-        nullable: true
+        modifiers:
+          nullable: true
       country:
         type: string
-        nullable: true
+        modifiers:
+          nullable: true
       date_of_birth:
         type: datepicker
-        nullable: true
+        modifiers:
+          nullable: true
       gender:
         type: select
         options: male, female, other # Add other options as needed
-        nullable: true
+        modifiers:
+          nullable: true
 
     hiddenFields:
       onTable: []
@@ -51,13 +75,22 @@ models:
     tab:
       label: Basic Info
       group: users-management
-      id: basic-info
+      id: basic-infos
       parentPageTitle: Users Management
       pageTitle: Basic Info
-      view: basic-info
-      url: user/basic-info
+      view: basic-infos
+      url: user/basic-infos
 
     fieldGroups:
+      - title: Personal Details
+        groupType: hr
+        fields:
+          - user_id
+          - about_me
+          - profile_picture # <--- ADDED TO FIELD GROUP
+          - date_of_birth
+          - gender
+
       - title: Contact Information
         groupType: hr
         fields:
@@ -74,21 +107,15 @@ models:
           - postal_code
           - country
 
-      - title: Personal Details
-        groupType: hr
-        fields:
-          - date_of_birth
-          - gender
-
     relations:
       user:
         type: belongsTo
-        model: App\Models\User # Assuming User model is in app/Models
+        model: App\Models\User # Assuming your User model is in App\Models
         foreignKey: user_id
-        displayField: name
+        displayField: name # Or an appropriate display field like 'email'
 
     sidebar:
-      add: true
+      add: true # Allows adding new basic info records (linked to a user)
       title: Basic Info
       iconClasses: fas fa-info-circle # Or a more suitable icon
 

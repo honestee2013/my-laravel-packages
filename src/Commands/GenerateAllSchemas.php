@@ -33,17 +33,26 @@ class GenerateAllSchemas extends Command
         'Hr' =>  [
             'employee_management.yaml',
             'onboarding_and_employee_lifecycle.yaml',
-            'time_off_and_leaves.yaml',
-            'payroll_processing.yaml', 
-            'payroll_adjustments.yaml', 
-            'payroll_components.yaml',
-            'attendance.yaml',
 
+            // Payroll & Attendance related files
+
+            'payroll_processing.yaml', 
+            'payroll_components.yaml',
+            'payroll_bonuses_and_allowances.yaml', 
+            'payroll_deductions.yaml', 
+            
+            'payroll_attendance_and_earning.yaml',
+            'payroll_attendance_exemption.yaml',
+
+            'shifts_and_compliance.yaml',
             'role_scheduling.yaml',
-            'user_scheduling.yaml',
-            'work_day.yaml',
+            'time_off_and_leaves.yaml',
+
+
             'salaries_and_payment_structure.yaml',
-            'user_salary_records.yaml'
+            'user_salary_records.yaml',
+
+             'departments.yaml',
         ],
         //'Profile' => [],
         //'Item' => [],

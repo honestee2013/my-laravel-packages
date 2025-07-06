@@ -2,10 +2,10 @@ models:
   UserPayroll:
     module: hr
     fields:
-      payroll_id:
+      payroll_run_id:
         type: select
         foreign:
-          table: payrolls
+          table: payroll_runs
           column: id
           onDelete: cascade
         validation:
@@ -22,14 +22,14 @@ models:
         type: decimal
         modifiers:
           precision: 10,2
-        default: 0.00
+          default: 0.00
         validation:
           - required|numeric|min:0
       gross_salary:
         type: decimal
         modifiers:
           precision: 10,2
-        default: 0.00
+          default: 0.00
         validation:
           - required|numeric|min:0
       total_deductions:
@@ -58,19 +58,19 @@ models:
       onQuery: []
 
     tab:
-      label: User Payrolls
+      label: User Payroll_runs
       group: payroll-management
-      id: user-payrolls
+      id: user-payroll_runs
       parentPageTitle: Payroll Management
-      pageTitle: User Payrolls
-      view: user-payrolls
-      url: hr/user-payrolls
+      pageTitle: User Payroll_runs
+      view: user-payroll_runs
+      url: hr/user-payroll_runs
 
     fieldGroups:
       - title: Payroll Assignment
         groupType: hr
         fields:
-          - payroll_id
+          - payroll_run_id
           - user_id
 
       - title: Salary Details
@@ -86,7 +86,7 @@ models:
       payroll:
         type: belongsTo
         model: App\Modules\HR\Models\Payroll
-        foreignKey: payroll_id
+        foreignKey: payroll_run_id
         displayField: title # Or appropriate display field
       user:
         type: belongsTo
@@ -96,7 +96,7 @@ models:
 
     sidebar:
       add: true
-      title: User Payrolls
+      title: User Payroll_runs
       iconClasses: fas fa-user-cog # Or a more suitable icon
 
     iconClasses: fas fa-receipt # Or a more suitable icon

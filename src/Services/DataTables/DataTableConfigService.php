@@ -4,8 +4,7 @@ namespace QuickerFaster\CodeGen\Services\DataTables;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
-use  App\Modules\Core\Repositories\DataTables\FieldRepository;
-
+use QuickerFaster\CodeGen\Repositories\DataTables\FieldRepository;;
 
 
 class DataTableConfigService

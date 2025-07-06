@@ -245,15 +245,17 @@ class MigrationGenerator extends Command
             } elseif ($modifierName === 'unique' && $modifierValue === true) {
                 $columnDefinition .= "->unique()";
             } elseif ($modifierName === 'default') { //e.g default:100
+                
                 if ($modifierValue === true) {
                     $columnDefinition .= "->default(true)";
                 } elseif ($modifierValue === false) {
                     $columnDefinition .= "->default(false)";
-                } elseif (is_string($modifierValue)) {
+                } elseif (is_string($modifierValue) && !is_numeric($modifierValue)) {
                     $columnDefinition .= "->default('" . str_replace("'", "\\'", $modifierValue) . "')";
                 } else {
                     $columnDefinition .= "->default($modifierValue)";
                 }
+
             }
         }
 

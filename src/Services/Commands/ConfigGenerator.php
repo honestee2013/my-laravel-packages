@@ -109,7 +109,7 @@ class ConfigGenerator extends Command
                 }
             }
 
-            $display = 'inline';
+            $display = $relationData['display'] ?? 'inline'; // Default to inline if not specified
 
             // Handle relations (hasMany, belongsToMany, morphTo, morphToMany)
             if (isset($modelData['relations'])) {
@@ -236,10 +236,19 @@ class ConfigGenerator extends Command
             $yamlFieldDefinitions[$fieldName]['label'] = $field["label"]?? $label;
 
             // Check auto generate
-            if (isset($field['autoGenerate'])) {
-                $yamlFieldDefinitions[$fieldName]["autoGenerate"] =  $field['autoGenerate'];
+            if (isset($field['autoGenerate']) && $field['autoGenerate'] == true) {
+                $yamlFieldDefinitions[$fieldName]['autoGenerate'] =  $field['autoGenerate'];
+            } 
+
+            // Check multiselect
+            if (isset($field['multiSelect']) && $field['multiSelect'] == true) {
+                $yamlFieldDefinitions[$fieldName]['multiSelect'] = true;
             }
 
+            // Check Reactivity
+            if (isset($field['reactivity']) ){
+                $yamlFieldDefinitions[$fieldName]['reactivity'] = $field['reactivity'];
+            }
 
             /*foreach ($field as $key => $value) {
                 $yamlFieldDefinitions[$fieldName][$key] = $value ;

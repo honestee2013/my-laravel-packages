@@ -2,6 +2,7 @@ models:
   EmployeeProfile:
     module: hr
     fields:
+
       employee_id:
         type: string
         label: Employee ID
@@ -10,10 +11,21 @@ models:
           nullable: true
         validation:
           - required|unique:employee_profiles,employee_id
+
+      user_id:
+        type: select
+        foreign:
+          table: users
+          column: id
+          onDelete: cascade
+        validation:
+          - required|unique:basic_infos,user_id
+
       department:
         type: string
         modifiers:
           nullable: true
+
       designation:
         type: string
         modifiers:
@@ -28,8 +40,9 @@ models:
         validation:
           - required|int
 
-      reporting_manager_id:
+      employee_profile_id:
         type: select
+        label: Reporting Manager ID
         foreign:
           table: employee_profiles
           column: id
@@ -47,14 +60,30 @@ models:
         modifiers:
           nullable: true 
         validation:
-          - required|string|max:255
+          - required
+
+
+      role_id:
+        type: select
+        label: Primary Role
+        foreign:
+          table: roles
+          column: id
+          onDelete: cascade
+        validation:
+          - required
+          
+
+
+
       employment_type:
         type: select
         options: Full-time, Part-time, Contract # Add other types as needed
         modifiers:
           nullable: true
         validation:
-          - required|string|max:255
+          - required
+
       work_location:
         type: string
         modifiers:
@@ -71,6 +100,17 @@ models:
         type: datepicker
         modifiers:
           nullable: true
+
+
+      notes:
+        type: textarea
+        label: Notes  
+        modifiers:
+          nullable: true
+        validation:
+          - nullable      
+
+
 
     hiddenFields:
       onTable: []
@@ -92,35 +132,50 @@ models:
         groupType: hr
         fields:
           - employee_id
+          - user_id
           - job_title_id
+          - role_id
           - shift_id
           - employment_type
           - joining_date
+          - termination_date
 
       - title: Job Details
         groupType: hr
         fields:
           - department
           - designation
-          - reporting_manager_id
+          - employee_profile_id
           - work_location
+          - notes
 
     relations:
       user:
         type: belongsTo
-        model: App\Modules\User\Models\User # Adjust namespace if needed
-        foreignKey: employee_id
+        model: App\Models\User # Assuming User model is in app/Models
+        foreignKey: user_id
         displayField: name
+
       jobTitle:
         type: belongsTo
         model: App\Modules\Hr\Models\JobTitle # Adjust namespace if needed
         foreignKey: job_title_id
         displayField: title
-      reportingManager:
+
+      role:
+        type: belongsTo
+        model: App\Modules\Access\Models\Role # Adjust namespace if needed
+        foreignKey: role_id
+        displayField: name # Or appropriate display field
+
+
+      employeeProfile:
         type: belongsTo
         model: App\Modules\Hr\Models\EmployeeProfile # Adjust namespace if needed
-        foreignKey: reporting_manager_id
-        displayField: name
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or appropriate display field
+
+
       shift:
         type: belongsTo
         model: App\Modules\Hr\Models\Shift # Adjust namespace if needed
@@ -181,6 +236,14 @@ models:
         modifiers:
           nullable: true
 
+      notes:
+        type: textarea
+        label: Notes  
+        modifiers:
+          nullable: true
+        validation:
+          - nullable
+
     hiddenFields:
       onTable:
         - file_path # Might not want to display the path directly
@@ -207,6 +270,7 @@ models:
           - file_path # Consider displaying a link instead of the path in forms/tables
           - original_name
           - mime_type
+          - notes
 
     relations:
       employee:

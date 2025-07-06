@@ -83,6 +83,16 @@ models:
           - password
           - password_confirmation
 
+
+    relations:
+      employeeProfile:
+        type: belongsTo
+        model: App\Modules\Hr\Models\EmployeeProfile # Adjust namespace if needed
+        foreignKey: employee_profile_id
+        displayField: employee_id # Or appropriate display field
+
+
+
     sidebar:
       add: true
       title: Manage Users
@@ -93,8 +103,7 @@ models:
           url: users
         - title: Basic Info
           url: basic-infos
-        - title: User Documents
-          url: user-documents
+
 
     iconClasses: fas fa-user # Or a more suitable icon
     includeHeader: true
@@ -109,6 +118,14 @@ models:
   BasicInfo:
     module: user
     fields:
+      profile_picture: # <--- ADDED THIS FIELD
+        type: file    # Or 'string' if you just store a URL/path and don't want a file upload input
+        modifiers:
+          nullable: true
+        # You might want to hide it from the table or query if it's just a path
+        # onTable: false
+        # onQuery: false
+
       user_id:
         type: select
         foreign:
@@ -116,11 +133,17 @@ models:
           column: id
           onDelete: cascade
         validation:
-          - required|unique:basic_infos,user_id
+          - required
+          - unique:basic_infos,user_id # Ensures one basic info record per user
+      about_me:
+        type: textarea
+        modifiers:
+          nullable: true
+
       phone_number:
         type: string
         modifiers:
-          nullable: true        
+          nullable: true
       email:
         type: email
         modifiers:
@@ -159,15 +182,6 @@ models:
         modifiers:
           nullable: true
 
-      user_status:
-        type: select
-        foreign:
-          table: user_statuses
-          column: id
-          onDelete: set null
-        modifiers:
-          nullable: true
-
     hiddenFields:
       onTable: []
       onNewForm: []
@@ -187,7 +201,9 @@ models:
       - title: Personal Details
         groupType: hr
         fields:
+          - profile_picture # <--- ADDED TO FIELD GROUP
           - user_id
+          - about_me
           - date_of_birth
           - gender
 
@@ -207,23 +223,15 @@ models:
           - postal_code
           - country
 
-
-
     relations:
       user:
         type: belongsTo
-        model: App\Models\User # Assuming User model is in app/Models
+        model: App\Models\User # Assuming your User model is in App\Models
         foreignKey: user_id
-        displayField: name
-      
-    userStatus:
-      type: belongsTo
-      model: App\Modules\User\Models\UserStatus # Adjust namespace if needed
-      foreignKey: user_status
-      displayField: name # Or appropriate display field
+        displayField: name # Or an appropriate display field like 'email'
 
     sidebar:
-      add: false
+      add: false # Allows adding new basic info records (linked to a user)
       title: Basic Info
       iconClasses: fas fa-info-circle # Or a more suitable icon
 
@@ -233,9 +241,3 @@ models:
     includeSidebar: true
     controls: all
     simpleActions: ['show', 'edit', 'delete']
-
-
-
-
-
-  
