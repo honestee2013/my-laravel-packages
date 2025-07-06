@@ -15,63 +15,15 @@ use Barryvdh\DomPDF\Facade\Pdf; // Import the PDF facade
 
 class IdCardController extends Controller
 {
-    /**
-     * Display the ID card for the authenticated user.
-     *
-     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
-     */
-    public function showMyIdCard()
+
+
+
+    public function showEmployeeIdCard(Request $request)
     {
-        // Get the authenticated user's ID
-        $userId = Auth::id();
+        $userId = $request->query('employeeprofile');
 
-        // Load the employee profile with the related user data
-        $employee = EmployeeProfile::with('user')
-                                    ->where('user_id', $userId)
-                                    ->first();
-
-        // If no employee profile is found for the authenticated user
-        if (!$employee) {
-            return redirect()->back()->with('error', 'Your employee profile could not be found.');
-        }
-
-        // --- QR Code Generation Logic ---
-        // For dynamic QR codes, you might encode something like:
-        // - The employee's unique ID from employee_profiles table ($employee->employee_id or $employee->id)
-        // - A timestamp for dynamic/expiring QR codes (e.g., for attendance)
-        // - A unique token generated per request
-        //
-        // Example for a basic QR code (you'll need to install the QR code package first):
-        // composer require simplesoftwareio/simple-qrcode ~4
-        //
-        // You would typically generate the QR code as an SVG or PNG data URL.
-        $qrCodeData = json_encode([
-            'employee_id' => $employee->employee_id,
-            //'user_id' => $employee->user_id,
-            //'timestamp' => now()->timestamp, // Good for dynamic/expiring codes
-            // 'token' => uniqid(), // For even more security, generate a unique token and store it
-        ]);
-
-        // Generate QR code as SVG. You can choose PNG or other formats.
-        $qrCodeSvg = QrCode::size(140)->generate($qrCodeData);
-        // Note: For production, you might want to cache this or generate it on demand.
-        // For physical cards, generate once and store. For digital, dynamically generate.
-
-        return view('hr.views::id_card.show', compact('employee', 'qrCodeSvg'));
-
-    }
-
-    /**
-     * Display the ID card for a specific employee (for HR manager access).
-     *
-     * @param  int  $userId
-     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
-     */
-    public function showEmployeeIdCard($userId)
-    {
-        // Add authorization check here to ensure only HR managers can access this
-        // For example, using Laravel Gates or Policies:
-        // $this->authorize('view', EmployeeProfile::class); // Or a specific policy like 'viewAnyIdCard'
+        // Authorization check (very important)
+        // $this->authorize('viewIdCard', User::find($userId)); // optional but recommended
 
         $employee = EmployeeProfile::with('user')
                                     ->where('user_id', $userId)
@@ -81,14 +33,9 @@ class IdCardController extends Controller
             return redirect()->back()->with('error', 'Employee profile not found.');
         }
 
-        // --- QR Code Generation Logic (similar to above) ---
-        $qrCodeData = json_encode([
+        $qrCodeSvg = QrCode::size(140)->generate(json_encode([
             'employee_id' => $employee->employee_id,
-            //'user_id' => $employee->user_id,
-            //'timestamp' => now()->timestamp,
-        ]);
-        $qrCodeSvg = QrCode::size(140)->generate($qrCodeData);
-
+        ]));
 
         return view('hr.views::id_card.show', compact('employee', 'qrCodeSvg'));
     }
@@ -96,23 +43,11 @@ class IdCardController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-/**
-     * Download the ID card as a PDF for the authenticated user.
-     *
-     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\RedirectResponse
-     */
-    public function downloadMyIdCard()
+    public function downloadEmployeeIdCard(Request $request)
     {
 
 
+        $userId = $request->query('employeeprofile');
         $userId = Auth::id();
         $employee = EmployeeProfile::with('user')
                                     ->where('user_id', $userId)
@@ -156,41 +91,6 @@ class IdCardController extends Controller
 
 
     }
-
-    /**
-     * Download the ID card as a PDF for a specific employee (for HR manager access).
-     *
-     * @param  int  $userId
-     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\RedirectResponse
-     */
-    public function downloadEmployeeIdCard($userId)
-    {
-        // Add authorization check here
-        // $this->authorize('download', EmployeeProfile::class); // Or a specific policy like 'downloadAnyIdCard'
-
-        $employee = EmployeeProfile::with('user')
-                                    ->where('user_id', $userId)
-                                    ->first();
-
-        if (!$employee) {
-            return redirect()->back()->with('error', 'Employee profile not found for download.');
-        }
-
-        // Generate QR Code SVG (same logic as above)
-        $qrCodeData = json_encode([
-            'employee_id' => $employee->employee_id,
-            //'user_id' => $employee->user_id,
-            //'timestamp' => now()->timestamp,
-        ]);
-        $qrCodeSvg = QrCode::size(140)->generate($qrCodeData);
-
-        // Render the blade view into HTML
-        $pdf = Pdf::loadView('hr.views::id_card.show_printable', compact('employee', 'qrCodeSvg'));
-
-        return $pdf->download('ID_Card_' . ($employee->user->name ?? 'unknown') . '.pdf');
-    }
-
-
 
 
 

@@ -181,43 +181,52 @@
                         @endforeach
                     @endif
 
+                    {{----------  HANDLING MORE ACTIONS (GROUPED AND UNGROUPED)  ---------}}
                     @if ($moreActions)
-
-                        <span class="btn-group dropdown" data-bs-toggle="tooltip" data-bs-original-title="More" style="cursor: pointer">
+                        <span class="btn-group dropdown" data-bs-toggle="tooltip" data-bs-original-title="More">
                             <span class="px-2" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-ellipsis-vertical text-secondary"></i>
+                                <i class="fa-solid fa-ellipsis-vertical text-secondary" style="cursor: pointer"></i>
                             </span>
-                            <ul class="dropdown-menu dropdown-menu-end me-sm-n4  px-2 py-3" aria-labelledby="dropdownMenuButton">
-                                @foreach ( $moreActions as $actionName => $actionData )
-                                    @if(isset($actionData['title']))
-                                        <pan class="m-2 text-uppercase text-xs fw-bolder">{{ ucfirst($actionData['title']) }}</pan>
+                            <ul class="dropdown-menu dropdown-menu-end me-sm-n4 px-2 py-3" aria-labelledby="dropdownMenuButton">
+
+                                @foreach ($moreActions as $key => $value)
+                                    @php
+                                        $isGrouped = is_string($key) && is_array($value);
+                                        $actions = $isGrouped ? $value : [$value];
+                                    @endphp
+
+                                    @if($isGrouped)
+                                        <span class="m-2 text-uppercase text-xs fw-bolder">{{ ucfirst($key) }}</span>
                                         <hr class="m-2 p-0 bg-gray-500" />
                                     @endif
 
-                                    <li class="mb-2">
-                                        @if(isset($actionData['route']))
-                                            <a class="dropdown-item border-radius-md" href="javascript:void(0)" wire:click="openLink('{{ $actionData['route'] }}', {{ $row->id }})">
-                                        @elseif(isset($actionData['updateModelField']) && isset($actionData['fieldName']) && isset($actionData['fieldValue']))
-                                            <a class="dropdown-item border-radius-md" onclick="Livewire.dispatch('updateModelFieldEvent',['{{$row->id}}', '{{$actionData['fieldName']}}', '{{$actionData['fieldValue']}}'])">
-                                        @else
-                                            <a class="dropdown-item border-radius-md" href="javascript:void(0)">
+                                    @foreach ($actions as $action)
+                                        <li class="mb-2">
+                                            @if(isset($action['route']))
+                                                <a class="dropdown-item border-radius-md" wire:click="openLink('{{ $action['route'] }}', {{ $row->id }})">
+                                            @elseif(isset($action['updateModelField']) && isset($action['fieldName']) && isset($action['fieldValue']))
+                                                <a class="dropdown-item border-radius-md" onclick="Livewire.dispatch('updateModelFieldEvent',['{{$row->id}}', '{{$action['fieldName']}}', '{{$action['fieldValue']}}'])">
+                                            @else
+                                                <a class="dropdown-item border-radius-md" href="javascript:void(0)">
+                                            @endif
+
+                                                @if(isset($action['icon']))
+                                                    <i class="{{ $action['icon'] }}" style="margin-right: 1em"></i>
+                                                @endif
+                                                <span class="btn-inner--text">{{ $action['title'] ?? '' }}</span>
+                                                </a>
+                                        </li>
+
+                                        @if(isset($action['hr']))
+                                            <hr class="m-2 p-0 bg-gray-500" />
                                         @endif
-                                        @if(isset($actionData['icon']))
-                                                <i class="{{$actionData['icon']}}"></i>
-                                        @endif
-                                        <span class="btn-inner--text">{{ ucfirst($actionName) }}</span>
-                                        </a>
-                                    </li>
-                                    @if(isset($actionData['hr']))
-                                        <hr class="m-2 p-0 bg-gray-500" />
-                                    @endif
+                                    @endforeach
                                 @endforeach
 
                             </ul>
                         </span>
-
-
                     @endif
+
 
                 </td>
 

@@ -201,8 +201,25 @@ models:
     includeFooter: false
     includeSidebar: true
     controls: all
+    
     simpleActions: ['show', 'edit', 'delete']
 
+    moreActions:
+      - title: Show ID Card
+        icon: fas fa-id-card
+        route: show.employee.id.card
+      - title: Download ID Card (PDF)
+        icon: fas fa-file-pdf
+        route: download.employee.id.card
+
+      #more action group 1:
+      #  - title: G1 Item 1
+      #    icon: fas fa-list-alt
+      #    route: my.id.card
+      #more action group 2:
+      #  - title: G2 Item 2
+      #    icon: fas fa-list-alt
+      #    route: my.id.card
 
 
 

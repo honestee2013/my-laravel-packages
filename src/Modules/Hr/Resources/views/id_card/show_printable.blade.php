@@ -65,8 +65,8 @@
         }
 
         .employee-photo {
-            width: 90px; /* Smaller photo for compact card */
-            height: 90px;
+            width: 95px; /* Smaller photo for compact card */
+            height: 95px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #e0e0e0;
@@ -143,7 +143,8 @@
 
 
         <div class="photo-section">
-            <img src="{{ $employee->user->profile_photo_url ?? public_path('assets/img/default_profile_picture.jpg') }}" alt="Employee Photo" class="employee-photo">
+            <img src="{{ public_path('storage/' .$employee->user->basicInfo->profile_picture) ?? public_path('assets/img/default_profile_picture.jpg') }}" alt="Employee Photo" class="employee-photo">
+
         </div>
 
         <div class="info-section">
@@ -164,7 +165,7 @@
             </div>
         </div>
 
- <div class="qr-code-section">
+        <div class="qr-code-section">
             <div class="qr-code">
                 <img src="{{ $qrCodeImageSrc }}" alt="QR Code">
             </div>

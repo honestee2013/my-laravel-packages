@@ -29,11 +29,6 @@ class ConfigGenerator extends Command
 
 
 
-
-
-
-
-
     protected function getConfigStub($module, $modelName, $modelData, $command)
     {
         $configStubPath =  __DIR__ . '/../../Stubs/config.stub';
@@ -263,18 +258,6 @@ class ConfigGenerator extends Command
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         // ... (Rest of the code for fieldGroups, merging configs, and replacements remains the same)
 
     // Handle fieldGroups
@@ -297,7 +280,7 @@ class ConfigGenerator extends Command
             "dispatchEvents" => $modelData['dispatchEvents'] ?? false,
             "controls" => $modelData['controls'] ?? [],
             "fieldGroups" => $fieldGroups, // Add fieldGroups to the config data
-
+            "moreActions" => $modelData['moreActions'] ?? [],
         ],
     );
 

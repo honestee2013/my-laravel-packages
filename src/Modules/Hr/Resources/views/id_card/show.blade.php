@@ -15,6 +15,7 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
+            flex-direction: column; /* Add this line */
         }
 
         .id-card-container {
@@ -63,8 +64,8 @@
         }
 
         .employee-photo {
-            width: 150px;
-            height: 150px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
             object-fit: cover;
             border: 4px solid #e0e0e0;
@@ -157,13 +158,13 @@
     <div class="id-card-container">
         <div class="header">
             {{-- Replace with your actual company logo --}}
-            <!--<img src="{{ asset('assets/img/default_profile_picture.jpg') }}" alt="Company Logo" class="company-logo">-->
+            <!--<img src="{{ asset('$employee->user->basicInfo->profile_picture') }}" alt="Company Logo" class="company-logo">-->
             <div class="company-name">Agriwatss Nigeria Ltd.</div>
         </div>
 
         <div class="photo-section">
             {{-- Dynamically load employee photo. Ensure your user/employee profile has a 'photo_url' attribute or similar --}}
-            <img src="{{ $employee->user->profile_photo_url ?? asset('assets/img/default_profile_picture.jpg') }}" alt="Employee Photo" class="employee-photo">
+            <img src="{{ asset('storage/' .$employee->user->basicInfo->profile_picture) ?? asset('assets/img/default_profile_picture.jpg') }}" alt="Employee Photo" class="employee-photo">
         </div>
 
         <div class="info-sectio" style="margin-top:0.5em; margin-bottom:1em">
@@ -204,17 +205,10 @@
         </div>
     </div>
 
-    <br />
     <div style="margin-top: 30px; text-align: center;">
-        <a href="{{ route('download.id.card') }}" class="download-button" >
+        <a href="{{ route('download.employee.id.card', ['employeeprofile' => 1]) }}" class="download-button" >
             Download ID Card (PDF)
         </a>
-        {{-- For HR managers, conditionally show a download button for the specific user --}}
-        @if(isset($employee->user->id) && Auth::user()->can('download-employee-id-cards')) {{-- Replace with actual gate/policy --}}
-            <a href="{{ route('employee.id.card.download', $employee->user->id) }}" class="download-button" target="_blank" style="margin-left: 15px;">
-                Download for HR (PDF)
-            </a>
-        @endif
     </div>
 
 </body>
