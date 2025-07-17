@@ -141,7 +141,7 @@
 
         <div class="col-12 col-sm-4">
             <livewire:dashboard.visualisation.widgets.charts.chart
-                recordModel="App\Modules\user\Models\BasicInfo"
+                recordModel="App\Modules\User\Models\BasicInfo"
                 chartType="pie"
                 recordName="Users"
                 title="Users by Gender"

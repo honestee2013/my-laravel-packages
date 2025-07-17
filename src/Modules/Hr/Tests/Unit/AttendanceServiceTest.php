@@ -8,7 +8,7 @@ use Tests\TestCase;
 use App\Modules\Hr\Services\PayrollCalculatorService;
 use App\Modules\Hr\Models\DailyAttendance;
 use App\Modules\Hr\Models\EmployeeProfile;
-use App\Modules\hr\Models\RoleSchedule;
+use App\Modules\Hr\Models\RoleSchedule;
 use App\Modules\Hr\Database\Factories\EmployeeProfileFactory;
 use App\Modules\Hr\Database\Factories\ShiftFactory;
 use App\Modules\Hr\Database\Factories\RoleFactory;
@@ -23,7 +23,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use App\Modules\Hr\Services\AttendanceService;
-use App\Modules\user\Models\EmployeeProfile as ModelsEmployeeProfile;
+use App\Modules\User\Models\EmployeeProfile as ModelsEmployeeProfile;
 use InvalidArgumentException;
 
 
