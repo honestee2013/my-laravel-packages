@@ -29,6 +29,9 @@ class AttendanceService
 
     public function record(array $data): DailyAttendance
     {
+
+
+
         return DB::transaction(function () use ($data) {
 
             $employeeId = $data['employee_id'];

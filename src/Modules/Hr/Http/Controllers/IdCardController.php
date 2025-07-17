@@ -33,9 +33,11 @@ class IdCardController extends Controller
             return redirect()->back()->with('error', 'Employee profile not found.');
         }
 
-        $qrCodeSvg = QrCode::size(140)->generate(json_encode([
+        /*$qrCodeSvg = QrCode::size(140)->generate(json_encode([
             'employee_id' => $employee->employee_id,
-        ]));
+        ]));*/
+
+        $qrCodeSvg = QrCode::size(140)->generate($userId);
 
         return view('hr.views::id_card.show', compact('employee', 'qrCodeSvg'));
     }
@@ -58,11 +60,13 @@ class IdCardController extends Controller
         }
 
       // --- Fallback: Generate QR Code as SVG, then Base64 Encode it ---
-        $qrCodeData = json_encode([
+        /*$qrCodeData = json_encode([
             'employee_id' => $employee->employee_id,
             //'user_id' => $employee->user_id,
             //'timestamp' => now()->timestamp,
-        ]);
+        ]);*/
+
+        $qrCodeData = $userId;
 
         // 1. Generate QR code as SVG (this doesn't require Imagick)
         $qrCodeSvgString = QrCode::size(140)->margin(1)->generate($qrCodeData); // Default format is SVG
