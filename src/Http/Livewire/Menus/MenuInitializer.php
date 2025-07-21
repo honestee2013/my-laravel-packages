@@ -63,7 +63,7 @@ class MenuInitializer extends Component
             [
                 'title' => 'System Modules',
                 'icon' => 'fas fa-th fs-4 ms-2',
-                'url' => strtolower($this->moduleName) . '/dashboard',
+                'url' => 'core/modules',
                 'cssClasses' => "menu-item-header menu-header",
                 'itemType' => 'header',
                 

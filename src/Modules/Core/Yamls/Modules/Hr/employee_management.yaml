@@ -84,6 +84,17 @@ models:
         validation:
           - required
 
+
+      hourly_rate:
+        type: decimal
+        modifiers:
+          precision: 5,2
+          default: 0.00
+          nullable: true
+        validation:
+          - required|decimal
+
+
       work_location:
         type: string
         modifiers:
