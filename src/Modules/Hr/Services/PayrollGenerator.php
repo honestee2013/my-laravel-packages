@@ -190,7 +190,8 @@ class PayrollGenerator
                 PayrollEmployee::updateOrCreate(
                     [
                         'payroll_number' => $payrollRun->payroll_number,
-                        'employee_id' => $employeeProfile->employee_id
+                        'employee_id' => $employeeProfile->employee_id,
+                        'payroll_run_id' => $payrollRun->id,
                     ],
                     $payrollData
                 );
@@ -341,7 +342,7 @@ class PayrollGenerator
     protected function getEarningsForPeriod($startDate, $endDate): array
     {
         return DailyEarning::whereBetween('work_date', [$startDate, $endDate])
-            ->select('employee_id', DB::raw('SUM(amount_earned) as total'))
+            ->select('employee_id', DB::raw('SUM(total_amount) as total'))
             ->groupBy('employee_id')
             ->pluck('total', 'employee_id')
             ->all();

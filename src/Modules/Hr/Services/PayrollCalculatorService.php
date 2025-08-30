@@ -24,133 +24,83 @@ class PayrollCalculatorService
      * @param RoleSchedule|null $roleSchedule The specific RoleSchedule for the period, passed from AttendanceService
      * @return array Contains 'regular_minutes', 'overtime_minutes', 'unpaid_break_minutes'
      */
-    public function calculatePaidHours(DailyAttendance $checkIn, DailyAttendance $checkOut, EmployeeProfile $employeeProfile, ?RoleSchedule $roleSchedule): array
-    {
-
-
-        $totalWorkedMinutes = Carbon::parse($checkIn->attendance_time)->diffInMinutes($checkOut->attendance_time);
-
-        if (!$roleSchedule) {
-            return $this->calculateBaseOnEmployeeProfileShift($checkIn, $checkOut, $employeeProfile);
-        }
-
-
-
-        // Helper to get effective scheduled times
-        list($scheduledStart, $scheduledEnd, $isOvernight) = $this->getEffectiveShiftTimes(
-            $checkIn->attendance_time->copy()->startOfDay(), // Base date for calculation
-            $roleSchedule
-        );
-
-        // Initialize variables
-        $regularMinutes = 0;
-        $overtimeMinutes = 0;
-        $unpaidBreakMinutes = 0;
-
-        // 1. Calculate Unpaid Break Minutes
-        if ($roleSchedule->breakRule) {
-            $unpaidBreakMinutes = $this->calculateUnpaidBreakMinutes($totalWorkedMinutes, $roleSchedule->breakRule);
-        }
-
-        $netWorkedMinutes = $totalWorkedMinutes - $unpaidBreakMinutes;
-        if ($netWorkedMinutes < 0) {
-            $netWorkedMinutes = 0; // Should not happen, but a safeguard
-        }
-
-        // 2. Calculate Regular Hours
-        // Actual time employee was in, clamped within the *effective* scheduled window
-        $actualWorkStart = $checkIn->attendance_time->max($scheduledStart);
-        $actualWorkEnd = $checkOut->attendance_time->min($scheduledEnd);
-
-        // Adjust actualWorkEnd if it crosses midnight but scheduledEnd is same day
-        if ($isOvernight && $actualWorkEnd->isSameDay($scheduledStart) && $actualWorkEnd->lessThan($scheduledStart)) {
-            // This scenario means actualWorkEnd is earlier than scheduledStart on the same calendar day
-            // which can happen if actualWorkEnd is from the next calendar day's portion of an overnight shift.
-            // Ensure actualWorkEnd is relative to scheduledEnd (which might be next day).
-            $actualWorkEnd = $actualWorkEnd->addDay(); // Temporarily add day for comparison
-        }
-
-        if ($actualWorkEnd->greaterThan($actualWorkStart)) {
-            $regularMinutes = $actualWorkStart->diffInMinutes($actualWorkEnd);
-        }
-
-        // Ensure regular minutes don't exceed net worked minutes
-        $regularMinutes = min($regularMinutes, $netWorkedMinutes);
-
-
-        // 3. Calculate Overtime Hours
-        $remainingMinutes = $netWorkedMinutes - $regularMinutes;
-
-        if ($remainingMinutes > 0) {
-            // Overtime based on specific time window (if defined)
-            if ($roleSchedule->overtime_start && $roleSchedule->overtime_end) {
-                $otWindowStart = Carbon::parse($scheduledStart->toDateString() . ' ' . $roleSchedule->overtime_start);
-                $otWindowEnd = Carbon::parse($scheduledStart->toDateString() . ' ' . $roleSchedule->overtime_end);
-
-                // Adjust OT window for overnight shifts (if it crosses midnight)
-                if ($roleSchedule->overtime_start > $roleSchedule->overtime_end) {
-                     $otWindowEnd->addDay();
-                }
-
-                // Intersection of worked time and OT window
-                $otIntersectionStart = $checkIn->attendance_time->max($otWindowStart);
-                $otIntersectionEnd = $checkOut->attendance_time->min($otWindowEnd);
-
-                if ($otIntersectionEnd->greaterThan($otIntersectionStart)) {
-                    $overtimeMinutes += $otIntersectionStart->diffInMinutes($otIntersectionEnd);
-                }
-            }
-
-            // Overtime based on hours worked threshold (e.g., after 8 hours)
-            if ($roleSchedule->overtime_after_hours) {
-                $thresholdMinutes = $roleSchedule->overtime_after_hours * 60;
-                if ($netWorkedMinutes > $thresholdMinutes) {
-                    // This rule should only apply to minutes *after* regular scheduled hours + threshold
-                    // It's more complex if time-based OT also exists. Here, we take the MAX of different OT calculations.
-                    $overtimeMinutes = max($overtimeMinutes, $netWorkedMinutes - $thresholdMinutes);
-                }
-            }
-        }
-
-        // Apply Overtime Caps (crucial for your requirement)
-        if ($roleSchedule->max_paid_overtime_hours !== null) {
-            $maxOvertimeMinutes = $roleSchedule->max_paid_overtime_hours * 60;
-            $overtimeMinutes = min($overtimeMinutes, $maxOvertimeMinutes);
-        }
-
-        // Ensure total paid minutes don't exceed net worked minutes
-        $totalPaidMinutes = $regularMinutes + $overtimeMinutes;
-        if ($totalPaidMinutes > $netWorkedMinutes) {
-            $overtimeMinutes = max(0, $netWorkedMinutes - $regularMinutes);
-            $totalPaidMinutes = $regularMinutes + $overtimeMinutes;
-        }
-
-        // Apply Max Daily Hours Cap (highest level cap)
-        if ($roleSchedule->max_daily_hours !== null) {
-            $maxDailyMinutes = $roleSchedule->max_daily_hours * 60;
-            if ($totalPaidMinutes > $maxDailyMinutes) {
-                $diff = $totalPaidMinutes - $maxDailyMinutes;
-                $overtimeMinutes = max(0, $overtimeMinutes - $diff); // Reduce overtime first
-                $totalPaidMinutes = $regularMinutes + $overtimeMinutes;
-
-                if ($totalPaidMinutes > $maxDailyMinutes) { // If still over, reduce regular
-                    $regularMinutes = max(0, $regularMinutes - ($totalPaidMinutes - $maxDailyMinutes));
-                }
-            }
-        }
-
-        // Ensure no negative values after all calculations
-        $regularMinutes = max(0, $regularMinutes);
-        $overtimeMinutes = max(0, $overtimeMinutes);
-        $unpaidBreakMinutes = max(0, $unpaidBreakMinutes);
-
-
+public function calculatePaidHours($checkIn, $checkOut, $employeeProfile, $roleSchedule): array
+{
+    if (!$checkIn || !$checkOut || $checkIn->check_status === 'invalid' || $checkOut->check_status === 'invalid') {
         return [
-            'regular_minutes' => $regularMinutes,
-            'overtime_minutes' => $overtimeMinutes,
-            'unpaid_break_minutes' => $unpaidBreakMinutes,
+            'work_minutes' => 0,
+            'overtime_minutes' => 0,
+            'paid_minutes' => 0,
         ];
     }
+
+
+
+
+    // Handle time crossing midnight
+    $checkInTime = Carbon::parse($checkIn->check_time);
+    $checkOutTime = Carbon::parse($checkOut->check_time);
+    if ($checkOutTime->lessThan($checkInTime)) {
+        $checkOutTime->addDay();
+    }
+
+    $totalWorkMinutes = $checkInTime->diffInMinutes($checkOutTime);
+
+    // Apply late grace
+    $shiftStartTime = $checkInTime->copy()->startOfDay()->setTimeFromTimeString($roleSchedule->override_time_start ?? '08:00:00');
+    $graceStart = $shiftStartTime->copy()->addMinutes($roleSchedule->late_grace_minutes ?? 0);
+    if ($checkInTime->gt($graceStart)) {
+        $lateMinutes = $checkInTime->diffInMinutes($shiftStartTime);
+    } else {
+        $lateMinutes = 0;
+    }
+
+    // Apply early leave grace
+    $shiftEndTime = $checkInTime->copy()->startOfDay()->setTimeFromTimeString($roleSchedule->override_time_end ?? '17:00:00');
+    if ($shiftEndTime->lessThan($shiftStartTime)) {
+        $shiftEndTime->addDay(); // Overnight shift
+    }
+    $graceEnd = $shiftEndTime->copy()->subMinutes($roleSchedule->early_leave_grace_minutes ?? 0);
+    if ($checkOutTime->lt($graceEnd)) {
+        $earlyLeaveMinutes = $shiftEndTime->diffInMinutes($checkOutTime);
+    } else {
+        $earlyLeaveMinutes = 0;
+    }
+
+    // Subtract break time (if any)
+    $breakMinutes = 0;
+    if ($roleSchedule->break_rule) {
+        $breakMinutes = $roleSchedule->break_rule->total_break_minutes ?? 0;
+    }
+
+    // Final paid minutes
+    $paidMinutes = max($totalWorkMinutes - $breakMinutes - $lateMinutes - $earlyLeaveMinutes, 0);
+
+    // Overtime logic
+    $overtimeAfter = $roleSchedule->overtime_after_hours ? $roleSchedule->overtime_after_hours * 60 : null;
+    $maxOvertime = $roleSchedule->max_paid_overtime_hours ? $roleSchedule->max_paid_overtime_hours * 60 : null;
+    $maxDaily = $roleSchedule->max_daily_hours ? $roleSchedule->max_daily_hours * 60 : null;
+
+    $overtimeMinutes = 0;
+    if ($overtimeAfter && $paidMinutes > $overtimeAfter) {
+        $overtimeMinutes = $paidMinutes - $overtimeAfter;
+        if ($maxOvertime) {
+            $overtimeMinutes = min($overtimeMinutes, $maxOvertime);
+        }
+    }
+
+    // Enforce max daily cap
+    if ($maxDaily && $paidMinutes > $maxDaily) {
+        $paidMinutes = $maxDaily;
+    }
+
+    return [
+        'work_minutes' => $totalWorkMinutes,
+        'overtime_minutes' => $overtimeMinutes,
+        'paid_minutes' => $paidMinutes,
+    ];
+}
+
 
     /**
      * Helper method to get effective start and end times for a schedule,

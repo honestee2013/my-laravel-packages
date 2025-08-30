@@ -57,20 +57,20 @@ models:
           - nullable
 
 
-      created_by: 
+      created_by:
         type: string
         modifiers:
           nullable: true
         validation:
           - nullable
-    
+
 
       approved_by:
         type: string
         modifiers:
           nullable: true
         validation:
-          - nullable 
+          - nullable
 
       approved_at:
         type: datetime
@@ -79,7 +79,7 @@ models:
 
       paid_by:
         type: string
-        modifiers:  
+        modifiers:
           nullable: true
         validation:
           - nullable
@@ -87,13 +87,13 @@ models:
       paid_at:
         type: datetime
         modifiers:
-          nullable: true  
+          nullable: true
         validation:
           - nullable
 
-      cancelled_by:    
+      cancelled_by:
         type: string
-        modifiers:  
+        modifiers:
           nullable: true
         validation:
           - nullable
@@ -103,7 +103,7 @@ models:
         modifiers:
           nullable: true
         validation:
-          - nullable 
+          - nullable
 
 
       notes:
@@ -116,6 +116,15 @@ models:
         type: string
         modifiers:
           default: 'Yes'
+
+
+    relations:
+      payrollEmployees:
+        type: hasMany
+        model: App\Modules\Hr\Models\PayrollEmployee # Adjust namespace if needed
+        foreignKey: payroll_run_id
+        displayField: employee_id # Or appropriate display field
+
 
 
 
@@ -156,7 +165,7 @@ models:
           - status
           - notes
 
-      - title: Payroll Components 
+      - title: Payroll Components
         groupType: hr
         fields:
           #- allowances_included
@@ -167,12 +176,12 @@ models:
 
       - title: Attendance Exemptions
         groupType: hr
-        fields:  
+        fields:
           #- include_attendance_exempted
           #- include_attendance_check_only
           - attendance_options
 
-      - title: Audit Trails 
+      - title: Audit Trails
         groupType: hr
         fields:
           - created_by
@@ -204,40 +213,7 @@ models:
           - employeeDeductions
 
 
-    #relations:
-    #  roleAllowances:
-    #    type: hasMany
-    #    model: App\Modules\HR\Models\RoleAllowance # Adjust namespace if needed
-    #    foreignKey: payroll_run_id
-    #    displayField: name # Or appropriate display field
-    #  roleBonuses:
-    #    type: hasMany
-    #    model: App\Modules\HR\Models\RoleBonus # Adjust namespace if needed
-    #    foreignKey: payroll_run_id
-    #    displayField: name # Or appropriate display field
-    #  empployeeAllowances:
-    #    type: hasMany
-    #    model: App\Modules\HR\Models\EmployeeAllowance # Adjust namespace if needed
-    #    foreignKey: payroll_run_id
-    #    displayField: name # Or appropriate display field
-    #  empployeeBonuses:
-    #    type: hasMany
-    #    model: App\Modules\HR\Models\EmployeeBonus # Adjust namespace if needed
-    #    foreignKey: payroll_run_id
-    #    displayField: name # Or appropriate display field
-    #
-    #  roleDeductions:
-    #    type: hasMany
-    #    model: App\Modules\HR\Models\RoleDeduction
-    #    foreignKey: payroll_run_id
-    #    displayField: name # Or appropriate display field
-    #  employeeDeductions:
-    #    type: hasMany
-    #    model: App\Modules\HR\Models\EmployeeDeduction
-    #    foreignKey: payroll_run_id
-    #    displayField: name # Or appropriate display field  
 
-      
 
     sidebar:
       add: true
@@ -260,7 +236,93 @@ models:
     controls: all
     simpleActions: ['show', 'edit', 'delete']
 
-  
+
+    moreActions:
+      - title: Generate Payroll
+        icon: fas fa-cogs
+        updateModelField: true
+        fieldName: status
+        fieldValue: generated
+        actionName: generate_payroll
+        handleByEventHandlerOnly: true
+
+      - title: Approve Payroll
+        icon: fas fa-check-circle
+        updateModelField: true
+        fieldName: status
+        fieldValue: approved
+        actionName: approve_payroll
+        handleByEventHandlerOnly: true
+
+
+
+      - title: Process Payment
+        icon: fas fa-money-check-alt
+        updateModelField: true
+        fieldName: status
+        fieldValue: processed
+        actionName: process_payment
+        handleByEventHandlerOnly: true
+
+
+
+      - title: Cancel Payroll
+        icon: fas fa-ban
+        updateModelField: true
+        fieldName: status
+        fieldValue: cancelled
+        actionName: cancel_payroll
+        handleByEventHandlerOnly: true
+
+
+
+
+      - title: View Report
+        icon: fas fa-file-alt
+        route: reports.show
+        params:
+          modelName: PayrollRun
+          moduleName: Hr
+
+
+
+
+    isTransaction: true
+    dispatchEvents: true
+
+
+
+    report:
+      model: PayrollRun
+      itemsModel: PayrollEmployee
+      recordModel: PayrollRun
+
+      headerFields:
+        - title
+        - payroll_number
+        - from_date
+        - to_date
+        - status
+
+      summaryFields:
+        base_salary: Total Base Salary
+        total_allowances: Total Allowances
+        total_bonuses: Total Bonuses
+        total_deductions: Total Deductions
+        net_salary: Total Net Salary
+
+      signatories:
+        - label: Prepared By
+          field: created_by
+        - label: Approved By
+          field: approved_by
+
+      foreignKey: payroll_run_id
+
+
+
+
+
 
 
 
@@ -293,6 +355,7 @@ models:
         default: 0.00
         validation:
           - required|numeric|min:0
+
       total_bonuses:
         type: decimal
         modifiers:
@@ -300,6 +363,7 @@ models:
         default: 0.00
         validation:
           - required|numeric|min:0
+
       total_taxes:
         type: decimal
         modifiers:
@@ -307,6 +371,7 @@ models:
         default: 0.00
         validation:
           - required|numeric|min:0
+
       total_other_deductions:
         type: decimal
         modifiers:
@@ -322,12 +387,14 @@ models:
           precision: 12,2
         validation:
           - required|numeric|min:0
+
       total_deductions:
         type: decimal
         modifiers:
           precision: 12,2
         validation:
           - required|numeric|min:0
+
       net_salary:
         type: decimal
         modifiers:
@@ -340,11 +407,29 @@ models:
         modifiers:
           nullable: true
 
+      payroll_run_id:
+        type: select
+        foreign:
+          table: payroll_runs
+          column: id
+          onDelete: cascade
+        validation:
+          - nullable
+
+
+
+    relations:
+      payrollRun:
+        type: belongsTo
+        model: App\Modules\Hr\Models\PayrollRun # Adjust namespace if needed
+        foreignKey: payroll_number
+        displayField: title # Or appropriate display field
+
     hiddenFields:
-      onTable: []
-      onNewForm: []
-      onEditForm: []
-      onQuery: []
+      onTable: ['payroll_run_id']
+      onNewForm: ['payroll_run_id']
+      onEditForm: ['payroll_run_id']
+      onQuery: ['payroll_run_id']
 
     tab:
       label: Payroll Employees
@@ -391,6 +476,20 @@ models:
     includeSidebar: true
     controls: all
     simpleActions: ['show', 'edit', 'delete']
+
+
+
+    report:
+      model: PayrollEmployee
+      tableFields:
+        employee_id: Employee
+        base_salary: Base Salary
+        total_allowances: Allowances
+        total_bonuses: Bonuses
+        gross_salary: Gross
+        total_deductions: Deductions
+        net_salary: Net
+        comments: Comments
 
 
 
@@ -551,32 +650,32 @@ models:
     #relations:
     #  roleAllowances:
     #    type: hasMany
-    #    model: App\Modules\HR\Models\RoleAllowance # Adjust namespace if needed
+    #    model: App\Modules\Hr\Models\RoleAllowance # Adjust namespace if needed
     #    foreignKey: payroll_run_id
     #    displayField: name # Or appropriate display field
     #  roleBonuses:
     #    type: hasMany
-    #    model: App\Modules\HR\Models\RoleBonus # Adjust namespace if needed
+    #    model: App\Modules\Hr\Models\RoleBonus # Adjust namespace if needed
     #    foreignKey: payroll_run_id
     #    displayField: name # Or appropriate display field
     #  empployeeAllowances:
     #    type: hasMany
-    #    model: App\Modules\HR\Models\EmployeeAllowance # Adjust namespace if needed
+    #    model: App\Modules\Hr\Models\EmployeeAllowance # Adjust namespace if needed
     #    foreignKey: payroll_run_id
     #    displayField: name # Or appropriate display field
     #  empployeeBonuses:
     #    type: hasMany
-    #    model: App\Modules\HR\Models\EmployeeBonus # Adjust namespace if needed
+    #    model: App\Modules\Hr\Models\EmployeeBonus # Adjust namespace if needed
     #    foreignKey: payroll_run_id
     #    displayField: name # Or appropriate display field
     #
     #  roleDeductions:
     #    type: hasMany
-    #    model: App\Modules\HR\Models\RoleDeduction
+    #    model: App\Modules\Hr\Models\RoleDeduction
     #    foreignKey: payroll_run_id
     #    displayField: name # Or appropriate display field
     #  employeeDeductions:
     #    type: hasMany
-    #    model: App\Modules\HR\Models\EmployeeDeduction
+    #    model: App\Modules\Hr\Models\EmployeeDeduction
     #    foreignKey: payroll_run_id
-    #    displayField: name # Or appropriate display field 
+    #    displayField: name # Or appropriate display field

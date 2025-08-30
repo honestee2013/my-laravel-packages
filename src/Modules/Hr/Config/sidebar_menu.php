@@ -336,4 +336,10 @@ return array (
       ),
     ),
   ),
+  17 => 
+  array (
+    'title' => 'Departments',
+    'icon' => 'fas fa-users-cog',
+    'url' => 'hr/departments',
+  ),
 );

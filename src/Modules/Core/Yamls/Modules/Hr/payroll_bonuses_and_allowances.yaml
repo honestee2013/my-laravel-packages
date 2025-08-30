@@ -84,7 +84,7 @@ models:
     relations:
       payrollRun:
         type: belongsTo
-        model: App\Modules\HR\Models\PayrollRun
+        model: App\Modules\Hr\Models\PayrollRun
         foreignKey: payroll_run_id
         displayField: payroll_number # Or appropriate display field
         
@@ -96,7 +96,7 @@ models:
         
       allowanceType:
         type: belongsTo
-        model: App\Modules\HR\Models\AllowanceType
+        model: App\Modules\Hr\Models\AllowanceType
         foreignKey: allowance_type_id
         displayField: name
 
@@ -198,7 +198,7 @@ models:
     relations:
       payrollRun:
         type: belongsTo
-        model: App\Modules\HR\Models\PayrollRun
+        model: App\Modules\Hr\Models\PayrollRun
         foreignKey: payroll_run_id
         displayField: payroll_number # Or appropriate display field
         
@@ -210,7 +210,7 @@ models:
         
       bonusType:
         type: belongsTo
-        model: App\Modules\HR\Models\BonusType
+        model: App\Modules\Hr\Models\BonusType
         foreignKey: bonus_type_id
         displayField: name
 
@@ -312,7 +312,7 @@ models:
     relations:  
       payrollRun:
         type: belongsTo
-        model: App\Modules\HR\Models\PayrollRun
+        model: App\Modules\Hr\Models\PayrollRun
         foreignKey: payroll_run_id
         displayField: payroll_number # Or appropriate display field
         
@@ -324,7 +324,7 @@ models:
         
       allowanceType:
         type: belongsTo
-        model: App\Modules\HR\Models\AllowanceType
+        model: App\Modules\Hr\Models\AllowanceType
         foreignKey: allowance_type_id
         displayField: name
 
@@ -429,7 +429,7 @@ models:
     relations:
       payrollRun:
         type: belongsTo
-        model: App\Modules\HR\Models\PayrollRun
+        model: App\Modules\Hr\Models\PayrollRun
         foreignKey: payroll_run_id
         displayField: payroll_number # Or appropriate display field
 
@@ -441,7 +441,7 @@ models:
 
       bonusType:
         type: belongsTo
-        model: App\Modules\HR\Models\BonusType
+        model: App\Modules\Hr\Models\BonusType
         foreignKey: bonus_type_id
         displayField: name
 

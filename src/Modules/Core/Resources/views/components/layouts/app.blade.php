@@ -227,12 +227,12 @@
             border-radius: 0.5em;
             /* Adjust the radius value to control the roundness */
         }
-        
+
         .menu-item, .submenu {
           margin-top: 0.5em;
           margin-bottom: 0.5em;
         }
-        
+
 
 
 
@@ -247,7 +247,7 @@
             left: 80px;
             top: 0;
             background:  rgba(255, 255, 255, 0.9);
-            
+
             box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07) !important;
             border-radius: 0.3em;
             border: solid 0.1em rgba(170, 171, 174, 0.5);
@@ -267,7 +267,7 @@
 
 
 
-       
+
 
         /* Toggle button is fixed so it’s always visible */
         .toggle-btn {
@@ -307,7 +307,7 @@
           bottom: 0;
         }
 
-     
+
 
 
 
@@ -451,15 +451,18 @@
         </button>
 
 
-
-
+    @else
+        @php
+            header("Location: " . route('login'));
+            exit;
+        @endphp
     @endauth
 
 
     {{-- <script>
 
 
-  
+
 
 
     const sidebar    = document.getElementById('sidebar');
@@ -502,19 +505,19 @@
       sidebar.classList.remove('hidden', 'icons', 'full');
       sidebar.classList.add(states[currentStateIndex]);
 
-    
+
       // Set main content margin to exactly match sidebar width.
       const sWidth = getSidebarWidth();
       // content.style.marginLeft = sWidth + 'px';
-    
+
       // Position the toggle button near the right edge of the sidebar.
       toggleBtn.style.left = (sWidth > 0 ? sWidth : 5) + 'px';
-    
+
       // Set the toggle arrow icon.
       toggleIcon.className = (states[currentStateIndex] === 'hidden')
                              ? 'fas fa-chevron-right'
                              : 'fas fa-chevron-left';
-    
+
       // 🔽 NEW: Hide all expanded submenus if sidebar is not in 'full' state
       if (states[currentStateIndex] !== 'full') {
         document.querySelectorAll('.submenu.active').forEach(el => {
@@ -554,7 +557,7 @@
 
 
     }
-    
+
 
     // Sidebar menu data (with submenu support).
     const menuItems = [
@@ -582,7 +585,7 @@
         const menuDiv = createElem('div', 'menu-item');
         menuDiv.dataset.index = index;
         menuDiv.innerHTML = `<i class="fas ${item.icon}"></i><span class="menu-text">${item.text}</span>`;
-        
+
         // If the menu item has a submenu, attach it.
         if (item.submenu) {
           const submenuDiv = createElem('div', 'submenu');
@@ -600,7 +603,7 @@
           menuDiv.appendChild(submenuDiv);
         }
         sidebar.appendChild(menuDiv);
-        
+
         // Handle click events for submenu toggle.
         if (item.submenu) {
           menuDiv.addEventListener('click', (e) => {

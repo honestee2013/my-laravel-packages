@@ -3,6 +3,7 @@
 namespace App\Modules\Access\Models;
 
 use App\Modules\Access\Models\Permission;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
@@ -15,6 +16,7 @@ class Role extends SpatieRole
 {
 
     use HasEditableTraits;
+    use HasFactory;
 
     /**
      * The database table used by the model.
@@ -28,9 +30,9 @@ class Role extends SpatieRole
     *
     * @var string
     */
-    protected $primaryKey = 'id';
+    /*protected $primaryKey = 'id';
     protected $keyType = 'string';
-    public $incrementing = false;
+    public $incrementing = false;*/
 
 
     /**
@@ -75,6 +77,13 @@ class Role extends SpatieRole
             'permission_id'
         );
     }
+
+
+    protected static function newFactory()
+    {
+        return \App\Modules\Access\Database\Factories\RoleFactory::new();
+    }
+
 
 
 

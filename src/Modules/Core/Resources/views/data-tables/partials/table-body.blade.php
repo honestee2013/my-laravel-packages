@@ -203,9 +203,9 @@
                                     @foreach ($actions as $action)
                                         <li class="mb-2">
                                             @if(isset($action['route']))
-                                                <a class="dropdown-item border-radius-md" wire:click="openLink('{{ $action['route'] }}', {{ $row->id }})">
-                                            @elseif(isset($action['updateModelField']) && isset($action['fieldName']) && isset($action['fieldValue']))
-                                                <a class="dropdown-item border-radius-md" onclick="Livewire.dispatch('updateModelFieldEvent',['{{$row->id}}', '{{$action['fieldName']}}', '{{$action['fieldValue']}}'])">
+                                               <a class="dropdown-item border-radius-md" wire:click="openLink('{{ $action['route'] }}', {{ json_encode(array_merge($action['params']?? [], ['id' => $row->id])) }})">
+                                            @elseif(isset($action['updateModelField']) && isset($action['fieldName']) && isset($action['fieldValue']) && isset($action['actionName']))
+                                                <a class="dropdown-item border-radius-md" onclick="Livewire.dispatch('updateModelFieldEvent',['{{$row->id}}', '{{$action['fieldName']}}', '{{$action['fieldValue']}}', '{{$action['actionName']}}', '{{$action['handleByEventHandlerOnly']}}'])">
                                             @else
                                                 <a class="dropdown-item border-radius-md" href="javascript:void(0)">
                                             @endif

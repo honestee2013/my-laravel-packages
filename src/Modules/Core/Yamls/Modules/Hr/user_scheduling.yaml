@@ -127,7 +127,7 @@ models:
         displayField: employee_id # Or appropriate display field
       workDay:
         type: belongsTo
-        model: App\Modules\HR\Models\WorkDay
+        model: App\Modules\Hr\Models\WorkDay
         foreignKey: work_day_id
         displayField: day_name
 

@@ -87,13 +87,13 @@ models:
         displayField: name
       department:
         type: belongsTo
-        model: App\Modules\HR\Models\Department # Adjust namespace if needed
+        model: App\Modules\Hr\Models\Department # Adjust namespace if needed
         foreignKey: department_id
         displayField: name
 
       jobTitle:
         type: belongsTo
-        model: App\Modules\HR\Models\JobTitle # Adjust namespace if needed
+        model: App\Modules\Hr\Models\JobTitle # Adjust namespace if needed
         foreignKey: job_title_id
         displayField: title
 

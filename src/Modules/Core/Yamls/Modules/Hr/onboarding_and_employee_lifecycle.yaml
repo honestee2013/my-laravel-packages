@@ -40,7 +40,7 @@ models:
     #relations:
     #  userOnboardingStatuses:
     #    type: hasMany
-    #    model: App\Modules\HR\Models\UserOnboardingStatus
+    #    model: App\Modules\Hr\Models\UserOnboardingStatus
     #    foreignKey: user_onboarding_status_id
 
     sidebar:
@@ -137,7 +137,7 @@ models:
 
       onboardingTask:
         type: belongsTo
-        model: App\Modules\HR\Models\OnboardingTask
+        model: App\Modules\Hr\Models\OnboardingTask
         foreignKey: onboarding_task_id
         displayField: name
 

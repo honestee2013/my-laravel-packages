@@ -86,7 +86,7 @@ models:
     relations:
       payrollRun:
         type: belongsTo
-        model: App\Modules\HR\Models\PayrollRun
+        model: App\Modules\Hr\Models\PayrollRun
         foreignKey: payroll_run_id
         displayField: payroll_number # Or appropriate display field
 
@@ -98,7 +98,7 @@ models:
         
       taxType:
         type: belongsTo
-        model: App\Modules\HR\Models\TaxType # Adjust namespace if needed
+        model: App\Modules\Hr\Models\TaxType # Adjust namespace if needed
         foreignKey: tax_type_id
         displayField: name # Or appropriate display field
 
@@ -201,7 +201,7 @@ models:
     relations:
       payrollRun:
         type: belongsTo
-        model: App\Modules\HR\Models\PayrollRun
+        model: App\Modules\Hr\Models\PayrollRun
         foreignKey: payroll_run_id
         displayField: payroll_number # Or appropriate display field
 
@@ -213,7 +213,7 @@ models:
 
       deductionType:
         type: belongsTo
-        model: App\Modules\HR\Models\DeductionType
+        model: App\Modules\Hr\Models\DeductionType
         foreignKey: deduction_type_id
         displayField: name  
 
@@ -334,7 +334,7 @@ models:
     relations:
       payrollRun:
         type: belongsTo
-        model: App\Modules\HR\Models\PayrollRun
+        model: App\Modules\Hr\Models\PayrollRun
         foreignKey: payroll_run_id
         displayField: payroll_number # Or appropriate display field
 
@@ -346,7 +346,7 @@ models:
         
       taxType:
         type: belongsTo
-        model: App\Modules\HR\Models\TaxType # Adjust namespace if needed
+        model: App\Modules\Hr\Models\TaxType # Adjust namespace if needed
         foreignKey: tax_type_id
         displayField: name # Or appropriate display field
 
@@ -451,7 +451,7 @@ models:
     relations:
       payrollRun:
         type: belongsTo
-        model: App\Modules\HR\Models\PayrollRun
+        model: App\Modules\Hr\Models\PayrollRun
         foreignKey: payroll_run_id
         displayField: payroll_number # Or appropriate display field
         
@@ -463,7 +463,7 @@ models:
 
       deductionType:
         type: belongsTo
-        model: App\Modules\HR\Models\DeductionType
+        model: App\Modules\Hr\Models\DeductionType
         foreignKey: deduction_type_id
         displayField: name
 

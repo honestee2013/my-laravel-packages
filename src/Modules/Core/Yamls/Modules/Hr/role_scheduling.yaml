@@ -16,6 +16,7 @@ models:
           onDelete: cascade
         validation:
           - required
+
       shift_id:
         type: select
         foreign:
@@ -24,6 +25,7 @@ models:
           onDelete: cascade
         validation:
           - required
+
       day_of_week_id:
         type: select
         foreign:
@@ -32,15 +34,17 @@ models:
           onDelete: cascade
         validation:
           - required
-      
+
       override_time_start:
         type: timepicker
         modifiers:
           nullable: true
+
       override_time_end:
         type: timepicker
         modifiers:
           nullable: true
+
       overtime_after_hours:
         type: decimal
         modifiers:
@@ -51,6 +55,14 @@ models:
 
 
       max_paid_overtime_hours:
+        type: decimal
+        modifiers:
+          precision: 4,2
+          nullable: true
+        validation:
+          - nullable|numeric|min:0
+
+      overtime_rate_multiplier:
         type: decimal
         modifiers:
           precision: 4,2
@@ -162,17 +174,17 @@ models:
         displayField: name # Or appropriate display field
       shift:
         type: belongsTo
-        model: App\Modules\HR\Models\Shift # Adjust namespace if needed
+        model: App\Modules\Hr\Models\Shift # Adjust namespace if needed
         foreignKey: shift_id
         displayField: name # Or appropriate display field
       dayOfWeek:
         type: belongsTo
-        model: App\Modules\HR\Models\DayOfWeek # Assuming you create this model
+        model: App\Modules\Hr\Models\DayOfWeek # Assuming you create this model
         foreignKey: day_of_week_id
         displayField: name # Or appropriate display field like 'day_name'
       breakRule:
         type: belongsTo
-        model: App\Modules\HR\Models\BreakRule # Assuming this model exists
+        model: App\Modules\Hr\Models\BreakRule # Assuming this model exists
         foreignKey: break_rule_id
         displayField: name # Or appropriate display field
 
@@ -188,7 +200,7 @@ models:
           iconClasses: fas fa-business-time # Or a more suitable icon
         - title: User Schedules
           url: user-schedules
-        
+
 
 
 
@@ -198,6 +210,20 @@ models:
     includeSidebar: true
     controls: all
     simpleActions: ['show', 'edit', 'delete']
+
+
+    # indexes:
+    #   - role_id
+    #   - shift_id
+
+    # uniqueIndexes:
+    #   - email
+    #   - phone
+
+    # compoundIndexes:
+    #   - [employee_id, attendance_date]
+    #   - [shift_id, role_id]
+
 
 
 
@@ -216,10 +242,12 @@ UserSchedule:
           onDelete: cascade
         validation:
           - required
+
       start_time:
         type: timepicker
         modifiers:
           nullable: true
+          
       end_time:
         type: timepicker
         modifiers:
@@ -258,7 +286,7 @@ UserSchedule:
 
     sidebar:
       add: false
-      title: Manage User Schedules 
+      title: Manage User Schedules
       iconClasses: fas fa-user-clock # Or a more suitable icon
       submenu:
         - title: User Schedules
@@ -335,7 +363,7 @@ UserSchedule:
   #      displayField: name # Or appropriate display field
   #    workDay:
   #      type: belongsTo
-  #      model: App\Modules\HR\Models\WorkDay
+  #      model: App\Modules\Hr\Models\WorkDay
   #      foreignKey: work_day_id
   #      displayField: day_name
 #

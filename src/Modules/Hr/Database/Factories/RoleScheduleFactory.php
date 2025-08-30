@@ -8,11 +8,12 @@ use App\Modules\Hr\Models\Shift;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 use App\Modules\Hr\Models\RoleSchedule;
-use App\Modules\Hr\Models\Role;
+use App\Modules\Access\Models\Role;
 use App\Modules\Hr\Models\DayOfWeek;
 use App\Modules\Hr\Models\BreakRule;
 
 use Carbon\Carbon;
+use Illuminate\Support\Testing\Fakes\Fake;
 
 class RoleScheduleFactory extends Factory
 {
@@ -21,13 +22,12 @@ class RoleScheduleFactory extends Factory
     public function definition(): array
     {
         return [
+            'name' => $this->faker->unique()->word . ' Schedule',
             'role_id' => Role::factory(),
             'shift_id' => Shift::factory(),
             'day_of_week_id' => DayOfWeek::factory(), // Or specific dayOfWeek()
             'override_time_start' => null,
             'override_time_end' => null,
-            'overtime_start' => null,
-            'overtime_end' => null,
             'overtime_after_hours' => null,
             'max_paid_overtime_hours' => null,
             'max_daily_hours' => null,

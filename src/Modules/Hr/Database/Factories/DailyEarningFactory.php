@@ -17,7 +17,7 @@ class DailyEarningFactory extends Factory
     public function definition(): array
     {
         return [
-            'employee_id' => Employee::factory(),
+            'employee_id' => 'EMP-' . now()->format('Y') . '-' . str_pad($this->faker->unique()->numberBetween(1, 999), 3, '0', STR_PAD_LEFT),
             'work_date' => $this->faker->date(),
             'hours_worked' => 0.00,
             'regular_hours' => 0.00,

@@ -41,7 +41,7 @@ models:
     #relations:
     #  employeeBonuses:
     #    type: hasMany
-    #    model: App\Modules\HR\Models\EmployeeBonus
+    #    model: App\Modules\Hr\Models\EmployeeBonus
     #    foreignKey: bonus_type_id
 
     sidebar:
@@ -110,7 +110,7 @@ models:
     #relations:
     #  userAllowances:
     #    type: hasMany
-    #    model: App\Modules\HR\Models\UserAllowance
+    #    model: App\Modules\Hr\Models\UserAllowance
     #    foreignKey: allowance_type_id
 
     sidebar:
@@ -283,7 +283,7 @@ models:
     #relations:
     #  userDeductions:
     #    type: hasMany
-    #    model: App\Modules\HR\Models\UserDeduction
+    #    model: App\Modules\Hr\Models\UserDeduction
     #    foreignKey: deduction_type_id
 
     sidebar:

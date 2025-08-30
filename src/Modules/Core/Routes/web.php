@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Modules\Access\Http\Livewire\AccessControls\AccessControlManager;
+use App\Modules\Core\Http\Controllers\ReportController;
 
 
 Route::get('/{module}/{view}', function ($module, $view) {
@@ -16,7 +17,6 @@ Route::get('/{module}/{view}', function ($module, $view) {
     if (!in_array($module, $allowedModules)) {
         abort(404, 'Invalid module');
     }
-
 
 
     // Chech if only admin can access this view. If the user is not admin do not proceed
@@ -53,7 +53,6 @@ Route::get('/{module}/{view}', function ($module, $view) {
 
     abort(404, 'View not found');
 });
-
 
 
 

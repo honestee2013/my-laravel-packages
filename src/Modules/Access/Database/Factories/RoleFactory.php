@@ -1,14 +1,10 @@
 <?php
 
-namespace App\Modules\Hr\Database\Factories;
-
-
+namespace App\Modules\Access\Database\Factories;
 
 use App\Modules\Access\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
-
-
-
+use Illuminate\Support\Str;
 
 class RoleFactory extends Factory
 {
@@ -17,8 +13,12 @@ class RoleFactory extends Factory
     public function definition(): array
     {
         return [
+            //'id' => (string) Str::uuid(), // Important for UUID-based primary keys
             'name' => $this->faker->unique()->jobTitle,
             'description' => $this->faker->sentence,
+            'guard_name' => 'web', // Required by Spatie\Role
+            //'editable' => true,
+            //'team_id' => null,
         ];
     }
 }

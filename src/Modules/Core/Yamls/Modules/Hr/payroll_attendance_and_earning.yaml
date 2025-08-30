@@ -16,6 +16,8 @@ models:
         validation:
           - required|unique:employee_profiles,employee_id
 
+
+
       attendance_type:
         type: string
         validation:
@@ -30,10 +32,12 @@ models:
         type: timepicker
         modifiers:
           nullable: true
+
       check_status:
         type: string
         modifiers:
           nullable: true
+
       minutes_difference:
         type: integer
         default: 0
@@ -52,32 +56,48 @@ models:
         type: string
         validation:
           - required
+
       latitude:
         type: integer
         modifiers:
           nullable: true
           precision: 10,6 # Common precision for latitude/longitude
+
       longitude:
         type: integer
         modifiers:
           nullable: true
           precision: 10,6 # Common precision for latitude/longitude
-      sync_status:
+
+
+      employee_profile_id:
         type: select
-        options: pending, success, failed # Example statuses
-        default: pending
-      sync_attempts:
-        type: integer
-        default: 0
+        label: Employee Profile ID
+        foreign:
+          table: employee_profiles
+          column: id
+          onDelete: cascade
         validation:
-          - required|integer|min:0
+          - nullable
+
+
+      # sync_status:
+      #   type: select
+      #   options: pending, success, failed # Example statuses
+      #   default: pending
+      #
+      # sync_attempts:
+      #   type: integer
+      #   default: 0
+      #   validation:
+      #     - required|integer|min:0
 
 
 
     hiddenFields:
-      onTable: []
-      onNewForm: []
-      onEditForm: []
+      onTable: ["employee_profile_id"]
+      onNewForm: ["employee_profile_id"]
+      onEditForm: ["employee_profile_id"]
       onQuery: []
 
     tab:
@@ -152,6 +172,7 @@ models:
         label: Employee ID
         validation:
           - required
+
       work_date:
         type: datepicker
         validation:
@@ -203,10 +224,21 @@ models:
           nullable: true
 
 
+      employee_profile_id:
+        type: select
+        label: Employee Profile ID
+        foreign:
+          table: employee_profiles
+          column: id
+          onDelete: cascade
+        validation:
+          - nullable
+
+
     hiddenFields:
-      onTable: []
-      onNewForm: []
-      onEditForm: []
+      onTable: ["employee_profile_id"]
+      onNewForm: ["employee_profile_id"]
+      onEditForm: ["employee_profile_id"]
       onQuery: []
 
     tab:
@@ -255,5 +287,25 @@ models:
     includeSidebar: true
     controls: all
     simpleActions: ['show', 'edit', 'delete']
+
+
+
+
+# $table->index(['employee_id', 'attendance_date']); // For daily_attendances
+# $table->index(['employee_id', 'work_date']);       // For daily_earnings
+# $table->index(['role_id', 'day_of_week_id']);      // For role_schedules
+
+
+# // In daily_attendances
+# $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->nullOnDelete();
+# // In daily_earnings
+# $table->foreignId('employee_id')->constrained('employees', 'id')->cascadeOnDelete();
+
+# // Prevent duplicate daily earnings records on on Daily Earnings table
+# $table->unique(['employee_id', 'work_date']);
+
+
+# // on daily_attendances
+# $table->string('clock_method')->nullable(); // 'face', 'qr', 'manual', etc.
 
 

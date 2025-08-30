@@ -47,6 +47,10 @@ class AttendanceService
                 throw new InvalidArgumentException("Employee with ID {$employeeId} not found.");
             }
 
+            if (!isset($data['attendance_type']) || !in_array($data['attendance_type'], ['check-in', 'check-out'])) {
+                throw new InvalidArgumentException("Invalid attendance type.");
+            }
+
 
             // Create the attendance record
             $attendance = DailyAttendance::create([
@@ -245,6 +249,20 @@ class AttendanceService
             default => null,
         };
 
+        // Check for overtime if applicable
+        if (
+            isset($roleSchedule?->overtime_after_hours) &&
+            $roleSchedule->overtime_after_hours > 0
+        ) {
+            $overtimeThreshold = $scheduledEnd->copy()->startOfDay()->addMinutes($roleSchedule->overtime_after_hours * 60);
+
+            if ($actualCheckOut->greaterThan($overtimeThreshold)) {
+                $status = 'overtime';
+            }
+        }
+
+
+
         $checkOut->update([
             'check_status' => $status,
             'minutes_difference' => $difference,
@@ -284,19 +302,26 @@ class AttendanceService
 
         // Determine the work_date for aggregation (important for overnight shifts)
         $workDate = $this->determineShiftWorkDate(Carbon::parse($checkIn->attendance_time), $employeeProfile->shift); // Still relies on shift for work_date logic
-
         // Use the PayrollCalculatorService to get paid minutes
         $calculatedHours = $this->payrollCalculator->calculatePaidHours($checkIn, $checkout, $employeeProfile, $roleSchedule);
+
 
         $regularMinutes = $calculatedHours['regular_minutes'];
         $overtimeMinutes = $calculatedHours['overtime_minutes'];
 
+
+        $hourlyRate = $employeeProfile->hourly_rate ?? 100;
+        $overtimeRateMultiplier = 1; //this should be configurable
+        if (!$roleSchedule?->overtime_after_hours) {
+            $overtimeMinutes = 0;
+        } else {
+            $overtimeRateMultiplier = $roleSchedule->overtimeRateMultiplier? $roleSchedule->overtimeRateMultiplier: 1; //this should be configurable
+        }
+
+
         $regularHours = round($regularMinutes / 60, 2);
         $overtimeHours = round($overtimeMinutes / 60, 2);
         $totalPaidHours = $regularHours + $overtimeHours;
-
-        $hourlyRate = $employeeProfile->hourly_rate ?? 100;
-        $overtimeRateMultiplier = 1.5;
 
         $regularAmount = $regularHours * $hourlyRate;
         $overtimeAmount = $overtimeHours * ($hourlyRate * $overtimeRateMultiplier);
@@ -312,8 +337,13 @@ class AttendanceService
         $earning->overtime_hours = ($earning->overtime_hours ?? 0) + $overtimeHours;
         $earning->total_hours = ($earning->total_hours ?? 0) + $totalPaidHours;
 
-        if (!$roleSchedule) // Handle overtime by default when roleSchedule is not configure by admin
-            $earning = $this->adjustOverHours($earning, $employeeId);
+
+        if (!$roleSchedule?->overtime_after_hours) {
+            // Handle overtime by default when roleSchedule is not configure by admin
+            // $earning = $this->adjustOverHours($earning, $employeeId);
+        }
+
+
 
         $earning->regular_amount = ($earning->regular_amount ?? 0) + $regularAmount;
         $earning->overtime_amount = ($earning->overtime_amount ?? 0) + $overtimeAmount;

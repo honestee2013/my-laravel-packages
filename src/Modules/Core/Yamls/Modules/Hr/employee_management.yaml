@@ -12,14 +12,20 @@ models:
         validation:
           - required|unique:employee_profiles,employee_id
 
-      user_id:
-        type: select
-        foreign:
-          table: users
-          column: id
-          onDelete: cascade
+      full_name :
+        type: string
         validation:
-          - required|unique:basic_infos,user_id
+          - required|string|max:255
+
+
+      #user_id:
+      #  type: select
+      #  foreign:
+      #    table: users
+      #    column: id
+      #    onDelete: cascade
+      #  validation:
+      #    - required|unique:basic_infos,user_id
 
       department:
         type: string
@@ -40,6 +46,7 @@ models:
         validation:
           - required|int
 
+
       employee_profile_id:
         type: select
         label: Reporting Manager ID
@@ -58,7 +65,7 @@ models:
           column: id
           onDelete: set null
         modifiers:
-          nullable: true 
+          nullable: true
         validation:
           - required
 
@@ -72,7 +79,7 @@ models:
           onDelete: cascade
         validation:
           - required
-          
+
 
 
 
@@ -92,7 +99,7 @@ models:
           default: 0.00
           nullable: true
         validation:
-          - required|decimal
+          - required
 
 
       work_location:
@@ -106,7 +113,7 @@ models:
           nullable: true
         validation:
           - required|string|max:255
-          
+
       termination_date:
         type: datepicker
         modifiers:
@@ -115,11 +122,11 @@ models:
 
       notes:
         type: textarea
-        label: Notes  
+        label: Notes
         modifiers:
           nullable: true
         validation:
-          - nullable      
+          - nullable
 
 
 
@@ -148,6 +155,7 @@ models:
           - role_id
           - shift_id
           - employment_type
+          - hourly_rate
           - joining_date
           - termination_date
 
@@ -196,7 +204,7 @@ models:
     sidebar:
       add: true
       groupTitle: Employee Management
-      title: Employee Details 
+      title: Employee Details
       iconClasses: fas fa-id-card-alt # Or a more suitable icon
       url: employee-profiles
       submenu:
@@ -206,13 +214,13 @@ models:
           url: employee-documents
         - title: Job Titles
           url: job-titles
-      
+
     iconClasses: fas fa-briefcase # Or a more suitable icon
     includeHeader: false
     includeFooter: false
     includeSidebar: true
     controls: all
-    
+
     simpleActions: ['show', 'edit', 'delete']
 
     moreActions:
@@ -266,7 +274,7 @@ models:
 
       notes:
         type: textarea
-        label: Notes  
+        label: Notes
         modifiers:
           nullable: true
         validation:
@@ -287,7 +295,7 @@ models:
       pageTitle: Employee Documents
       view: employee-documents
       url: hr/employee-documents
-      
+
 
     fieldGroups:
       - title: Document Information
@@ -318,7 +326,6 @@ models:
     includeSidebar: true
     controls: all
     simpleActions: ['show', 'edit', 'delete']
-
 
 
 
@@ -375,6 +382,73 @@ models:
     controls: all
     simpleActions: ['show', 'edit', 'delete']
 
+
+
+
+  Department:
+    module: hr
+    fields:
+      name:
+        type: string
+        validation:
+          - required|string|max:255
+        label: Department
+
+      company_id:
+        type: select
+        foreign:
+          table: companies
+          column: id
+          onDelete: cascade
+        validation:
+          - required|int
+
+      description:
+        type: textarea
+        modifiers:
+          nullable: true
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    #tab:
+    #  label: Departments
+    #  group: departments-management
+    #  id: departments
+    #  parentPageTitle: Departments Management
+    #  pageTitle: Departments Overview
+    #  view: departments
+    #  url: enterprise/departments
+
+    fieldGroups:
+      - title: Department Information
+        groupType: hr
+        fields:
+          - name
+          - company_id
+          - description
+
+    relations:
+      company:
+        type: belongsTo
+        model: App\Modules\Organization\Models\Company # Updated model namespace
+        foreignKey: company_id
+        displayField: name
+
+    sidebar:
+      add: false
+      title: Departments
+      iconClasses: fas fa-sitemap # Or a more suitable icon
+
+    iconClasses: fas fa-users-cog # Or a more suitable icon
+    includeHeader: false
+    includeFooter: false
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
 
 
 

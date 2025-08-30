@@ -13,6 +13,15 @@
 
     <div class="row g-5 p-5 ">
         @include('core.views::module-menu-icon', [
+            'icon' => 'fas fa-users',
+            'title' => 'Human Resource',
+            'url' => '/hr/dashboard',
+            ]
+        )
+
+
+
+        @include('core.views::module-menu-icon', [
             'icon' => 'fas fa-key',
             'title' => 'Access Control',
             'url' => '/access/dashboard',
@@ -21,11 +30,13 @@
 
 
         @include('core.views::module-menu-icon', [
-            'icon' => 'fas fa-users',
+            'icon' => 'fas fa-user-cog',
             'title' => 'User Management',
             'url' => '/user/dashboard',
             ]
         )
+
+
 
 
         @include('core.views::module-menu-icon', [
@@ -45,6 +56,7 @@
         )
 
 
+{{--
 
         @include('core.views::module-menu-icon', [
             'icon' => 'fas fa-warehouse',
@@ -69,7 +81,7 @@
             ]
         )
 
-
+--}}
 
 
     </div>

@@ -73,6 +73,13 @@ models:
     simpleActions: ['show', 'edit', 'delete']
 
 
+    traits:
+      HasDisplayName: QuickerFaster\CodeGen\Traits\GUI\HasDisplayName
+      HasEditableTraits: App\Modules\Core\Traits\HasEditableTraits
+
+
+
+
 
 
 

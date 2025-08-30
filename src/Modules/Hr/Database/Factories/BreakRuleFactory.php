@@ -6,8 +6,8 @@ namespace App\Modules\Hr\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Models\BreakRule;
-use App\Module\Hr\Models\ComplianceStandard; // If you have this model
+use App\Modules\Hr\Models\BreakRule;
+use App\Modules\Hr\Models\ComplianceStandard; // If you have this model
 
 
 class BreakRuleFactory extends Factory
@@ -17,6 +17,7 @@ class BreakRuleFactory extends Factory
     public function definition(): array
     {
         return [
+            'name' => $this->faker->randomElement(['Standard Break', 'Extended Break', 'Short Break']),
             'after_hours' => $this->faker->randomElement([4.00, 5.00, 6.00]),
             'min_shift_minutes' => $this->faker->randomElement([240, 300, 360]), // 4, 5, 6 hours
             'break_duration_minutes' => $this->faker->randomElement([15, 30, 45, 60]),

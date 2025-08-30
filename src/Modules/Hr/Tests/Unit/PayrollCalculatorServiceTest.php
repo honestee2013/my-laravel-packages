@@ -9,7 +9,7 @@ use App\Modules\Hr\Services\PayrollCalculatorService;
 use App\Modules\Hr\Models\DailyAttendance;
 use App\Modules\Hr\Models\EmployeeProfile;
 use App\Modules\Hr\Models\Shift;
-use App\Modules\Hr\Models\Role;
+use App\Modules\Access\Models\Role;
 use App\Modules\Hr\Models\DayOfWeek;
 use App\Modules\Hr\Models\BreakRule;
 use App\Modules\Hr\Models\RoleSchedule;
@@ -41,6 +41,8 @@ class PayrollCalculatorServiceTest extends TestCase
     /** @test */
     public function it_calculates_regular_hours_without_breaks_or_overtime()
     {
+
+
         $employee = EmployeeProfile::factory()->create();
         $role = Role::factory()->create();
         $shift = Shift::factory()->dayShift()->create(); // 09:00-17:00 (8 hours)
@@ -248,3 +250,4 @@ class PayrollCalculatorServiceTest extends TestCase
     // - Grace periods (though validated in AttendanceService, ensure they don't break calculation here if times are exact)
     // - Edge cases around midnight, 0 hours worked, very short shifts.
 }
+

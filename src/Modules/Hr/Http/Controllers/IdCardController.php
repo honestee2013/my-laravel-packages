@@ -18,16 +18,17 @@ class IdCardController extends Controller
 
 
 
-    public function showEmployeeIdCard(Request $request)
+    public function showEmployeeIdCard($id)
     {
-        $userId = $request->query('employeeprofile');
+
 
         // Authorization check (very important)
         // $this->authorize('viewIdCard', User::find($userId)); // optional but recommended
 
         $employee = EmployeeProfile::with('user')
-                                    ->where('user_id', $userId)
+                                    ->where('user_id', $id)
                                     ->first();
+
 
         if (!$employee) {
             return redirect()->back()->with('error', 'Employee profile not found.');
@@ -37,7 +38,7 @@ class IdCardController extends Controller
             'employee_id' => $employee->employee_id,
         ]));*/
 
-        $qrCodeSvg = QrCode::size(140)->generate($userId);
+        $qrCodeSvg = QrCode::size(140)->generate($id);
 
         return view('hr.views::id_card.show', compact('employee', 'qrCodeSvg'));
     }
@@ -45,14 +46,12 @@ class IdCardController extends Controller
 
 
 
-    public function downloadEmployeeIdCard(Request $request)
+    public function downloadEmployeeIdCard($id)
     {
 
 
-        $userId = $request->query('employeeprofile');
-        $userId = Auth::id();
         $employee = EmployeeProfile::with('user')
-                                    ->where('user_id', $userId)
+                                    ->where('user_id', $id)
                                     ->first();
 
         if (!$employee) {
@@ -66,7 +65,7 @@ class IdCardController extends Controller
             //'timestamp' => now()->timestamp,
         ]);*/
 
-        $qrCodeData = $userId;
+        $qrCodeData = $id;
 
         // 1. Generate QR code as SVG (this doesn't require Imagick)
         $qrCodeSvgString = QrCode::size(140)->margin(1)->generate($qrCodeData); // Default format is SVG

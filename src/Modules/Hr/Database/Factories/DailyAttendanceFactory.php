@@ -6,8 +6,8 @@ namespace App\Modules\Hr\Database\Factories;
 use App\Modules\Hr\Models\Shift;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Module\Hr\Models\DailyAttendance;
-use App\Module\Hr\Models\Employee;
+use App\Modules\Hr\Models\DailyAttendance;
+use App\Modules\Hr\Models\Employee;
 
 use Carbon\Carbon;
 
@@ -21,7 +21,7 @@ class DailyAttendanceFactory extends Factory
     {
         $attendanceTime = $this->faker->dateTimeBetween('-1 week', 'now');
         return [
-            'employee_id' => Employee::factory(),
+            'employee_id' => 'EMP-' . now()->format('Y') . '-' . str_pad($this->faker->unique()->numberBetween(1, 999), 3, '0', STR_PAD_LEFT),
             'attendance_time' => $attendanceTime,
             'attendance_type' => $this->faker->randomElement(['check-in', 'check-out']),
             'device_id' => $this->faker->uuid,
@@ -30,7 +30,7 @@ class DailyAttendanceFactory extends Factory
             'sync_status' => 'synced',
             'sync_attempts' => 1,
             'attendance_date' => Carbon::parse($attendanceTime)->toDateString(),
-            'checkin_id' => null,
+            // 'checkin_id' => null,
             'scheduled_start' => null,
             'scheduled_end' => null,
             'check_status' => null,

@@ -46,7 +46,7 @@ models:
     relations:
       userReviews:
         type: hasMany
-        model: App\Modules\HR\Models\UserReview
+        model: App\Modules\Hr\Models\UserReview
         foreignKey: review_id
 
     sidebar:
@@ -148,7 +148,7 @@ models:
     relations:
       performanceReview:
         type: belongsTo
-        model: App\Modules\HR\Models\PerformanceReview
+        model: App\Modules\Hr\Models\PerformanceReview
         foreignKey: review_id
         displayField: name
       employeeProfile:

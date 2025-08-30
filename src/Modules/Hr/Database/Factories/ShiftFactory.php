@@ -5,6 +5,7 @@ namespace App\Modules\Hr\Database\Factories;
 
 
 use App\Modules\Hr\Models\Shift;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 
@@ -25,6 +26,8 @@ class ShiftFactory extends Factory
             'is_overnight' => $isOvernight,
             'is_active' => true,
         ];
+
+      
     }
 
     public function dayShift(): Factory

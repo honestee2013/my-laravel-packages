@@ -109,7 +109,7 @@ models:
     relations:
       complianceStandard:
         type: belongsTo
-        model: App\Modules\HR\Models\ComplianceStandard # Adjust namespace if needed
+        model: App\Modules\Hr\Models\ComplianceStandard # Adjust namespace if needed
         foreignKey: compliance_standard_id
         displayField: name # Or a suitable display field for your ComplianceStandard model
 
@@ -311,7 +311,7 @@ models:
     relations:
       breakRules:
         type: hasMany
-        model: App\Modules\HR\Models\BreakRule # Assuming BreakRule uses this foreign key
+        model: App\Modules\Hr\Models\BreakRule # Assuming BreakRule uses this foreign key
         foreignKey: compliance_standard_id
 
     sidebar:

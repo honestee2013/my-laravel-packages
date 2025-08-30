@@ -18,6 +18,16 @@ Route::group([
 
     Route::get('user/sync', [\App\Modules\Hr\Http\Controllers\UserSyncController::class, 'syncUser']);
 
+
+
+Route::middleware('auth:sanctum')->get('/test', function (Request $request) {
+    return response()->json(['user' => $request->user()]);
+});
+
+
+
+
+
 });
 
 
