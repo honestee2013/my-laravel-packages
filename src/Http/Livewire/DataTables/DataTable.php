@@ -215,11 +215,12 @@ class DataTable extends Component
 
 
     // Redirect to the link
-    public function openLink($route, $id)
+    public function openLink($routeName, $params = [])
     {
-        $modelName = Str::singular(strtolower($this->modelName));
-        return redirect()->route($route, [$modelName => $id]);
+        return redirect()->route($routeName, $params);
     }
+
+
 
 
 

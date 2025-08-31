@@ -14,23 +14,13 @@ class DataTableFormEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-     public $oldRecord;
-     public $newRecord;
-     public $eventName;
-     public $model;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param array $oldRecord
-     * @param array $newRecord
-     */
-    public function __construct($oldRecord, $newRecord, $eventName = '', $model = '')
+     public $data;
+
+
+    public function __construct($data)
     {
-        $this->oldRecord = $oldRecord;
-        $this->newRecord = $newRecord;
-        $this->eventName = $eventName;
-        $this->model = $model;
+        $this->data = $data;
     }
 
     /**

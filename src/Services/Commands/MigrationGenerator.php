@@ -72,9 +72,8 @@ class MigrationGenerator extends Command
                     case 'belongsTo':
                         $isPivot = $modelData['isPivot'] ?? false;
                         if (!$isPivot) {
-                            $fields = $modelData['fields'];
                             $migrationFullPath = $this->getMigrationPath($module, $modelName, $isPivot);
-                            $stub = $this->getMigrationStub($module, $modelName, $fields);
+                            $stub = $this->getMigrationStub($module, $modelName, $modelData);
                             File::put($migrationFullPath, $stub);
                         }
                         break;
@@ -82,18 +81,16 @@ class MigrationGenerator extends Command
                     case 'hasMany':
                         $isPivot = $modelData['isPivot'] ?? false;
                         if (!$isPivot) {
-                            $fields = $modelData['fields'];
                             $migrationFullPath = $this->getMigrationPath($module, $modelName, $isPivot);
-                            $stub = $this->getMigrationStub($module, $modelName, $fields);
+                            $stub = $this->getMigrationStub($module, $modelName, $modelData);
                             File::put($migrationFullPath, $stub);
                         }
                         break;
                     case 'hasOne':
                         $isPivot = $modelData['isPivot'] ?? false;
                         if (!$isPivot) {
-                            $fields = $modelData['fields'];
                             $migrationFullPath = $this->getMigrationPath($module, $modelName, $isPivot);
-                            $stub = $this->getMigrationStub($module, $modelName, $fields);
+                            $stub = $this->getMigrationStub($module, $modelName, $modelData);
                             File::put($migrationFullPath, $stub);
                         }
                         break;
@@ -109,9 +106,8 @@ class MigrationGenerator extends Command
         } else {
             // No relationships defined; generate migration from fields
             $isPivot = $modelData['isPivot'] ?? false;
-            $fields = $modelData['fields'];
             $migrationFullPath = $this->getMigrationPath($module, $modelName, $isPivot);
-            $stub = $this->getMigrationStub($module, $modelName, $fields);
+            $stub = $this->getMigrationStub($module, $modelName, $modelData);
             File::put($migrationFullPath, $stub);
         }
     }
@@ -139,8 +135,10 @@ class MigrationGenerator extends Command
         echo "Pivot migration created: {$migrationFullPath}";
     }
 
-    protected function getMigrationStub($module, $modelName, $fields)
+    protected function getMigrationStub($module, $modelName, $modelData)
     {
+
+        $fields = $modelData['fields']?? [];
         $moduleStubPath = app_path("Modules/{$module}/Stubs/Database/Migrations/{$modelName}.stub");
         if (File::exists($moduleStubPath)) {
             $stub = File::get($moduleStubPath);
@@ -204,9 +202,44 @@ class MigrationGenerator extends Command
         $stub = str_replace('{{modelName}}', $modelName, $stub);
         $stub = str_replace('{{tableName}}', strtolower(Str::plural(Str::snake($modelName))), $stub);
         $stub = str_replace('{{columns}}', $columns, $stub);
-
+        $stub = str_replace('{{indexes}}', $this->generateIndexes($modelData), $stub);
         return $stub;
+        
     }
+
+
+
+protected function generateIndexes($modelData): string
+{
+
+    $indexLines = [];
+    if (isset($modelData["indexes"])) {
+        foreach ($modelData['indexes'] ?? [] as $index) {
+            $col = is_array($index) ? $index['column'] : $index;
+            $indexLines[] = "\t\t\t\$table->index('{$col}');";
+        }
+    }
+
+    if (isset($modelData["uniqueIndexes"])) {
+        foreach ($modelData['uniqueIndexes'] ?? [] as $index) {
+            $col = is_array($index) ? $index['column'] : $index;
+            $indexLines[] = "\t\t\t\$table->unique('{$col}');";
+        }
+    }
+
+    if (isset($modelData["compoundIndexes"])) {
+        foreach ($modelData['compoundIndexes'] ?? [] as $cols) {
+            //$cols = $compound['columns'];
+            $colList = implode("', '", $cols);
+            $indexLines[] = "\t\t\t\$table->index(['{$colList}']);";
+        }
+    }
+
+
+    return implode("\n", $indexLines);
+}
+
+
 
 
     private function getFieldType($fieldData)

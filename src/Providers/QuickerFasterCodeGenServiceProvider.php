@@ -33,6 +33,9 @@ use QuickerFaster\CodeGen\Commands\GenerateAllSchemas;
 use QuickerFaster\CodeGen\Commands\GenerateFromSchema;
 use Illuminate\Support\Facades\Route;
 
+use Illuminate\Database\Eloquent\Factory as EloquentFactory; // only for Laravel < 8
+use Illuminate\Database\Eloquent\Factories\Factory;
+
 
 
 
@@ -248,6 +251,7 @@ class QuickerFasterCodeGenServiceProvider extends ServiceProvider
                         $eventType = $this->getEventFromListener($class);
                         if ($eventType) {
                             Event::listen($eventType, $class);
+                            \Log::info("Registered event listener: {$class} for event: {$eventType}");
                         }
                     }
                 }

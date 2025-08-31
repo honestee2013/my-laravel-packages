@@ -235,9 +235,8 @@ class DataTableForm extends Component
 
 
     // updateModelFieldEvent  handler
-    public function updateModelField($modelIds, $fieldName, $fieldValue)
+    public function updateModelField($modelIds, $fieldName, $fieldValue, $actionName = null, $handleByEventHandlerOnly = false)
     {
-
 
 
         // Ensure $modelIds is an array of integers
@@ -247,6 +246,7 @@ class DataTableForm extends Component
         if (empty($modelIds) || !is_array($modelIds)) {
             throw new InvalidArgumentException("Model IDs must be a non-empty array.");
         }
+
         // Validation: Ensure all IDs are integers
         foreach ($modelIds as $id) {
             if (!is_numeric($id)) {
@@ -254,12 +254,15 @@ class DataTableForm extends Component
             }
         }
 
-        // Now create or update the model using the sanitized fields array
-        if (isset($this->config["isTransaction"])) {
-            DB::beginTransaction();
-        }
+
 
         try {
+
+            // Begin transaction if configured
+            if (isset($this->config["isTransaction"])) {
+                DB::beginTransaction();
+            }
+
 
             // Fetch old records
             $oldRecords = $this->model::whereIn('id', $modelIds)->get();
@@ -268,16 +271,36 @@ class DataTableForm extends Component
             $modelIds = is_array($modelIds) ? array_map('intval', $modelIds) : [intval($modelIds)];
             // Sending [After Update Event]
             $oldRecords = $this->model::whereIn('id', $modelIds)->get();
-            // Perform the update
-            $data = $this->addAuditTrailFields("updated", [$fieldName => $fieldValue]);
-            $this->model::whereIn('id', $modelIds)->update($data);
-            // Sending [After Update Event]
-            $newRecords = $this->model::whereIn('id', $modelIds)->get();
 
-            // Dispatch events
-            $this->dispatchAllEvents("BeforeUpdate", $oldRecords, $newRecords);
-            $this->dispatchAllEvents("AfterUpdate", $oldRecords, $newRecords);
-            $this->dispatch('recordSavedEvent');
+            // Dispatch before update events
+            $data = ["modelIds" => $modelIds, "fieldName" => $fieldName, "fieldValue" => $fieldValue, "oldRecords" => $oldRecords, "actionName" => $actionName, "newRecords" => null, 'config' => $this->config ?? []];
+            $this->dispatchAllEvents("BeforeUpdate", $data);
+            
+
+            // Dispatch before update events
+            if (!$handleByEventHandlerOnly) {
+                // Perform the update
+                /// $data = $this->addAuditTrailFields($fieldValue, [$fieldName => $fieldValue]);
+                $this->model::whereIn('id', $modelIds)->update([$fieldName => $fieldValue]);
+
+                $newRecords = $this->model::whereIn('id', $modelIds)->get();
+                $data ["newRecords"] = $newRecords;
+                $this->dispatch('recordSavedEvent');
+            }
+
+
+            if (isset($this->config["isTransaction"])) {
+                DB::commit(); // Commit the transaction
+            }
+
+            $this->dispatchAllEvents("AfterUpdate", $data);
+
+            // Display acction success message
+            // Show feedback when actionName is not set. Event handler is expected to handle the feedback when actionName is set
+            if (!$handleByEventHandlerOnly) 
+                SweetAlertService::showSuccess($this, "Success!", "Record ".$fieldValue." successfully.");
+
+
 
         } catch (\Exception $e) {
             if (isset($this->config["isTransaction"])) {
@@ -287,6 +310,7 @@ class DataTableForm extends Component
             // Log the error or handle the exception as needed
             throw $e;
         }
+        
 
 
     }
@@ -364,11 +388,17 @@ class DataTableForm extends Component
             $this->validate($validationData, [...$this->messages, ...$validationMsgs]);
 
             
-            $record = null;
-            if ($this->isEditMode) {
-                $record = $this->model::find($this->selectedItemId);
-                $this->handleUploadedImages($record);
-            }
+        $record = null;
+
+        if ($this->isEditMode) {
+            $record = $this->model::find($this->selectedItemId);
+            $this->handleUploadedImages($record); // Reuse image logic for both modes
+
+        } else {
+            $dummyRecord = new $this->model(); // <-- Create dummy model instance for image handling
+            $this->handleUploadedImages($dummyRecord); // Reuse image logic for both modes
+        }
+
 
 
         // Handle simple (No Relationship involved) multi-select form fields (convert them to JSON for storage)
@@ -442,27 +472,28 @@ class DataTableForm extends Component
 
                 $oldRecord = $record->toArray();
                 // Sending [After Update Event]
-                $this->dispatchAllEvents("BeforeUpdate", $oldRecord, $sanitizedFields);
+                $this->dispatchAllEvents("BeforeUpdate", ["oldRecord" => $oldRecord, "newRecord" => $sanitizedFields]);
                 // Update the record
                 UserActivityLoggerFacade::logAction(auth()->id(), "Attempting to update $this->modelName record", $this->model, $this->selectedItemId);
                 $record?->update($sanitizedFields);
                 ////UserActivityLoggerFacade::logAction(auth()->id(), "Successfully updated $this->modelName record", $this->model, $this->selectedItemId);
                 // Sending [After Update Event]
-                $this->dispatchAllEvents("AfterUpdate", $oldRecord, $record->toArray());
+                $this->dispatchAllEvents("AfterUpdate", ["oldRecord" => $oldRecord, "newRecord" => $record->toArray()]);
                 //dd($sanitizedFields, $record->fillable, $sanitizedFields["is_active"]);
 
             } else {
                 // Sending [Before Create Event]
-                $this->dispatchAllEvents("BeforeCreate", [], $sanitizedFields);
+                $this->dispatchAllEvents("BeforeCreate", ["oldRecord" => $sanitizedFields]);
                 // Create a new record
                 UserActivityLoggerFacade::logAction(auth()->id(), "Attempting to add new $this->modelName record", $this->model, $this->selectedItemId);
                 //dd($sanitizedFields);
 
+                
                 $record = $this->model::create($sanitizedFields);
 
                 ////UserActivityLoggerFacade::logAction(auth()->id(), "Successfully to added new $this->modelName record", $this->model, $this->selectedItemId);
                 // Sending [After Create Event]
-                $this->dispatchAllEvents("AfterCreate", [], $record->toArray());
+                $this->dispatchAllEvents("AfterCreate", ["newRecord" => $record->toArray()]);
             }
 
             if (isset($this->config["isTransaction"])) {
@@ -577,7 +608,7 @@ class DataTableForm extends Component
     }
 
 
-    private function dispatchAllEvents($eventName, $oldRecord, $newRecord) {
+    private function dispatchAllEvents($eventName, $data) {
         if (!isset($this->config["dispatchEvents"]))
             return;
 
@@ -588,37 +619,39 @@ class DataTableForm extends Component
         // {AnyModelName}BeforeUpdateEvent,  {AnyModelName}AfterUpdateEvent,
 
         // Sending DtatTableForm Generic event
-        DataTableFormEvent::dispatch($oldRecord, $newRecord, $eventName, $this->model);
+        $data ["context"] = $this;
+        $data ["eventName"] = $eventName;
+        DataTableFormEvent::dispatch($data);
 
         // Sending DtatTableForm Specific event eg. DataTableForm{BeforeUpdate}Event
         $dataTableFormEvent = "DataTableForm{$eventName}Event";
         if(class_exists($dataTableFormEvent))
-            $dataTableFormEvent::dispatch($oldRecord, $newRecord, $eventName, $this->model);
+            $dataTableFormEvent::dispatch($data);
 
 
         // Specific Model releted eg. {User}BeforeUpdateEvent
         $specificEvent = $this->getSpecificEventFullName($eventName);
         $event = $this->getEventFullName();
         if (class_exists($specificEvent))
-            $specificEvent::dispatch($oldRecord, $newRecord);
+            $specificEvent::dispatch($data);
 
         // Generic Model releted eg. {User}Event
         if (class_exists($event))
-            $event::dispatch($oldRecord, $newRecord, $eventName);
+            $event::dispatch($data);
     }
 
 
 
 
+    private function getSpecificEventFullName($eventName) {
+        return "\\App\\Modules\\{$this->moduleName}\\Events\\{$eventName}".$this->modelName."Event";
+    }
 
 
-private function getSpecificEventFullName($eventName) {
-    return "\\App\\Modules\\{$this->moduleName}\\Events\\{$eventName}".$this->modelName."Event";
-}
 
-private function getEventFullName() {
-    return "\\App\\Modules\\{$this->moduleName}\\Events\\".$this->modelName."Event";
-}
+    private function getEventFullName() {
+        return "\\App\\Modules\\{$this->moduleName}\\Events\\".$this->modelName."Event";
+    }
 
 
 

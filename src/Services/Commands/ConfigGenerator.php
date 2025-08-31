@@ -260,45 +260,56 @@ class ConfigGenerator extends Command
 
         // ... (Rest of the code for fieldGroups, merging configs, and replacements remains the same)
 
-    // Handle fieldGroups
-    $fieldGroups = $modelData['fieldGroups'] ?? [];
-    $fieldGroupsString = var_export($fieldGroups, true);
-    $fieldGroupsString = str_replace("array (", "[", str_replace(")", "]", $fieldGroupsString)); // Clean up var_export
+        // Handle fieldGroups
+        $fieldGroups = $modelData['fieldGroups'] ?? [];
+        $fieldGroupsString = var_export($fieldGroups, true);
+        $fieldGroupsString = str_replace("array (", "[", str_replace(")", "]", $fieldGroupsString)); // Clean up var_export
 
 
+        $report = $modelData['report'] ?? [];
+        if ($report) {
+            if (isset($report["model"]))
+                $report["model"] = "App\\Modules\\{$module}\\Models\\{$report["model"]}";
+            if (isset($report["itemsModel"]))
+                $report["itemsModel"] = "App\\Modules\\{$module}\\Models\\{$report["itemsModel"]}";
+            if (isset($report["recordModel"]))
+                $report["recordModel"] = "App\\Modules\\{$module}\\Models\\{$report["recordModel"]}";
+            
+        }
 
-    // Merge included configs and YAML generated configs (include overrides YAML if both exist).
-    $ucModule = ucfirst($module);
-    $configData = array_merge(
-        $includedConfig, // Include first, so it has lower override priority.
-        [
-            "model" => "App\\Modules\\{$ucModule}\\Models\\{$modelName}",
-            "fieldDefinitions" => $yamlFieldDefinitions,
-            "hiddenFields" => $modelData['hiddenFields'] ?? [],
-            "simpleActions" => $modelData['simpleActions'] ?? [],
-            "isTransaction" => $modelData['isTransaction'] ?? false,
-            "dispatchEvents" => $modelData['dispatchEvents'] ?? false,
-            "controls" => $modelData['controls'] ?? [],
-            "fieldGroups" => $fieldGroups, // Add fieldGroups to the config data
-            "moreActions" => $modelData['moreActions'] ?? [],
-        ],
-    );
+        // Merge included configs and YAML generated configs (include overrides YAML if both exist).
+        $ucModule = ucfirst($module);
+        $configData = array_merge(
+            $includedConfig, // Include first, so it has lower override priority.
+            [
+                "model" => "App\\Modules\\{$ucModule}\\Models\\{$modelName}",
+                "fieldDefinitions" => $yamlFieldDefinitions,
+                "hiddenFields" => $modelData['hiddenFields'] ?? [],
+                "simpleActions" => $modelData['simpleActions'] ?? [],
+                "isTransaction" => $modelData['isTransaction'] ?? false,
+                "dispatchEvents" => $modelData['dispatchEvents'] ?? false,
+                "controls" => $modelData['controls'] ?? [],
+                "fieldGroups" => $fieldGroups, // Add fieldGroups to the config data
+                "moreActions" => $modelData['moreActions'] ?? [],
+                "report" => $report, // Add report configuration
+            ],
+        );
 
-    /*foreach ($modelData as $key => $modelDataItem) {
-        if (!array_search($key, array_keys($configData)))
-            $configData[$key] = $modelDataItem;
-    }*/
+        /*foreach ($modelData as $key => $modelDataItem) {
+            if (!array_search($key, array_keys($configData)))
+                $configData[$key] = $modelDataItem;
+        }*/
 
 
-    $configString = var_export($configData, true);
-    $configString = str_replace("=> \n", "=>", $configString); // Place [ on the same line
+        $configString = var_export($configData, true);
+        $configString = str_replace("=> \n", "=>", $configString); // Place [ on the same line
 
-    $configString = str_replace("array (", "[", str_replace(")", "]", $configString)); // Clean up var_export
-    $configString = str_replace("],", "], \n", $configString); // Add newline after ] closes
+        $configString = str_replace("array (", "[", str_replace(")", "]", $configString)); // Clean up var_export
+        $configString = str_replace("],", "], \n", $configString); // Add newline after ] closes
 
-    $stub = str_replace('{{configData}}', $configString, $stub);
+        $stub = str_replace('{{configData}}', $configString, $stub);
 
-    return $stub;
+        return $stub;
 
     }
 

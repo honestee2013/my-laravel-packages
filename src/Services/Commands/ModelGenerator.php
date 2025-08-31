@@ -112,7 +112,7 @@ class ModelGenerator extends Command
         }
         $fillableString = implode(', ', $fillableProperties);
 
-        $stub = str_replace('{{module}}', $module, $stub);
+        $stub = str_replace('{{module}}', ucfirst($module), $stub);
         $stub = str_replace('{{modelName}}', $modelName, $stub);
         $stub = str_replace('{{relations}}', $relationDefinitions, $stub);
         $stub = str_replace('{{fillable}}', $fillableString, $stub);
@@ -137,20 +137,40 @@ class ModelGenerator extends Command
     }
 
 
-    protected function getImports($modelData) {
-        if (isset($modelData["displayFields"])) {
-            return "use QuickerFaster\CodeGen\Traits\GUI\HasDisplayName;";
+
+    protected function getImports(array $modelData): string
+    {
+        $lines = [];
+
+        // Add class imports
+        if (isset($modelData['imports']) && is_array($modelData['imports'])) {
+            foreach ($modelData['imports'] as $import) {
+                $lines[] = "use {$import};";
+            }
         }
-        return '';
+
+        // Add trait imports
+        if (isset($modelData['traits']) && is_array($modelData['traits'])) {
+            foreach ($modelData['traits'] as $alias => $class) {
+                $lines[] = "use {$class};";
+            }
+        }
+
+        return implode("\n", $lines);
+    }
+
+    protected function getImportLists(array $modelData): string
+    {
+        if (!isset($modelData['traits']) || !is_array($modelData['traits'])) {
+            return '';
+        }
+
+        return 'use ' . implode(', ', array_keys($modelData['traits'])) . ';';
     }
 
 
-    protected function getImportLists($modelData) {
-        if (isset($modelData["displayFields"])) {
-            return "use HasDisplayName;";
-        }
-        return '';
-    }
+
+
 
 
     protected function getDisplayNames($modelName, $modelData) {

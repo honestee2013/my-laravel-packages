@@ -1,18 +1,16 @@
 <?php
 
-namespace App\Modules\{{module}}\Models; // Important: Include the module namespace
+namespace App\Modules\{{module}}\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 {{imports}}
-
 
 class {{modelName}} extends Model
 {
     use HasFactory;
     {{importList}}
     {{displayFields}}
-
 
     {{tableName}}
 
@@ -21,4 +19,12 @@ class {{modelName}} extends Model
     ];
 
     {{relations}} // Relations will be inserted here
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \App\Modules\{{module}}\Database\Factories\{{modelName}}Factory::new();
+    }
 }

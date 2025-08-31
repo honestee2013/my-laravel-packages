@@ -119,13 +119,18 @@ class DataTableManager extends Component
         }
 
 
-        $this->controls = $this->config["controls"];
+
+        // If custom controls are passed, use them. Otherwise, fetch default controls from the trait.
+        if (!is_array($this->config["controls"]) && strtolower($this->config["controls"]) == "all")
+            $this->controls = $this->getDataTableAllControls();
+        else 
+            $this->controls = $this->getPreparedControls($this->config["controls"]);
+
+
         $this->columns = $this->config["columns"];
         $this->multiSelectFormFields = $this->config["multiSelectFormFields"];
         $this->singleSelectFormFields = $this->config["singleSelectFormFields"];
 
-        // If custom controls are passed, use them. Otherwise, fetch default controls from the trait.
-        $this->controls = $this->getPreparedControls($this->controls);
 
         $this->visibleColumns = $this->config["columns"];// Show all columns by default
         // Hidden on table index view
